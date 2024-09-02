@@ -1,89 +1,101 @@
-
 export const DRAWERWIDTH = 240;
 
-
 export const ROUTES = {
-    ROOT: '/',
-    SIGNIN: '/signin',
-    DASHBOARD : '/dashboard',
-    KPI: '/kpi',
-    KPIADD: '/kpi/add'
-  };
+  ROOT: "/",
+  SIGNIN: "/signin",
+  DASHBOARD: "/dashboard",
+  KPI: "/kpi",
+  KPIADD: "/kpi/add",
+  USERS: "/users/users",
+  ROLES: "/users/roles",
+  PERMISSIONS: "/users/permissions",
+  SETTINGS: "/settings",
+  CUSTOMERS: "/customers/customers",
+  CUSTOMERS_INQUIRIES: "/customers/inquiries",
+};
 
 export const PROTECTED_ROUTES = [
   ROUTES.DASHBOARD,
   ROUTES.KPI,
   ROUTES.KPIADD,
-]
-
+  ROUTES.USERS,
+  ROUTES.ROLES,
+  ROUTES.PERMISSIONS,
+  ROUTES.SETTINGS,
+  ROUTES.CUSTOMERS,
+  ROUTES.CUSTOMERS_INQUIRIES,
+];
 
 export const SECTIONS = [
   {
-    title: 'Dashboard',
+    title: "Dashboard",
     path: ROUTES.DASHBOARD,
   },
   {
-    title: 'KPI',
+    title: "KPI",
     path: ROUTES.KPI,
   },
 
   {
-    title: 'Sections',
- 
+    title: "Sections",
   },
   {
-    title: 'Categories',
-
+    title: "Categories",
   },
 
   {
-    title: 'Reports',
-  
+    title: "Reports",
   },
   {
-    title: 'Orders',
- 
+    title: "Orders",
+    // path: ROUTES.USERS,
   },
   {
-    title: 'Marketing',
-    subsections: ['hooks', 'templates'],
+    title: "Marketing",
+    subsections: [{ name: "hooks" }, "templates"],
   },
   {
-    title: 'Users',
-    subsections: ['users', 'roles'],
+    title: "Users",
+    subsections: [
+      { name: "Users", path: ROUTES.USERS },
+      { name: "Roles", path: ROUTES.ROLES },
+      { name: "Permissions", path: ROUTES.PERMISSIONS },
+    ],
   },
   {
-    title: 'Iventory',
-    subsections: ['inventory', 'upload & edit', 'bulk uploads', 'valuation'],
+    title: "Iventory",
+    subsections: ["inventory", "upload & edit", "bulk uploads", "valuation"],
   },
   {
-    title: 'Customers',
-    subsections: ['customers', 'inquiries'],
+    title: "Customers",
+    subsections: [
+      { name: "customers", path: ROUTES.CUSTOMERS },
+      { name: "inquiries", path: ROUTES.CUSTOMERS_INQUIRIES },
+    ],
   },
   {
-    title: 'Application Configurations',
-    subsections: ['tax rates', 'shipping options', 'zones'],
+    title: "Application Configurations",
+    subsections: ["tax rates", "shipping options", "zones"],
   },
 
   {
-    title: 'Settings',
+    title: "Settings",
+    path: ROUTES.SETTINGS,
   },
 
   {
-    title: 'Logs',
-
+    title: "Logs",
   },
 ];
 
-
 export const DUMMYDATA = {
-  VerticalBarChart:{
+  VerticalBarChart: {
     xAxisData: ["group A", "group B", "group C"],
-    seriesData: [{ data: [4, 2, 3] }, { data: [1, 2, 1] }]
+    seriesData: [{ data: [4, 2, 3] }, { data: [1, 2, 1] }],
   },
 
-  HorizontalBarChart:{
-    dataset:[
+  HorizontalBarChart: {
+    dataset: [
       { london: 59, paris: 57, newYork: 86, seoul: 21, month: "Jan" },
       { london: 50, paris: 52, newYork: 78, seoul: 28, month: "Feb" },
       { london: 47, paris: 53, newYork: 106, seoul: 41, month: "Mar" },
@@ -99,89 +111,83 @@ export const DUMMYDATA = {
     ],
   },
 
-  BiaxialLineChart:{
-      years:[
-        new Date(1990, 0, 1),
-        new Date(1991, 0, 1),
-        new Date(1992, 0, 1),
-        new Date(1993, 0, 1),
-        new Date(1994, 0, 1),
-        new Date(1995, 0, 1),
-        new Date(1996, 0, 1),
-        new Date(1997, 0, 1),
-        new Date(1998, 0, 1),
-        new Date(1999, 0, 1),
-        new Date(2000, 0, 1),
-        new Date(2001, 0, 1),
-        new Date(2002, 0, 1),
-        new Date(2003, 0, 1),
-        new Date(2004, 0, 1),
-        new Date(2005, 0, 1),
-        new Date(2006, 0, 1),
-        new Date(2007, 0, 1),
-        new Date(2008, 0, 1),
-        new Date(2009, 0, 1),
-        new Date(2010, 0, 1),
-        new Date(2011, 0, 1),
-        new Date(2012, 0, 1),
-        new Date(2013, 0, 1),
-        new Date(2014, 0, 1),
-        new Date(2015, 0, 1),
-        new Date(2016, 0, 1),
-        new Date(2017, 0, 1),
-        new Date(2018, 0, 1),
-      ],
+  BiaxialLineChart: {
+    years: [
+      new Date(1990, 0, 1),
+      new Date(1991, 0, 1),
+      new Date(1992, 0, 1),
+      new Date(1993, 0, 1),
+      new Date(1994, 0, 1),
+      new Date(1995, 0, 1),
+      new Date(1996, 0, 1),
+      new Date(1997, 0, 1),
+      new Date(1998, 0, 1),
+      new Date(1999, 0, 1),
+      new Date(2000, 0, 1),
+      new Date(2001, 0, 1),
+      new Date(2002, 0, 1),
+      new Date(2003, 0, 1),
+      new Date(2004, 0, 1),
+      new Date(2005, 0, 1),
+      new Date(2006, 0, 1),
+      new Date(2007, 0, 1),
+      new Date(2008, 0, 1),
+      new Date(2009, 0, 1),
+      new Date(2010, 0, 1),
+      new Date(2011, 0, 1),
+      new Date(2012, 0, 1),
+      new Date(2013, 0, 1),
+      new Date(2014, 0, 1),
+      new Date(2015, 0, 1),
+      new Date(2016, 0, 1),
+      new Date(2017, 0, 1),
+      new Date(2018, 0, 1),
+    ],
 
-      FranceGDPperCapita:[
-        28129, 28294.264, 28619.805, 28336.16, 28907.977, 29418.863, 29736.645, 30341.807,
-        31323.078, 32284.611, 33409.68, 33920.098, 34152.773, 34292.03, 35093.824,
-        35495.465, 36166.16, 36845.684, 36761.793, 35534.926, 36086.727, 36691, 36571,
-        36632, 36527, 36827, 37124, 37895, 38515.918,
-      ],
+    FranceGDPperCapita: [
+      28129, 28294.264, 28619.805, 28336.16, 28907.977, 29418.863, 29736.645,
+      30341.807, 31323.078, 32284.611, 33409.68, 33920.098, 34152.773, 34292.03,
+      35093.824, 35495.465, 36166.16, 36845.684, 36761.793, 35534.926,
+      36086.727, 36691, 36571, 36632, 36527, 36827, 37124, 37895, 38515.918,
+    ],
 
-      UKGDPperCapita:[
-        26189, 25792.014, 25790.186, 26349.342, 27277.543, 27861.215, 28472.248, 29259.764,
-        30077.385, 30932.537, 31946.037, 32660.441, 33271.3, 34232.426, 34865.78,
-        35623.625, 36214.07, 36816.676, 36264.79, 34402.36, 34754.473, 34971, 35185, 35618,
-        36436, 36941, 37334, 37782.83, 38058.086,
-      ],
+    UKGDPperCapita: [
+      26189, 25792.014, 25790.186, 26349.342, 27277.543, 27861.215, 28472.248,
+      29259.764, 30077.385, 30932.537, 31946.037, 32660.441, 33271.3, 34232.426,
+      34865.78, 35623.625, 36214.07, 36816.676, 36264.79, 34402.36, 34754.473,
+      34971, 35185, 35618, 36436, 36941, 37334, 37782.83, 38058.086,
+    ],
 
-      GermanyGDPperCapita:[
-        25391, 26769.96, 27385.055, 27250.701, 28140.057, 28868.945, 29349.982, 30186.945,
-        31129.584, 32087.604, 33367.285, 34260.29, 34590.93, 34716.44, 35528.715,
-        36205.574, 38014.137, 39752.207, 40715.434, 38962.938, 41109.582, 43189, 43320,
-        43413, 43922, 44293, 44689, 45619.785, 46177.617,
-      ],
-      
-      
-
+    GermanyGDPperCapita: [
+      25391, 26769.96, 27385.055, 27250.701, 28140.057, 28868.945, 29349.982,
+      30186.945, 31129.584, 32087.604, 33367.285, 34260.29, 34590.93, 34716.44,
+      35528.715, 36205.574, 38014.137, 39752.207, 40715.434, 38962.938,
+      41109.582, 43189, 43320, 43413, 43922, 44293, 44689, 45619.785, 46177.617,
+    ],
   },
 
-  PieActiveArc:{
-    data:  [
-      { id: 0, value: 10, label: 'series A' },
-      { id: 1, value: 15, label: 'series B' },
-      { id: 2, value: 20, label: 'series C' },
-    ]
+  PieActiveArc: {
+    data: [
+      { id: 0, value: 10, label: "series A" },
+      { id: 1, value: 15, label: "series B" },
+      { id: 2, value: 20, label: "series C" },
+    ],
   },
 
-  TopN:{
-    items:
-      [
-        { name: 'Item 1', value: 100 },
-        { name: 'Item 2', value: 80 },
-        { name: 'Item 3', value: 70 },
-        { name: 'Item 4', value: 100 },
-        { name: 'Item 5', value: 80 },
-        { name: 'Item 6', value: 70 },
-        { name: 'Item N', value: 50 },
- 
-      ]
-    
+  TopN: {
+    items: [
+      { name: "Item 1", value: 100 },
+      { name: "Item 2", value: 80 },
+      { name: "Item 3", value: 70 },
+      { name: "Item 4", value: 100 },
+      { name: "Item 5", value: 80 },
+      { name: "Item 6", value: 70 },
+      { name: "Item N", value: 50 },
+    ],
   },
 
-  BasicColorLegend:{
-    dataset:[
+  BasicColorLegend: {
+    dataset: [
       { year: new Date(1850, 0, 1), value: -0.4177114 },
       { year: new Date(1851, 0, 1), value: -0.2333498 },
       { year: new Date(1852, 0, 1), value: -0.22939907 },
@@ -357,10 +363,6 @@ export const DUMMYDATA = {
       { year: new Date(2022, 0, 1), value: 0.8013053 },
       { year: new Date(2023, 0, 1), value: 1.1003127 },
       { year: new Date(2024, 0, 1), value: 1.2314565 },
-    ]
-  }
-
-}
-
-  
-  
+    ],
+  },
+};
