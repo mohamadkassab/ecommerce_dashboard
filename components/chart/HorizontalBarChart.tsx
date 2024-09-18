@@ -4,82 +4,124 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Box from "@mui/material/Box";
+import axios from "axios";
 import { Typography } from "@mui/material";
+import { APIROUTES } from "@/utils/constants";
+import { findPropertyValueByKey } from "@/utils/functions";
 
 type HorizontalBarChartProps = {
-  dataset?: { [key: string]: number | string }[];
-  initialSelectedOption?: string;
-  xaxisLabel?: string,
-  dataKey?: string,
-  label?: string,
+  chart: any;
 };
 
-
-
-export default function HorizontalBarChart({
-  dataset,
-  initialSelectedOption,
-  xaxisLabel,
-  dataKey,
-  label
-}: HorizontalBarChartProps) {
+export default function HorizontalBarChart({ chart }: HorizontalBarChartProps) {
+  const [dataQuery, setDataQuery] = React.useState<any[]>([]);
+  const [selctedOptionQuery, setSelctedOptionQuery] = React.useState<
+    string | undefined
+  >(undefined);
 
   const chartSetting = {
-    xAxis: [{ label: xaxisLabel ? String(xaxisLabel) : ""}],
+    xAxis: [{ label: "" }],
     width: 500,
-    height: 400,
+    height: 450,
   };
-
-
-  const [selectedOption, setSelectedOption] = React.useState(initialSelectedOption);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSelectedOption(event.target.value);
+    setSelctedOptionQuery(event.target.value);
   };
 
+  const fetchData = async (query: string) => {
+    try {
+      const params = new URLSearchParams({ query });
+      const fullUrl = `${process.env.NEXT_PUBLIC_API_URL}${
+        APIROUTES.GETCHARTDATABYQUERY
+      }?${params.toString()}`;
+      const response = await axios.get<[]>(fullUrl);
+      setDataQuery(response.data);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    }
+  };
+
+  React.useEffect(() => {
+    if (chart.query) {
+      fetchData(chart.query);
+    }
+  }, [chart]);
+
+
+
+  React.useEffect(() => {
+    if (dataQuery.length > 0) {
+      const firstObject = dataQuery[0];
+      const firstKey = Object.keys(firstObject).find(
+        (key) => key !== "key"
+      );
+      setSelctedOptionQuery(firstKey);
+    }
+  }, [dataQuery]);
+
   return (
-
-
-<div className="flex flex-col items-center justify-center">
-
-<div className=" w-full flex items-between justify-between">
-<Typography variant="h6" component="div" gutterBottom>
-                    {label}
-                  </Typography>
-<FormControl  size="small">
+    <div className="flex flex-col items-center justify-center">
+      <div className=" w-full flex items-between justify-between">
+        {/* <Typography
+          variant="h6"
+          component="div"
+          gutterBottom
+          sx={{
+            wordWrap: "break-word",
+            overflowWrap: "break-word",
+            whiteSpace: "normal",
+            maxWidth: "70%",
+          }}
+        >
+          {chart.label}
+        </Typography> */}
+        <FormControl size="small">
           <InputLabel id="selected-item-label">Select</InputLabel>
-          <Select
-            labelId="selected-item-label"
-            id="selected-item"
-            value={selectedOption}
-            label="Select"
-            onChange={handleChange}
-          >
-            {dataset && dataset.length > 0 && 
-              Object.keys(dataset[0])
-                .filter((key) => key !== String(dataKey))
-                .map((key) => (
-                  <MenuItem key={key} value={key}>
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
-                  </MenuItem>
-                ))}
- 
-          </Select>
+
+          {dataQuery && selctedOptionQuery && (
+            <Select
+              labelId="selected-item-label"
+              id="selected-item"
+              value={selctedOptionQuery}
+              label="Select"
+              onChange={handleChange}
+            >
+              {dataQuery &&
+                dataQuery.length > 0 &&
+                selctedOptionQuery &&
+                Object.keys(dataQuery[0])
+                  .filter((key) => key !== "key")
+                  .map((key) => (
+                    <MenuItem
+                      key={key}
+                      value={key}
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "background.default",
+                        },
+                      }}
+                    >
+                      {key.charAt(0).toUpperCase() + key.slice(1)}
+                    </MenuItem>
+                  ))}
+            </Select>
+          )}
         </FormControl>
-</div>
-    
- 
-<BarChart
-dataset={dataset}
-yAxis={[{ scaleType: "band", dataKey: String(dataKey) }]}
-series={[{ dataKey: selectedOption}]} 
-layout="horizontal"
-grid={{ vertical: true }}
+      </div>
+      {dataQuery &&
+        chart.chartProperties &&
 
-{...chartSetting}
-/>
-</div>
-
+        selctedOptionQuery && (
+          <BarChart
+            dataset={dataQuery}
+            yAxis={[{ scaleType: "band", dataKey: "key" }]}
+            series={[{ dataKey: selctedOptionQuery }]}
+            layout="horizontal"
+            grid={{ vertical: true }}
+            {...chartSetting}
+          />
+        )}
+    </div>
   );
 }

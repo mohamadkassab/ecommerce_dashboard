@@ -1,32 +1,38 @@
 import * as React from "react";
-import { BarChart } from "@mui/x-charts/BarChart";
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  TextField,
-  Typography,
-} from "@mui/material";
 import PrimaryButton from "../button/PrimaryButton";
-import VerticalBarChart from "../chart/VerticalBarChart";
 import BasicColorLegend from "../chart/BasicColorLegend";
 import { DUMMYDATA } from "@/utils/constants";
+import BasicColorLegendStatic from "../chart_static/BasicColorLegendStatic";
+import { useAppDispatch } from "@/utils/redux/hooks";
+import { createChart } from "@/utils/redux/actions/kpi";
+import {
+  Box,
+  Card,
+  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography
+} from "@mui/material";
 
 interface FormData {
   label: string;
   lowMargin: number;
   highMargin: number;
-  sqlSyntax: string;
+  query: string;
 }
 
 const BasicColorLegendCreate: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = React.useState<FormData>({
     label: "",
     lowMargin: 0,
     highMargin: 0,
-    sqlSyntax: "",
+    query: "",
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,21 +51,39 @@ const BasicColorLegendCreate: React.FC = () => {
     });
   };
 
-  const handleSubmit = () => {
-    console.log("FormData:", formData);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await dispatch(
+      createChart({
+        label: formData.label,
+        query: formData.query,
+        chartType: "BasicColorLegend",
+        chartProperties: [
+          {
+            propertyName: "lowMargin",
+            propertyValue: formData.lowMargin.toString(),
+          },
+          {
+            propertyName: "highMargin",
+            propertyValue: formData.highMargin.toString(),
+          },
+        ],
+      })
+    );
   };
 
   return (
-    <div className="flex flex-wrap w-full mt-[4rem]">
-      <div className=" w-full lg:w-1/3 flex flex-col justify-start items-center">
+    <div className="flex flex-wrap w-full mt-[4rem] ">
+      <form onSubmit={handleSubmit} className=" w-full lg:w-1/3 flex flex-col justify-start items-center">
         <TextField
           required
           type="text"
           label="Label"
           variant="outlined"
           margin="normal"
-          name="label" // Use name attribute to identify the field
+          name="label" 
           sx={{ width: "50%" }}
+          inputProps={{ maxLength: 89 }}
           onChange={handleChange}
         />
         <TextField
@@ -68,9 +92,12 @@ const BasicColorLegendCreate: React.FC = () => {
           type="number"
           variant="outlined"
           margin="normal"
-          name="lowMargin" // Use name attribute to identify the field
+          name="lowMargin" 
           sx={{ width: "50%" }}
+          inputProps={{ step: "0.01" }}
           onChange={handleChange}
+          // onChange={(e) => handleChange(parseFloat(e.target.value))} 
+
         />
         <TextField
           required
@@ -78,30 +105,65 @@ const BasicColorLegendCreate: React.FC = () => {
           type="number"
           variant="outlined"
           margin="normal"
-          name="highMargin" // Use name attribute to identify the field
+          name="highMargin" 
           sx={{ width: "50%" }}
+          inputProps={{ step: "0.01" }}
           onChange={handleChange}
         />
         <TextField
           required
           type="text"
           multiline
-          rows={3}
-          label="SQL Syntax"
+          rows={10}
+          label="SQL Query"
           variant="outlined"
           margin="normal"
-          name="sqlSyntax" // Use name attribute to identify the field
+          name="query" 
           sx={{ width: "50%" }}
           onChange={handleChange}
+          inputProps={{ spellCheck: false }}
         />
-        <PrimaryButton width={"50%"} onClick={handleSubmit}>
+        <PrimaryButton width={"50%"} type="submit" >
           ADD
         </PrimaryButton>
-      </div>
+        <p className="mt-[2rem] px-[4rem]">
+              <Typography variant="body2">
+                SQL QUERY RULES: <br />
+                * SQL result should have a column with name "date_key" wich represenets the xaxis, the data should be as type Date <br />
+                * SQL result should have a column with name "value" wich represenets the yaxis values <br />
+                * Example: <br />
+              </Typography>
+
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>date_key</TableCell>
+                      <TableCell>value</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>2020-01-01 00:00:00</TableCell>
+                      <TableCell>140</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>2021-01-01 00:00:00</TableCell>
+                      <TableCell>50</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>2022-01-01 00:00:00</TableCell>
+                      <TableCell>24</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </p>
+      </form>
       <Box className="w-full lg:w-2/3  flex justify-start items-center">
         <Card
           sx={{
-            width: 1000,
+            width: 850,
             height: 500,
             display: "flex",
             flexDirection: "column",
@@ -111,7 +173,7 @@ const BasicColorLegendCreate: React.FC = () => {
             <Typography variant="h6" component="div" gutterBottom>
               {formData["label"]}
             </Typography>
-            <BasicColorLegend
+            <BasicColorLegendStatic
               dataset={DUMMYDATA["BasicColorLegend"]["dataset"]}
               lowMargin={formData["lowMargin"]}
               highMargin={formData["highMargin"]}

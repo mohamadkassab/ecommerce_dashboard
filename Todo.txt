@@ -1,0 +1,13 @@
+Verify date of the token in the middleware, if not authenitcated change the status to iddle 
+Signout button and slice
+add dialog on delete chart in EditDeleteButtons
+onEdit chart implement 
+reload page after delete
+fix the description below create chart
+fix the notification that does not go away on change routes
+oncreate chart remove the fields
+take the loading to the center
+add logs to all error functions and monitor
+autosize columns
+
+

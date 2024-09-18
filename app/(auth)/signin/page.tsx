@@ -14,24 +14,48 @@ import signinImage from "@/public/images/siginin_image.svg";
 import PrimaryButton from "@/components/button/PrimaryButton";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
-import { login } from "@/utils/redux/slice";
+import { setIdle, signin } from "@/utils/redux/actions/auth";
 import {
   useAppSelector,
   useAppDispatch,
   useAppStore,
 } from "@/utils/redux/hooks";
+import { useRouter } from 'next/navigation';
+import { ROUTES } from "@/utils/constants";
+import { redirect } from 'next/navigation';
+
+interface FormData {
+  username: string;
+  password: string;
+}
 
 const SignInPage = () => {
+  const { status } = useAppSelector((state: any) => state.reducer);
+  const [formData, setFormData] = useState<FormData>({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const dispatch = useAppDispatch();
-  const store = useAppStore();
+
 
   const onSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    await dispatch(login({ username: "user", password: "pass" }));
+    await dispatch(signin({ formData : formData}));
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  React.useEffect(()=>{
+    console.log(status)
+    if(status === "loginSuccessful"){
+      dispatch(setIdle());
+      redirect(ROUTES.DASHBOARD);
+    }
+  }, [status]);
+
+  
   return (
     <Container
       component="main"
@@ -49,20 +73,26 @@ const SignInPage = () => {
           </Typography>
           <form onSubmit={onSignIn}>
             <TextField
+              name="username"
               required
               type="email"
               label="Email Address"
               variant="outlined"
               fullWidth
               margin="normal"
+              value={formData.username} 
+              onChange={handleChange} 
             />
             <TextField
               required
+              name="password"
               label="Password"
               type={showPassword ? "text" : "password"}
               variant="outlined"
               fullWidth
               margin="normal"
+              value={formData.password} 
+              onChange={handleChange} 
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">

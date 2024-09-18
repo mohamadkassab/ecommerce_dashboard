@@ -20,10 +20,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname(); // Get the current pathname
-
-  // Check if the current route is the login page
-  const isLoginPage = pathname === "/signin";
+  const pathname = usePathname(); 
+  
 
   return (
     <ThemeProvider theme={muiTheme}>

@@ -1,46 +1,55 @@
 import * as React from "react";
-import { BarChart } from "@mui/x-charts/BarChart";
+import PrimaryButton from "../button/PrimaryButton";
+import BiaxialLineChart from "../chart/BiaxialLineChart";
+import { DUMMYDATA } from "@/utils/constants";
+import ChartWrapper from "../wrapper/chartWrapper";
+import BiaxialLineChartStatic from "../chart_static/BiaxialLineChartStatic";
+import { useAppDispatch } from "@/utils/redux/hooks";
+import { createChart } from "@/utils/redux/actions/kpi";
 import {
   Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
-import PrimaryButton from "../button/PrimaryButton";
-import VerticalBarChart from "../chart/VerticalBarChart";
-import BiaxialLineChart from "../chart/BiaxialLineChart";
-import { DUMMYDATA } from "@/utils/constants";
 
 interface FormData {
   label: string;
   numberOfGroups: number;
   xAxisKey: string;
-  sqlSyntax: string;
+  query: string;
 }
 
-type seriesProps ={
-    label: string,
-    data: number [],
-    showMark: boolean
-  }
+type seriesProps = {
+  label: string;
+  data: number[];
+  showMark: boolean;
+};
 
 const BiaxialLineChartCreate: React.FC = () => {
+  const dispatch = useAppDispatch();
+
   const [formData, setFormData] = React.useState<FormData>({
     label: "",
     numberOfGroups: 0,
     xAxisKey: "",
-    sqlSyntax: "",
+    query: "",
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
-    const parsedValue = isNaN(parseFloat(value)) || value.trim() === ""
-    ? value 
-    : parseFloat(value); 
+    const parsedValue =
+      isNaN(parseFloat(value)) || value.trim() === ""
+        ? value
+        : parseFloat(value);
 
     setFormData({
       ...formData,
@@ -54,7 +63,7 @@ const BiaxialLineChartCreate: React.FC = () => {
     for (let i = 0; i < groupCount; i++) {
       newSeries.push({
         label: `Option ${i + 1}`,
-        data: Array.from({ length: 29 }, () => Math.random() * 30), 
+        data: Array.from({ length: 29 }, () => Math.random() * 30),
         showMark: false,
       });
     }
@@ -66,34 +75,38 @@ const BiaxialLineChartCreate: React.FC = () => {
     setSeries(newSeries);
   }, [formData["numberOfGroups"]]);
 
- 
-
-  const handleSubmit = () => {
-    console.log("FormData:", formData);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await dispatch(
+      createChart({
+        label: formData.label,
+        query: formData.query,
+        chartType: "BiaxialLineChart",
+        chartProperties: [
+          {
+            propertyName: "numberOfGroups",
+            propertyValue: formData.numberOfGroups.toString(),
+          },
+        ],
+      })
+    );
   };
 
   return (
-    <div className="flex flex-wrap w-full mt-[4rem]">
-      <div className="w-full lg:w-1/2 flex flex-col justify-start items-center">
+    <div className="flex flex-wrap w-full mt-[4rem] gap-[1rem]">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full lg:w-1/2 flex flex-col justify-start items-center"
+      >
         <TextField
           required
           type="text"
           label="Label"
           variant="outlined"
           margin="normal"
-          name="label" // Use name attribute to identify the field
+          name="label"
           sx={{ width: "50%" }}
-          onChange={handleChange}
-        />
-
-<TextField
-          required
-          type="text"
-          label="X axis key"
-          variant="outlined"
-          margin="normal"
-          name="xAxisKey" // Use name attribute to identify the field
-          sx={{ width: "50%" }}
+          inputProps={{ maxLength: 89 }}
           onChange={handleChange}
         />
 
@@ -103,7 +116,7 @@ const BiaxialLineChartCreate: React.FC = () => {
           label="Number of groups"
           variant="outlined"
           margin="normal"
-          name="numberOfGroups" // Use name attribute to identify the field
+          name="numberOfGroups"
           sx={{ width: "50%" }}
           onChange={handleChange}
         />
@@ -112,39 +125,62 @@ const BiaxialLineChartCreate: React.FC = () => {
           required
           type="text"
           multiline
-          rows={3}
-          label="SQL Syntax"
+          rows={10}
+          label="SQL Query"
           variant="outlined"
           margin="normal"
-          name="sqlSyntax" // Use name attribute to identify the field
+          name="query"
           sx={{ width: "50%" }}
           onChange={handleChange}
+          inputProps={{ spellCheck: false }}
         />
-        <PrimaryButton width={"50%"} onClick={handleSubmit}>
+        <PrimaryButton width={"50%"} type="submit">
           ADD
         </PrimaryButton>
-      </div>
-      <Box className="w-full lg:w-1/2 xl:w-1/3 flex justify-center">
-              <Card
-                sx={{
-                  width: 500,
-                  height: 500,
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-          <CardContent sx={{ flexGrow: 1 }}>
-            <Typography variant="h6" component="div" gutterBottom>
-              {formData["label"]}
-            </Typography>
-            <BiaxialLineChart
-            years={DUMMYDATA["BiaxialLineChart"]["years"]}
-            series={series}
+        <p className="mt-[2rem]">
+          <Typography variant="body2">
+            SQL QUERY RULES: <br />
+            * SQL result should have a column with name "date_key" wich
+            represenets the xaxis, the data should be as type Date <br />
+            * Example: <br />
+          </Typography>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>date_key</TableCell>
+                  <TableCell>beirut</TableCell>
+                  <TableCell>tyre</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>2020-01-01 00:00:00</TableCell>
+                  <TableCell>140</TableCell>
+                  <TableCell>33</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>2021-01-01 00:00:00</TableCell>
+                  <TableCell>50</TableCell>
+                  <TableCell>24</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>2022-01-01 00:00:00</TableCell>
+                  <TableCell>24</TableCell>
+                  <TableCell>51</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </p>
+      </form>
 
-            />
-          </CardContent>
-        </Card>
-      </Box>
+      <ChartWrapper width={500} height={500} label={"Biaxial Line Chart"}>
+        <BiaxialLineChartStatic
+          years={DUMMYDATA["BiaxialLineChart"]["years"]}
+          series={series}
+        />
+      </ChartWrapper>
     </div>
   );
 };

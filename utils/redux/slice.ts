@@ -1,52 +1,139 @@
 // src/slices/authSlice.ts
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, logoutUser } from '@/services/authService';
+import { createSlice } from '@reduxjs/toolkit';
+import { AUTHTOKEN } from '../constants';
+import Cookies from 'js-cookie';
+import { setIdle, signin, signout } from './actions/auth';
+import { createChart, deleteChart, getAllCharts } from './actions/kpi';
+import { getAllUsers } from './actions/user';
 
 
-interface AuthState {
-  isAuthenticated: boolean;
-  user?: { username: string; role: string }; 
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+
+
+
+interface InitialState {
+  allCharts? : any[];
+  allUsers? : any[];
+  status: 'idle' | 'loading' | 'success' | 'failed' | 'loginSuccessful' | 'ok' | 'chartDeleted';
   error: string | null;
 }
 
-const initialState: AuthState = {
-  isAuthenticated: false,
+const initialState: InitialState = {
   status: 'idle',
   error: null,
 };
 
-export const login = createAsyncThunk('auth/login', async (credentials: { username: string; password: string }) => {
-  const response = await loginUser(credentials.username, credentials.password);
-  // return response.user;
-});
-
-export const logout = createAsyncThunk('auth/logout', async () => {
-  await logoutUser();
-});
 
 const slice = createSlice({
-  name: 'auth',
+  name: 'slice', 
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state) => {
+
+      // Signin
+      .addCase(signin.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(login.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.isAuthenticated = true;
-        // state.user = action.payload;
+      .addCase(signin.fulfilled, (state, action) => {
+        if (action.payload) { 
+          const expirationMinutes = 720; 
+          const expirationDate = new Date();
+          expirationDate.setTime(expirationDate.getTime() + expirationMinutes * 60 * 1000);
+          
+          Cookies.set(AUTHTOKEN, action.payload, {
+            expires: expirationDate,
+            secure: true,
+            sameSite: 'Strict',
+          });
+          state.status = 'loginSuccessful'; 
+        } else {
+          state.status = 'failed';
+        }
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(signin.rejected, (state, action) => {
+        state.error = action.error?.message || null; 
         state.status = 'failed';
-        state.error = action.error.message || null;
       })
-      .addCase(logout.fulfilled, (state) => {
-        state.isAuthenticated = false;
-        state.user = undefined;
-      });
+
+
+       // Signout
+      .addCase(signout.fulfilled, (state) => {
+
+
+      })
+
+
+      //CreateChart
+      .addCase(createChart.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(createChart.fulfilled, (state, action) => {
+        if (action.payload) { 
+          state.status = 'success'; 
+        } else {
+          state.status = 'failed';
+        }
+      })
+      .addCase(createChart.rejected, (state, action) => {
+        state.error = action.error?.message || null; 
+        state.status = 'failed';
+      })
+
+      
+      //GetAllCharts
+      .addCase(getAllCharts.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(getAllCharts.fulfilled, (state, action) => {
+        if (action.payload && action.payload.data) { 
+  
+          state.allCharts = action.payload.data; 
+          state.status = 'ok'; 
+        } else {
+          state.status = 'failed';
+        }
+      })
+      .addCase(getAllCharts.rejected, (state, action) => {
+        state.error = action.error?.message || null; 
+        state.status = 'failed';
+      })
+
+
+      //DeleteChart
+      .addCase(deleteChart.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(deleteChart.fulfilled, (state, action) => {
+        state.status = 'chartDeleted'; 
+      })
+      .addCase(deleteChart.rejected, (state, action) => {
+        state.error = action.error?.message || null; 
+        state.status = 'failed';
+      })
+
+
+        //SetIdle
+      .addCase(setIdle.fulfilled, (state, action) => {
+        state.status = 'idle'; 
+      })
+
+      //GetAllusers
+      .addCase(getAllUsers.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
+        if (action.payload && action.payload.data) { 
+          state.allUsers = action.payload.data; 
+          state.status = 'ok'; 
+        } else {
+          state.status = 'failed';
+        }
+      })
+      .addCase(getAllUsers.rejected, (state, action) => {
+        state.error = action.error?.message || null; 
+        state.status = 'failed';
+      })
+    
   },
 });
 

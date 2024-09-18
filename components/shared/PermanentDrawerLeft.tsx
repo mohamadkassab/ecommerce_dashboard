@@ -28,7 +28,7 @@ interface PermanentDrawerProps {
   }
 
   type OpenSectionsProps = {
-    [key: string]: boolean; // or you can use a specific string union if you know the section titles
+    [key: string]: boolean; 
 
   };
   
@@ -40,7 +40,7 @@ interface PermanentDrawerProps {
     let pathNameToUpper = pathName?.split("/")[1];
     pathNameToUpper = pathNameToUpper ? pathNameToUpper.charAt(0).toUpperCase() + pathNameToUpper.slice(1).toLowerCase() : "";
   
-    const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({}); // Define OpenSectionsProps
+    const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({}); 
   
     const handleToggle = (sectionTitle: string) => {
       setOpenSections((prev) => ({
@@ -53,36 +53,14 @@ interface PermanentDrawerProps {
       router.push(route);
     }
 
-    const [isScrolled, setIsScrolled] = useState(false);
 
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setIsScrolled(scrollTop > 0);
-    };
   
-    React.useEffect(() => {
-      window.addEventListener('scroll', handleScroll);
-      return () => {
-        window.removeEventListener('scroll', handleScroll);
-      };
-    }, []);
+
   
     return (
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar
-          position="fixed"
-          sx={{ width: `calc(100% - ${DRAWERWIDTH}px)`, ml: `${DRAWERWIDTH}px`, backgroundColor: 'white',   boxShadow: isScrolled ? '0px 4px 12px rgba(0, 0, 0, 0.1)' : 'none',
-          transition: 'all 0.3s ease-in-out' }}
-        >
-          <Toolbar
-           sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'end' }}>
-            <div className='flex flex-row text-secondary gap-8'>
-              <MessageIcon />
-              <NotificationsIcon />
-            </div>
-          </Toolbar>
-        </AppBar>
+
         <Drawer
           sx={{
             width: DRAWERWIDTH,
@@ -98,9 +76,9 @@ interface PermanentDrawerProps {
           anchor="left"
         >
           <Toolbar sx={{ borderBottom: '2px solid white' }}>
-            <Typography variant="h5" noWrap component="div" sx={{ color: 'white', fontWeight:"bold" }}>
+            {/* <Typography variant="h5" noWrap component="div" sx={{ color: 'white', fontWeight:"bold" }}>
               {pathNameToUpper}
-            </Typography>
+            </Typography> */}
           </Toolbar>
           <Divider />
           <List>
@@ -131,8 +109,9 @@ interface PermanentDrawerProps {
                 {/* Collapsible Subsections */}
                 <Collapse in={openSections[section.title]} timeout="auto" unmountOnExit>
                   {section?.subsections?.map((subsection, subIndex) => (
-                    <ListItem key={subsection} disablePadding sx={{ display: 'block', pl: 2, color: 'white' }}>
+                    <ListItem key={subsection.title} disablePadding sx={{ display: 'block', pl: 2, color: 'white' }}>
                       <ListItemButton
+                      onClick={ () => handleRouting(String(subsection.path))}
                         sx={{
                           minHeight: 36,
                           justifyContent: 'initial',
@@ -146,7 +125,7 @@ interface PermanentDrawerProps {
                             justifyContent: 'center',
                           }}
                         />
-                           <p className='font-medium text-base'>{subsection}</p>
+                           <p className='font-medium text-base'>{subsection.title}</p>
                         {/* <ListItemText primary={subsection} sx={{ opacity: 1, color: 'white' }} /> */}
                       </ListItemButton>
                     </ListItem>
@@ -156,7 +135,7 @@ interface PermanentDrawerProps {
             ))}
           </List>
         </Drawer>
-        <Box component="main" sx={{ flexGrow: 1, pt: 14, px: 2 }}>
+        <Box component="main" sx={{ flexGrow: 1, pt: 4,  }}>
      
         {children}
       </Box>

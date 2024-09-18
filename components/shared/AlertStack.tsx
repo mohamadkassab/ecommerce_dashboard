@@ -5,26 +5,31 @@ import { Stack } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import { Container } from 'postcss';
 import Box from "@mui/material/Box";
-import { useAppSelector } from '@/utils/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/utils/redux/hooks';
 import LoadingComponent from './LoadingComponent';
+import { setIdle } from '@/utils/redux/actions/auth';
+
 
 
 const AlertStack: React.FC = () => {
     const { status, error } = useAppSelector((state: any) => state.reducer);
     const [showError, setShowError] = useState(status === "failed");
     const [showSuccess, setShowSuccess] = useState(status === "success");
+    const dispatch = useAppDispatch();
+
 
 
     useEffect(() => {
       if (status === "failed") {
+        dispatch(setIdle());
         setShowError(true);
-  
         const timer = setTimeout(() => {
           setShowError(false);
         }, 2000); 
   
         return () => clearTimeout(timer);
       }else if(status === "success"){
+        dispatch(setIdle());
         setShowSuccess(true);
   
         const timer = setTimeout(() => {
@@ -42,7 +47,7 @@ const AlertStack: React.FC = () => {
         sx={{ position: "fixed", bottom: 20, left: 20, zIndex: 1400 }}
       >
         {showSuccess && (
-          <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
+          <Alert severity="success" variant="filled" sx={{ width: "100%",  color: "white" }}>
             SUCCESS
           </Alert>
         )}

@@ -1,13 +1,23 @@
-// src/authService.ts
+
+import { SigninModel } from '@/models/AuthModels';
+import { APIROUTES, GLOBAL_REQUEST_TIMEOUT } from '@/utils/constants';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api'; // Adjust URL to your C# API
+export const siginUser = async (formData: SigninModel) => {
+  try {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}${APIROUTES.SIGNIN}`, { username: formData.username, password: formData.password }, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      timeout: GLOBAL_REQUEST_TIMEOUT,
+    });
+    return response?.data;
+  } catch (e) {
 
-export const loginUser = async (username: string, password: string) => {
-  const response = await axios.post(`${API_URL}/login`, { username, password });
-  return response.data;
+  }
 };
 
-export const logoutUser = async () => {
-  await axios.post(`${API_URL}/logout`);
+export const signoutUser = async () => {
+  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/logout`);
 };
+

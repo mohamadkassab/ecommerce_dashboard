@@ -1,13 +1,13 @@
 "use client";
 import { createTheme } from "@mui/material/styles";
 
-const globalRadius = "8px";
+export const globalRadius = "8px";
 
 const muiTheme = createTheme({
   palette: {
     primary: {
-      main: "#0091D5", // Teal blue
-      light: "#33aaff",
+      main: "#0091D5", 
+      light: "#cceaff",
       dark: "#006399",
       contrastText: "#ffffff",
     },
@@ -30,7 +30,7 @@ const muiTheme = createTheme({
       main: "#2196f3", // Blue
     },
     background: {
-      default: "#c1c1c1", // Light gray
+      default: "#ffffff", 
       paper: "#ffffff", // White
     },
     text: {
@@ -38,10 +38,10 @@ const muiTheme = createTheme({
       secondary: "#484848", // Dark gray
     },
     action: {
-      active: "#484848", // Dark gray
-      hover: "#757575", // Light gray
-      selected: "#0091D5", // Teal blue
-      disabled: "#9e9e9e", // Gray
+      active: "#484848", 
+      hover: "#cceaff", 
+      selected: "#ffffff",
+      disabled: "#9e9e9e", 
     },
   },
 
@@ -165,7 +165,7 @@ const muiTheme = createTheme({
     },
   },
 
-  spacing: 8, // Spacing unit
+  spacing: 8, 
 
   breakpoints: {
     values: {

@@ -1,4 +1,4 @@
-import { KpiModel } from "./KpiModel";
+import { KpiModel } from "./KpiModels";
 
 type items = KpiModel ;
 

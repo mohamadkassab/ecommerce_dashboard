@@ -1,21 +1,25 @@
 
 export const DRAWERWIDTH = 240;
 
+export const AUTHTOKEN = "ecommerce_api_authToken";
+
+export const GLOBAL_REQUEST_TIMEOUT = 10000;
 
 export const ROUTES = {
     ROOT: '/',
     SIGNIN: '/signin',
     DASHBOARD : '/dashboard',
     KPI: '/kpi',
-    KPIADD: '/kpi/add'
+    KPIADD: '/kpi/add',
+    USER: '/user'
   };
 
 export const PROTECTED_ROUTES = [
   ROUTES.DASHBOARD,
   ROUTES.KPI,
   ROUTES.KPIADD,
+  ROUTES.USER,
 ]
-
 
 export const SECTIONS = [
   {
@@ -44,26 +48,33 @@ export const SECTIONS = [
     title: 'Orders',
  
   },
-  {
-    title: 'Marketing',
-    subsections: ['hooks', 'templates'],
-  },
+  // {
+  //   title: 'Marketing',
+  //   subsections: ['hooks', 'templates'],
+  // },
   {
     title: 'Users',
-    subsections: ['users', 'roles'],
+    subsections: [{
+      title: 'users',
+      path: ROUTES.USER,
+    }, 
+    {
+      title: 'roles',
+      path: ROUTES.DASHBOARD,
+    }],
   },
-  {
-    title: 'Iventory',
-    subsections: ['inventory', 'upload & edit', 'bulk uploads', 'valuation'],
-  },
-  {
-    title: 'Customers',
-    subsections: ['customers', 'inquiries'],
-  },
-  {
-    title: 'Application Configurations',
-    subsections: ['tax rates', 'shipping options', 'zones'],
-  },
+  // {
+  //   title: 'Iventory',
+  //   subsections: ['inventory', 'upload & edit', 'bulk uploads', 'valuation'],
+  // },
+  // {
+  //   title: 'Customers',
+  //   subsections: ['customers', 'inquiries'],
+  // },
+  // {
+  //   title: 'Application Configurations',
+  //   subsections: ['tax rates', 'shipping options', 'zones'],
+  // },
 
   {
     title: 'Settings',
@@ -74,7 +85,6 @@ export const SECTIONS = [
 
   },
 ];
-
 
 export const DUMMYDATA = {
   VerticalBarChart:{
@@ -159,9 +169,9 @@ export const DUMMYDATA = {
 
   PieActiveArc:{
     data:  [
-      { id: 0, value: 10, label: 'series A' },
-      { id: 1, value: 15, label: 'series B' },
-      { id: 2, value: 20, label: 'series C' },
+      {  value: 10, label: 'series A' },
+      {  value: 15, label: 'series B' },
+      {  value: 20, label: 'series C' },
     ]
   },
 
@@ -174,10 +184,15 @@ export const DUMMYDATA = {
         { name: 'Item 4', value: 100 },
         { name: 'Item 5', value: 80 },
         { name: 'Item 6', value: 70 },
+        { name: 'Item 1', value: 100 },
+        { name: 'Item 2', value: 80 },
+        { name: 'Item 3', value: 70 },
+        { name: 'Item 4', value: 100 },
+        { name: 'Item 5', value: 80 },
+        { name: 'Item 6', value: 70 },
         { name: 'Item N', value: 50 },
  
       ]
-    
   },
 
   BasicColorLegend:{
@@ -359,6 +374,16 @@ export const DUMMYDATA = {
       { year: new Date(2024, 0, 1), value: 1.2314565 },
     ]
   }
+
+}
+
+export const APIROUTES = {
+  SIGNIN : "/User/signin",
+  CREATECHART: "/Kpi/createChart",
+  GETALLCHARTS: "/Kpi/getAllCharts",
+  GETCHARTDATABYQUERY : "/Kpi/getChartDataByQuery",
+  DELETECHART : "/Kpi/deleteChart",
+  GETALLUSERS : "/User/getAllUsersWithRolesAndPermissions",
 
 }
 
