@@ -4,7 +4,7 @@ import { AUTHTOKEN } from '../constants';
 import Cookies from 'js-cookie';
 import { setIdle, signin, signout } from './actions/auth';
 import { createChart, deleteChart, getAllCharts } from './actions/kpi';
-import { getAllUsers } from './actions/user';
+import { getAllRoles, getAllUsers } from './actions/user';
 
 
 
@@ -13,6 +13,7 @@ import { getAllUsers } from './actions/user';
 interface InitialState {
   allCharts? : any[];
   allUsers? : any[];
+  allRoles?: any[];
   status: 'idle' | 'loading' | 'success' | 'failed' | 'loginSuccessful' | 'ok' | 'chartDeleted';
   error: string | null;
 }
@@ -117,7 +118,7 @@ const slice = createSlice({
         state.status = 'idle'; 
       })
 
-      //GetAllusers
+      //GetAllUsers
       .addCase(getAllUsers.pending, (state) => {
         state.status = 'loading';
       })
@@ -133,6 +134,23 @@ const slice = createSlice({
         state.error = action.error?.message || null; 
         state.status = 'failed';
       })
+
+         //GetAllRoles
+         .addCase(getAllRoles.pending, (state) => {
+          state.status = 'loading';
+        })
+        .addCase(getAllRoles.fulfilled, (state, action) => {
+          if (action.payload && action.payload.data) { 
+            state.allRoles = action.payload.data; 
+            state.status = 'ok'; 
+          } else {
+            state.status = 'failed';
+          }
+        })
+        .addCase(getAllRoles.rejected, (state, action) => {
+          state.error = action.error?.message || null; 
+          state.status = 'failed';
+        })
     
   },
 });

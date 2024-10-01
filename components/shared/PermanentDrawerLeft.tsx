@@ -82,57 +82,64 @@ interface PermanentDrawerProps {
           </Toolbar>
           <Divider />
           <List>
-            {SECTIONS.map((section, sectionIndex) => (
-              <div key={section.title}>
-                <ListItem disablePadding sx={{ display: 'block', color: 'white' }}>
-                  <ListItemButton
-                    onClick={  () => { section.subsections ? handleToggle(section.title) : handleRouting(String(section.path))}}
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: 'initial',
-                      px: 2.5,
-                    }}
-                  >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: 3,
-                        justifyContent: 'center',
-                      }}
-                    />
-                    <p className='font-semibold text-base'>{section.title}</p>
-                    {/* <ListItemText primary={section.title} sx={{ opacity: 1, color: 'white',}} /> */}
-                    {section.subsections && (openSections[section.title] ? <ExpandLess /> : <ExpandMore />)}
-                  </ListItemButton>
-                </ListItem>
-  
-                {/* Collapsible Subsections */}
-                <Collapse in={openSections[section.title]} timeout="auto" unmountOnExit>
-                  {section?.subsections?.map((subsection, subIndex) => (
-                    <ListItem key={subsection.title} disablePadding sx={{ display: 'block', pl: 2, color: 'white' }}>
-                      <ListItemButton
-                      onClick={ () => handleRouting(String(subsection.path))}
-                        sx={{
-                          minHeight: 36,
-                          justifyContent: 'initial',
-                          px: 2.5,
-                        }}
-                      >
-                        <ListItemIcon
-                          sx={{
-                            minWidth: 0,
-                            mr: 3,
-                            justifyContent: 'center',
-                          }}
-                        />
-                           <p className='font-medium text-base'>{subsection.title}</p>
-                        {/* <ListItemText primary={subsection} sx={{ opacity: 1, color: 'white' }} /> */}
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
-                </Collapse>
-              </div>
-            ))}
+          {SECTIONS.map((section, sectionIndex) => (
+  <div key={section.title}>
+    <ListItem disablePadding sx={{ display: 'block', color: 'white' }}>
+      <ListItemButton
+        onClick={() => { section.subsections ? handleToggle(section.title) : handleRouting(String(section.path)) }}
+        sx={{
+          minHeight: 48,
+          justifyContent: 'initial',
+          px: 2.5,
+          color: 'white', // Default text color
+          '&:hover': {
+            color: 'primary.dark', // Change text color on hover
+          },
+        }}
+      >
+        <ListItemIcon
+          sx={{
+            minWidth: 0,
+            mr: 3,
+            justifyContent: 'center',
+          }}
+        />
+        <p className='font-semibold text-base'>{section.title}</p>
+        {section.subsections && (openSections[section.title] ? <ExpandLess /> : <ExpandMore />)}
+      </ListItemButton>
+    </ListItem>
+
+    {/* Collapsible Subsections */}
+    <Collapse in={openSections[section.title]} timeout="auto" unmountOnExit>
+      {section?.subsections?.map((subsection, subIndex) => (
+        <ListItem key={subsection.title} disablePadding sx={{ display: 'block', pl: 2, color: 'white' }}>
+          <ListItemButton
+            onClick={() => handleRouting(String(subsection.path))}
+            sx={{
+              minHeight: 36,
+              justifyContent: 'initial',
+              px: 2.5,
+              color: 'white', // Default text color
+              '&:hover': {
+                color: 'primary.dark', // Change text color on hover
+              },
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: 3,
+                justifyContent: 'center',
+              }}
+            />
+            <p className='font-medium text-base'>{subsection.title}</p>
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </Collapse>
+  </div>
+))}
+
           </List>
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, pt: 4,  }}>

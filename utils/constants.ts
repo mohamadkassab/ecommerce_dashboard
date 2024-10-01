@@ -379,12 +379,13 @@ export const DUMMYDATA = {
 
 export const APIROUTES = {
   SIGNIN : "/User/signin",
+  CREATEUSER : "/User/signup",
   CREATECHART: "/Kpi/createChart",
   GETALLCHARTS: "/Kpi/getAllCharts",
   GETCHARTDATABYQUERY : "/Kpi/getChartDataByQuery",
   DELETECHART : "/Kpi/deleteChart",
   GETALLUSERS : "/User/getAllUsersWithRolesAndPermissions",
-
+  GETALLROLES : "/User/getAllRolesAndPermissions",
 }
 
   

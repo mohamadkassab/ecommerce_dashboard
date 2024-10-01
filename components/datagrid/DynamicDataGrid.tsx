@@ -1,293 +1,4 @@
-// import { useState } from "react";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableContainer,
-//   TableHead,
-//   TableRow,
-//   Checkbox,
-//   Select,
-//   MenuItem,
-//   TextField,
-//   InputLabel,
-//   FormControl,
-//   Paper,
-//   Autocomplete,
-//   styled,
-//   Switch
-// } from "@mui/material";
-// import { CheckBoxOutlineBlank, CheckBox, BorderRight } from '@mui/icons-material';
-// import { useTheme } from "@emotion/react";
-// import { color } from "framer-motion";
-// interface DynamicDataGridProps {
-//   model?: any[];
-//   data?: any[];
-// }
 
-// const DynamicDataGrid: React.FC<DynamicDataGridProps> = () => {
-//     const theme = useTheme();
-//     const icon = <CheckBoxOutlineBlank fontSize="small" />;
-//     const checkedIcon = <CheckBox fontSize="small" />;
-//     const options = [
-//       'option1' ,
-//       'option2' ,
-//       'option3' ,
-//       ];
-
-//     const [multiSelect, setMultiSelect] = useState({
-//       row1: ["option2", "option3"],
-//       row2: [ 'option1' ],
-//     });
-
-//     const [singleSelect, setSingleSelect] = useState({
-//       row1: "optionB",
-//       row2: "optionA",
-//     });
-
-//   const handleMultiSelectChange = (
-//     event: React.FormEvent<HTMLSelectElement>,
-//     row: any
-//   ) => {
-//     setMultiSelect({
-//       ...multiSelect,
-//       [row]: event.currentTarget.value,
-//     });
-//   };
-
-//   const handleSingleSelectChange = (
-//     event: React.FormEvent<HTMLSelectElement>,
-//     row: any
-//   ) => {
-//     setSingleSelect({
-//       ...singleSelect,
-//       [row]: event.currentTarget.value,
-//     });
-//   };
-
-//   const StyledTableCell = styled(TableCell)(({ theme }) => ({
-//     color: theme.palette.text.primary,
-//     textAlign: "left",
-
-//     borderBottom: `2px solid ${theme.palette.divider}`,
-//     '&:first-child': {
-//       borderLeft: `1px solid ${theme.palette.divider}`,
-//     },
-
-//     '&:last-child': {
-//       borderRight: `1px solid ${theme.palette.divider}`,
-//     },
-//   }));
-
-//   const StyledHeaderTableCell = styled(TableCell)(({ theme }) => ({
-//     fontSize: '18px',
-//     color: theme.palette.background.paper,
-//     position: 'relative',
-//     textAlign: "left",
-//     '&:not(:last-child)::after': {
-//       content: '""',
-//       position: 'absolute',
-//       top: '50%',
-//       right: 0,
-//       width: '2px',
-//       height: '50%',
-//       transform: 'translateY(-50%)',
-//       background: theme.palette.background.paper,
-//     },
-//   }));
-
-//   const StyledTableRow = styled(TableRow)(({ theme }) => ({
-//     backgroundColor: `${theme.palette.primary.main}`,
-//     border: `1px solid ${theme.palette.primary.main}`,
-//   }));
-
-//   return (
-//     <TableContainer component={Paper}>
-//       <Table>
-//         <TableHead>
-//           <StyledTableRow>
-//             <StyledHeaderTableCell>String</StyledHeaderTableCell>
-//             <StyledHeaderTableCell>Number</StyledHeaderTableCell>
-//             <StyledHeaderTableCell>Boolean</StyledHeaderTableCell>
-//             <StyledHeaderTableCell>List (Multiple)</StyledHeaderTableCell>
-//             <StyledHeaderTableCell>List (Single)</StyledHeaderTableCell>
-//             <StyledHeaderTableCell>Date</StyledHeaderTableCell>
-//           </StyledTableRow>
-//         </TableHead>
-
-//         <TableBody>
-
-//           <TableRow>
-//             <StyledTableCell>Another Text</StyledTableCell>
-//             <StyledTableCell>99</StyledTableCell>
-//             <StyledTableCell>
-//             <Switch
-//             checked={true}
-//             // onChange={(e) => setBooleanValue(e.target.checked)}
-//             color="primary"
-//           />
-//             </StyledTableCell>
-//             <StyledTableCell>
-//               <FormControl fullWidth>
-//                 <Autocomplete
-//                   multiple
-//                   options={options}
-//                   disableCloseOnSelect
-//                   getOptionLabel={(option) => option}
-//                   value={multiSelect.row2}
-//                   onChange={(e: any, newValue) =>
-//                     handleMultiSelectChange(e, "row2")
-//                   }
-//                   renderOption={(props, option, { selected }) => (
-//                     <li {...props}>
-//                       <Checkbox
-//                         icon={icon}
-//                         checkedIcon={checkedIcon}
-//                         style={{ marginRight: 8 }}
-//                         checked={selected}
-//                       />
-//                       {option}
-//                     </li>
-//                   )}
-//                   renderInput={(params) => (
-//                     <TextField
-//                       {...params}
-//                       label="Select options"
-//                     />
-//                   )}
-//                   renderTags={(value, getTagProps) => (
-//                     <span>
-//                       {value.length} selected
-//                     </span>
-//                   )}
-//                 />
-//               </FormControl>
-//             </StyledTableCell>
-//             <StyledTableCell>
-//             <FormControl fullWidth>
-//                 <Autocomplete
-//                   options={options}
-//                   disableCloseOnSelect
-//                   getOptionLabel={(option) => option}
-//                   value={singleSelect.row2}
-//                   onChange={(e: any) => handleSingleSelectChange(e, "row2")}
-//                   renderOption={(props, option, { selected }) => (
-//                     <li {...props}>
-//                       <Checkbox
-//                         icon={icon}
-//                         checkedIcon={checkedIcon}
-//                         style={{ marginRight: 8 }}
-//                         checked={selected}
-//                       />
-//                       {option}
-//                     </li>
-//                   )}
-//                   renderInput={(params) => (
-//                     <TextField
-//                       {...params}
-//                       label="Single Select"
-//                       placeholder="Select options"
-//                     />
-//                   )}
-
-//                 />
-//               </FormControl>
-
-//             </StyledTableCell>
-//             <StyledTableCell>
-//               <TextField type="date" defaultValue="2024-09-17" fullWidth />
-//             </StyledTableCell>
-//           </TableRow>
-
-//           <TableRow>
-//             <StyledTableCell>Another Text</StyledTableCell>
-//             <StyledTableCell>99</StyledTableCell>
-//             <StyledTableCell>
-//             <Switch
-//             checked={true} // Replace with your state/variable for boolean value
-//             // onChange={(e) => setBooleanValue(e.target.checked)} // Update state on change
-//             color="primary" // Optional: Change color
-//           />
-//             </StyledTableCell>
-//             <StyledTableCell>
-//               <FormControl fullWidth>
-//                 <Autocomplete
-//                   multiple
-//                   options={options}
-//                   disableCloseOnSelect
-//                   getOptionLabel={(option) => option}
-//                   value={multiSelect.row2}
-//                   onChange={(e: any, newValue) =>
-//                     handleMultiSelectChange(e, "row2")
-//                   }
-//                   renderOption={(props, option, { selected }) => (
-//                     <li {...props}>
-//                       <Checkbox
-//                         icon={icon}
-//                         checkedIcon={checkedIcon}
-//                         style={{ marginRight: 8 }}
-//                         checked={selected}
-//                       />
-//                       {option}
-//                     </li>
-//                   )}
-//                   renderInput={(params) => (
-//                     <TextField
-//                       {...params}
-//                       label="Select options"
-//                     />
-//                   )}
-//                   renderTags={(value, getTagProps) => (
-//                     <span>
-//                       {value.length} selected
-//                     </span>
-//                   )}
-//                 />
-//               </FormControl>
-//             </StyledTableCell>
-//             <StyledTableCell>
-//             <FormControl fullWidth>
-//                 <Autocomplete
-//                   options={options}
-//                   disableCloseOnSelect
-//                   getOptionLabel={(option) => option}
-//                   value={singleSelect.row2}
-//                   onChange={(e: any) => handleSingleSelectChange(e, "row2")}
-//                   renderOption={(props, option, { selected }) => (
-//                     <li {...props}>
-//                       <Checkbox
-//                         icon={icon}
-//                         checkedIcon={checkedIcon}
-//                         style={{ marginRight: 8 }}
-//                         checked={selected}
-//                       />
-//                       {option}
-//                     </li>
-//                   )}
-//                   renderInput={(params) => (
-//                     <TextField
-//                       {...params}
-//                       label="Single Select"
-//                       placeholder="Select options"
-//                     />
-//                   )}
-
-//                 />
-//               </FormControl>
-
-//             </StyledTableCell>
-//             <StyledTableCell>
-//               <TextField type="date" defaultValue="2024-09-17" fullWidth />
-//             </StyledTableCell>
-//           </TableRow>
-
-//         </TableBody>
-//       </Table>
-//     </TableContainer>
-//   );
-// };
-// export default DynamicDataGrid;
-// pages/table.tsx
 
 import * as React from "react";
 import Box from "@mui/material/Box";
@@ -301,10 +12,14 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import {
   TextField,
-  Chip,
+  Modal,
   Checkbox,
   ListItemText,
   Autocomplete,
+  Typography,
+  FormControl,
+  InputLabel,
+  FormLabel
 } from "@mui/material";
 
 import {
@@ -326,2226 +41,46 @@ import {
   GridRowCount,
 } from "@mui/x-data-grid";
 import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
-  randomArrayItem,
-} from "@mui/x-data-grid-generator";
 
-const roles = [
-  "Market",
-  "Finance",
-  "Development",
-  "option1",
-  "option2",
-  "option3",
-];
-const randomRole = () => {
-  return randomArrayItem(roles);
+  randomId,
+} from "@mui/x-data-grid-generator";
+import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
+import { getAllUsers, getAllRoles, createUser } from "@/utils/redux/actions/user";
+import IconButton from '@mui/material/IconButton';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+
+
+type PasswordVisibilityMap = {
+  [key: string]: boolean; 
 };
 
-const initialRows: GridRowsProp = [
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: ["Market"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: ["Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: ["Market", "Finance"],
-    oneselect: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: ["Development"],
-    oneselect: randomRole(),
-  },
-];
+
+interface roleProps {
+  id: number,
+  roleName: string,
+  permissions: any[]
+}
+
+
+
+interface rowProps {
+  id?: number,
+  isNew?: boolean,
+  username: string,
+  firstName: string,
+  lastName: string,
+  age: number,
+  phone: string,
+  address: string,
+  password: string,
+  roles: roleProps[],
+  permissions?: {id:string, permissionName:string}[],
+  createdAt?: Date,
+  updatedAt?: Date,
+  createdBy?: string,
+  updatedBy?: string,
+}
+
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -2554,49 +89,54 @@ interface EditToolbarProps {
   ) => void;
 }
 
-function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel } = props;
 
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, name: "", age: "", role: [], isNew: true },
-    ]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-      <GridToolbarExport />
-      <div style={{ marginLeft: "auto" }}>
-        <GridToolbarQuickFilter />
-        {/* <GridRowCount rowCount={5} visibleRowCount={1}/> */}
-      </div>
-    </GridToolbarContainer>
-  );
-}
 
 export default function DynamicDataGrid() {
-  const [isTrue, setIsTrue] = React.useState<boolean>(false);
-  const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
-    {}
-  );
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsTrue(true);
-    }, 5000); // 5000 milliseconds = 5 seconds
+  function EditToolbar(props: EditToolbarProps) {
+    const { setRows, setRowModesModel } = props;
+  
+    const handleClick = () => {
+      handleOpen();
+      // const id = randomId();
+      // setRows((oldRows) => [
+      //   ...oldRows,
+      //   { id, username: "", firstName: "",lastName: "", age: 20 ,phone: "",address: "", roles: [],createdAt: new Date(), updatedAt:new Date(),  isNew: true },
+      // ]);
+      // setRowModesModel((oldModel) => ({
+      //   ...oldModel,
+      //   [id]: { mode: GridRowModes.Edit, },
+      // }));
+    };
+  
+    return (
+      <GridToolbarContainer>
+        <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+          Add record
+        </Button>
+        <GridToolbarExport />
+        <div style={{ marginLeft: "auto" }}>
+          <GridToolbarQuickFilter />
+          {/* <GridRowCount rowCount={5} visibleRowCount={1}/> */}
+        </div>
+      </GridToolbarContainer>
+    );
+  }
 
-    return () => clearTimeout(timer); // Cleanup the timer on component unmount
-  }, []);
+  const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [rows, setRows] = React.useState<rowProps[]>([]);
+  const [roles, setRoles] = React.useState<roleProps[] | null>(null);
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+  const { allUsers, allRoles } = useAppSelector((state: any) => state.reducer);
+  const [passwordVisibility, setPasswordVisibility] = React.useState<PasswordVisibilityMap>({});
+
+  const handleToggleShowPassword = (id: any) => {
+    setPasswordVisibility((prev:any) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
@@ -2612,9 +152,27 @@ export default function DynamicDataGrid() {
   };
 
   const handleSaveClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
+    const foundRow = rows.find((row) => row.id === id);
+    if (foundRow) {
+      const { id, createdAt, updatedAt, isNew, ...params } = foundRow;
+      if(true){
+        const requiredFields: Array<keyof typeof params> = ['username', 'lastName', 'firstName', 'phone', 'password'];
+        const emptyFields = requiredFields.filter(field => !params[field]);
+    
+        if (emptyFields.length > 0) {
+          alert(`The following fields are required: ${emptyFields.join(', ')}`);
+          return; 
+        }
+    
+        dispatch(createUser(params));
+        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+      }
+      else{
 
+      }
+    }
+  };
+  
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row) => row.id !== id));
   };
@@ -2631,8 +189,8 @@ export default function DynamicDataGrid() {
     }
   };
 
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
+  const processRowUpdate = (newRow: rowProps) => {
+    const updatedRow = { ...newRow, isNew: false,};
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
   };
@@ -2642,101 +200,102 @@ export default function DynamicDataGrid() {
   };
 
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", width: 180, editable: true },
+
+    {
+      field: "id",
+      headerName: "Id",
+      type: "number",
+      flex: 0.5,
+      align: "left",
+      headerAlign: "left",
+      editable: false,
+    },
+    { field: "username", headerName: "Username", flex: 1, editable: true, },
+    { field: "firstName", headerName: "First Name", flex: 1, editable: true },
+    { field: "lastName", headerName: "Last Name", flex: 1, editable: true },
     {
       field: "age",
       headerName: "Age",
       type: "number",
-      width: 80,
+      flex: 0.5,
       align: "left",
       headerAlign: "left",
       editable: true,
     },
+    { field: "phone", headerName: "Phone", flex: 1, editable: true },
+    { field: "address", headerName: "Address", flex: 1, editable: true },
     {
-      field: "joinDate",
-      headerName: "Join date",
+      field: "roles",
+      headerName: "Roles",
+      flex: 1,
+      renderCell: (params) => {
+        const rolesDisplay = params.value.map((role: roleProps) => role.roleName).join(', ') || 'No roles assigned';
+        return <span>{rolesDisplay}</span>; 
+      },
+    },  
+    {
+      field: "password",
+      headerName: "Password",
+      flex: 1,
+      editable: true,
+      renderCell: (params) => (
+        <div>
+          {params.value ? '******' : '******'} {/* Always show asterisks */}
+        </div>
+      ),
+      renderEditCell: (params: GridCellEditStopParams) => {
+        const isVisible = passwordVisibility[params.id] || false;
+        const passwordValue = params.value || '';
+
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+            <TextField
+              type={isVisible ? "text" : "password"} // Toggle password visibility
+              value={passwordValue}
+              onChange={(event) => {
+                const newValue = event.target.value;
+                params.api.setEditCellValue({ id: params.id, field: "password", value: newValue });
+              }}
+              variant="outlined"
+              size="small"
+              sx={{  flex: 1 }}
+            />
+            <IconButton onClick={() => handleToggleShowPassword(params.id)}>
+              {isVisible ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </div>
+        );
+      },
+    },  
+    {
+      field: "createdAt",
+      headerName: "Created At",
       type: "date",
-      width: 180,
-      editable: true,
+      valueGetter: (params) => {
+        return new Date(params); 
+      },
+      flex: 1,
+      editable: false,
     },
     {
-      field: "role",
-      headerName: "Departments",
-      width: 220,
-      editable: true,
-      renderEditCell: (params: GridCellEditStopParams) => (
-        <Box sx={{ width: "100%",  }}>
-          <Autocomplete
-            disableCloseOnSelect
-            multiple
-            freeSolo
-            options={roles} // Assuming 'roles' is an array of string options
-            value={(params.value as string[]) || []} // Cast to string[] for type safety
-            onChange={(event: React.SyntheticEvent, newValue: string[]) =>
-              params.api.setEditCellValue({
-                id: params.id,
-                field: "role",
-                value: newValue,
-              })
-            }
-            renderTags={() => null}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Departments"
-                variant="outlined"
-                size="small"
-                sx={{marginTop:0.5, }} 
-              />
-            )}
-            renderOption={(props, option, { selected }) => (
-              <li {...props}>
-                <Checkbox checked={selected} tabIndex={-1} disableRipple />
-                <ListItemText primary={option} />
-              </li>
-            )}
-          />
-        </Box>
-      ),
+      field: "updatedAt",
+      headerName: "Updated At",
+      type: "date",
+      valueGetter: (params) => {
+        return new Date(params); 
+      },
+      flex: 1,
+      editable: false,
     },
-    {
-      field: "oneselect",
-      headerName: "Department",
-      width: 220,
-      editable: true,
-      type: "singleSelect",
-      valueOptions: ["Market", "Finance", "Development"],
-      renderEditCell: (params: GridCellEditStopParams) => (
-        <TextField
-          select
-          size="small" // Set the size to small
-          fullWidth 
-          variant="outlined"
-          label="Department"
-          onChange={(event) => {
-            params.api.setEditCellValue({
-              id: params.id,
-              field: "oneselect",
-              value: event.target.value,
-            });
-          }}
-          sx={{ marginTop: 0.5 }}
-        >
-          {["Market", "Finance", "Development"].map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
-      ),
-    },
+    { field: "createdBy", headerName: "Created By",flex: 1, editable: false },
+    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 100,
+      flex: 0.6,
       cellClassName: "actions",
-      getActions: ({ id }) => {
+      getActions: ({ id,row, }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
@@ -2782,11 +341,63 @@ export default function DynamicDataGrid() {
     },
   ];
 
+  // ADD RECORD FORM 
+  const [open, setOpen] = React.useState(false);
+  const [formData, setFormData] = React.useState<rowProps>({username: "", firstName: "", lastName: "", age: 20, phone: "", address: "",roles: [], password: ""  });
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleChange = (e: any) => {
+    const { name, value, } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleRolesChange = (newValue: any) => {
+    if (Array.isArray(newValue)) {
+      setFormData((prevState) => ({
+        ...prevState,
+        roles: newValue,
+      }));
+    }
+    console.log(newValue)
+    console.log(formData)
+  };
+
+  const handleSubmit = () => {
+    // setData([...data, { id: data.length + 1, ...formData }]);
+    // setFormData({ name: '', age: '' });
+    handleClose();
+  };
+  // END ADD RECORD FORM 
+  
+  React.useEffect(()=>{
+    dispatch(getAllRoles());
+    dispatch(getAllUsers());
+  },[])
+
+
+  React.useEffect(()=>{
+    if(allUsers && allRoles){
+      setRows(allUsers); 
+    }
+  },[allUsers])
+
+  React.useEffect(()=>{
+    if(allRoles){
+      setRoles(allRoles);
+    }
+  },[allRoles])
+
+  React.useEffect(()=>{
+    setIsLoading(false);
+  },[rows])
+
   return (
     <Box
       sx={{
         height: "94vh",
-        width: "100%",
+        width: "calc(100vw - 240px)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -2808,7 +419,7 @@ export default function DynamicDataGrid() {
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         disableRowSelectionOnClick
-        // loading={!isTrue}
+       
 
         slots={{
           toolbar: EditToolbar as GridSlots["toolbar"],
@@ -2828,9 +439,120 @@ export default function DynamicDataGrid() {
           '& .MuiDataGrid-columnHeaderTitle':{
             fontWeight: 'bold', 
           }
-         
         }}
       />
+  <Modal open={open} onClose={handleClose}>
+  <Box
+    sx={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      bgcolor: 'background.paper',
+      boxShadow: 24,
+      p: 4,
+      borderRadius: 2,
+      width: 400,
+    }}
+  >
+    <Typography variant="h6" component="h2" gutterBottom>
+      Create New Entry
+    </Typography>
+    <form onSubmit={handleSubmit}>
+      <TextField
+        required
+        type="email"
+        label="Username"
+        name="username"
+        value={formData.username}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        required
+        type="text"
+        label="First Name"
+        name="firstName"
+        value={formData.firstName}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        required
+        type="text"
+        label="Last Name"
+        name="lastName"
+        value={formData.lastName} // Fixed value here
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        required
+        type="number"
+        label="Age"
+        name="age"
+        value={formData.age}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        required
+        type="tel"
+        label="Phone"
+        name="phone"
+        value={formData.phone}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        required
+        type="text"
+        label="Address"
+        name="address"
+        value={formData.address}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+      />
+      <FormControl fullWidth margin="normal">
+        <Autocomplete
+          multiple
+          disableCloseOnSelect
+          options={roles || []}
+          getOptionLabel={(option) => option.roleName}
+          value={formData.roles}
+          onChange={(event, newValue) => {
+            handleRolesChange(newValue);
+          }}
+          renderOption={(props, option, { selected }) => (
+            <li {...props}>
+              <Checkbox checked={selected} />
+              <ListItemText primary={option.roleName} />
+            </li>
+          )}
+          renderInput={(params) => (
+            <TextField {...params} variant="outlined" label="Select Roles" />
+          )}
+        />
+      </FormControl>
+      <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+        Submit
+      </Button>
+    </form>
+  </Box>
+</Modal>
+
     </Box>
   );
 }
