@@ -23,20 +23,16 @@ const AlertStack: React.FC = () => {
       if (status === "failed") {
         dispatch(setIdle());
         setShowError(true);
-        const timer = setTimeout(() => {
+        setTimeout(() => {
           setShowError(false);
-        }, 2000); 
-  
-        return () => clearTimeout(timer);
+        }, 1000); 
       }else if(status === "success"){
         dispatch(setIdle());
         setShowSuccess(true);
   
-        const timer = setTimeout(() => {
+        setTimeout(() => {
           setShowSuccess(false);
-        }, 2000); 
-  
-        return () => clearTimeout(timer);
+        }, 1000); 
       }
     }, [status]);
 
@@ -57,7 +53,7 @@ const AlertStack: React.FC = () => {
             variant="filled"
             sx={{ width: "100%", bgcolor: (theme) => theme.palette.error.main }}
           >
-           {error || "FAILED"} 
+           {error?.error || "FAILED"} 
           </Alert>
         )}
       </Stack>

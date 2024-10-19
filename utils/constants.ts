@@ -386,6 +386,8 @@ export const APIROUTES = {
   DELETECHART : "/Kpi/deleteChart",
   GETALLUSERS : "/User/getAllUsersWithRolesAndPermissions",
   GETALLROLES : "/User/getAllRolesAndPermissions",
+  DELETEUSER: "/User/deleteUser",
+  UPDATEUSER: "/User/updateUser",
 }
 
   

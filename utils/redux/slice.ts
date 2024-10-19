@@ -4,18 +4,19 @@ import { AUTHTOKEN } from '../constants';
 import Cookies from 'js-cookie';
 import { setIdle, signin, signout } from './actions/auth';
 import { createChart, deleteChart, getAllCharts } from './actions/kpi';
-import { getAllRoles, getAllUsers } from './actions/user';
+import { createUser, deleteUser, getAllRoles, getAllUsers, updateUser } from './actions/user';
 
 
 
 
 
 interface InitialState {
-  allCharts? : any[];
-  allUsers? : any[];
+  allCharts?: any[];
+  allUsers?: any[];
   allRoles?: any[];
-  status: 'idle' | 'loading' | 'success' | 'failed' | 'loginSuccessful' | 'ok' | 'chartDeleted';
-  error: string | null;
+  status: 'idle' | 'loading' | 'success' | 'failed' | 'loginSuccessful' | 'ok' | 'chartDeleted' | 'skeletonLoading';
+  error: string | null | object;
+
 }
 
 const initialState: InitialState = {
@@ -25,7 +26,7 @@ const initialState: InitialState = {
 
 
 const slice = createSlice({
-  name: 'slice', 
+  name: 'slice',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -36,28 +37,28 @@ const slice = createSlice({
         state.status = 'loading';
       })
       .addCase(signin.fulfilled, (state, action) => {
-        if (action.payload) { 
-          const expirationMinutes = 720; 
+        if (action.payload) {
+          const expirationMinutes = 720;
           const expirationDate = new Date();
           expirationDate.setTime(expirationDate.getTime() + expirationMinutes * 60 * 1000);
-          
+
           Cookies.set(AUTHTOKEN, action.payload, {
             expires: expirationDate,
             secure: true,
             sameSite: 'Strict',
           });
-          state.status = 'loginSuccessful'; 
+          state.status = 'loginSuccessful';
         } else {
           state.status = 'failed';
         }
       })
       .addCase(signin.rejected, (state, action) => {
-        state.error = action.error?.message || null; 
+        state.error = action.error?.message || null;
         state.status = 'failed';
       })
 
 
-       // Signout
+      // Signout
       .addCase(signout.fulfilled, (state) => {
 
 
@@ -69,33 +70,33 @@ const slice = createSlice({
         state.status = 'loading';
       })
       .addCase(createChart.fulfilled, (state, action) => {
-        if (action.payload) { 
-          state.status = 'success'; 
+        if (action.payload) {
+          state.status = 'success';
         } else {
           state.status = 'failed';
         }
       })
       .addCase(createChart.rejected, (state, action) => {
-        state.error = action.error?.message || null; 
+        state.error = action.error?.message || null;
         state.status = 'failed';
       })
 
-      
+
       //GetAllCharts
       .addCase(getAllCharts.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(getAllCharts.fulfilled, (state, action) => {
-        if (action.payload && action.payload.data) { 
-  
-          state.allCharts = action.payload.data; 
-          state.status = 'ok'; 
+        if (action.payload && action.payload.data) {
+
+          state.allCharts = action.payload.data;
+          state.status = 'ok';
         } else {
           state.status = 'failed';
         }
       })
       .addCase(getAllCharts.rejected, (state, action) => {
-        state.error = action.error?.message || null; 
+        state.error = action.error?.message || null;
         state.status = 'failed';
       })
 
@@ -105,53 +106,98 @@ const slice = createSlice({
         state.status = 'loading';
       })
       .addCase(deleteChart.fulfilled, (state, action) => {
-        state.status = 'chartDeleted'; 
+        state.status = 'chartDeleted';
       })
       .addCase(deleteChart.rejected, (state, action) => {
-        state.error = action.error?.message || null; 
+        state.error = action.error?.message || null;
         state.status = 'failed';
       })
 
 
-        //SetIdle
+      //SetIdle
       .addCase(setIdle.fulfilled, (state, action) => {
-        state.status = 'idle'; 
+        state.status = 'idle';
       })
 
       //GetAllUsers
       .addCase(getAllUsers.pending, (state) => {
-        state.status = 'loading';
+        state.status = 'skeletonLoading';
       })
       .addCase(getAllUsers.fulfilled, (state, action) => {
-        if (action.payload && action.payload.data) { 
-          state.allUsers = action.payload.data; 
-          state.status = 'ok'; 
+        if (action.payload && action.payload.data) {
+          state.allUsers = action.payload.data;
+          state.status = 'ok';
         } else {
           state.status = 'failed';
         }
       })
       .addCase(getAllUsers.rejected, (state, action) => {
-        state.error = action.error?.message || null; 
+        state.error = action.error?.message || null;
         state.status = 'failed';
       })
 
-         //GetAllRoles
-         .addCase(getAllRoles.pending, (state) => {
-          state.status = 'loading';
-        })
-        .addCase(getAllRoles.fulfilled, (state, action) => {
-          if (action.payload && action.payload.data) { 
-            state.allRoles = action.payload.data; 
-            state.status = 'ok'; 
-          } else {
-            state.status = 'failed';
-          }
-        })
-        .addCase(getAllRoles.rejected, (state, action) => {
-          state.error = action.error?.message || null; 
+      //GetAllRoles
+      .addCase(getAllRoles.pending, (state) => {
+        state.status = 'skeletonLoading';
+      })
+      .addCase(getAllRoles.fulfilled, (state, action) => {
+        if (action.payload && action.payload.data) {
+          state.allRoles = action.payload.data;
+          state.status = 'ok';
+        } else {
           state.status = 'failed';
-        })
-    
+        }
+      })
+      .addCase(getAllRoles.rejected, (state, action) => {
+        state.error = action.error?.message || null;
+        state.status = 'failed';
+      })
+
+      //CreateUser
+      .addCase(createUser.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(createUser.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.status = 'success';
+        } else {
+          state.status = 'failed';
+        }
+      })
+      .addCase(createUser.rejected, (state, action) => {
+        state.error = action.error?.message || null;
+        state.status = 'failed';
+      })
+
+      //UpdateUser
+      .addCase(updateUser.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.status = 'success';
+        } else {
+          state.status = 'failed';
+        }
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.error = action.error?.message || null;
+        state.status = 'failed';
+      })
+
+
+      //DeleteUser
+      .addCase(deleteUser.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.status = 'success';
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.error = action.error?.message || null;
+        state.status = 'failed';
+      })
+
   },
 });
 
