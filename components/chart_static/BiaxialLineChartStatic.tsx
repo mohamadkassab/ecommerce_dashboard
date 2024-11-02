@@ -24,7 +24,7 @@ export default function BiaxialLineChartStatic({years, series}:BiaxialLineChartP
 const lineChartsParams = {
   series: series,
   width: 500,
-  height: 450,
+  height: 430,
 };
   return (
     <LineChart

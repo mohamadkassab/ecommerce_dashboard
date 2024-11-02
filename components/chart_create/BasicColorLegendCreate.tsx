@@ -3,7 +3,7 @@ import PrimaryButton from "../button/PrimaryButton";
 import BasicColorLegend from "../chart/BasicColorLegend";
 import { DUMMYDATA } from "@/utils/constants";
 import BasicColorLegendStatic from "../chart_static/BasicColorLegendStatic";
-import { useAppDispatch } from "@/utils/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { createChart } from "@/utils/redux/actions/kpi";
 import {
   Box,
@@ -26,14 +26,17 @@ interface FormData {
   query: string;
 }
 
+const defaultFormData = {
+  label: "",
+  lowMargin: 0,
+  highMargin: 0,
+  query: "",
+}
+
 const BasicColorLegendCreate: React.FC = () => {
+  const { status } = useAppSelector((state: any) => state.reducer);
   const dispatch = useAppDispatch();
-  const [formData, setFormData] = React.useState<FormData>({
-    label: "",
-    lowMargin: 0,
-    highMargin: 0,
-    query: "",
-  });
+  const [formData, setFormData] = React.useState<FormData>(defaultFormData);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type  } = event.target;
@@ -72,6 +75,12 @@ const BasicColorLegendCreate: React.FC = () => {
     );
   };
 
+  React.useEffect(()=>{
+    if(status === "success"){
+      setFormData(defaultFormData);
+    }
+  },[status])
+
   return (
     <div className="flex flex-wrap w-full mt-[4rem] ">
       <form onSubmit={handleSubmit} className=" w-full lg:w-1/3 flex flex-col justify-start items-center">
@@ -84,6 +93,7 @@ const BasicColorLegendCreate: React.FC = () => {
           name="label" 
           sx={{ width: "50%" }}
           inputProps={{ maxLength: 89 }}
+          value={formData.label}
           onChange={handleChange}
         />
         <TextField
@@ -95,6 +105,7 @@ const BasicColorLegendCreate: React.FC = () => {
           name="lowMargin" 
           sx={{ width: "50%" }}
           inputProps={{ step: "0.01" }}
+          value={formData.lowMargin}
           onChange={handleChange}
           // onChange={(e) => handleChange(parseFloat(e.target.value))} 
 
@@ -108,6 +119,7 @@ const BasicColorLegendCreate: React.FC = () => {
           name="highMargin" 
           sx={{ width: "50%" }}
           inputProps={{ step: "0.01" }}
+          value={formData.highMargin}
           onChange={handleChange}
         />
         <TextField
@@ -120,6 +132,7 @@ const BasicColorLegendCreate: React.FC = () => {
           margin="normal"
           name="query" 
           sx={{ width: "50%" }}
+          value={formData.query}
           onChange={handleChange}
           inputProps={{ spellCheck: false }}
         />
@@ -129,8 +142,8 @@ const BasicColorLegendCreate: React.FC = () => {
         <p className="mt-[2rem] px-[4rem]">
               <Typography variant="body2">
                 SQL QUERY RULES: <br />
-                * SQL result should have a column with name "date_key" wich represenets the xaxis, the data should be as type Date <br />
-                * SQL result should have a column with name "value" wich represenets the yaxis values <br />
+                * SQL result should have a column with name |date_key| wich represenets the xaxis, the data should be as type Date <br />
+                * SQL result should have a column with name |value| wich represenets the yaxis values <br />
                 * Example: <br />
               </Typography>
 

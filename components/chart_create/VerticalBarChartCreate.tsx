@@ -14,22 +14,25 @@ import {
 } from "@mui/material";
 import PrimaryButton from "../button/PrimaryButton";
 import VerticalBarChart from "../chart/VerticalBarChart";
-import { useAppDispatch } from "@/utils/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { createChart } from "@/utils/redux/actions/kpi";
 import ChartWrapper from "../wrapper/chartWrapper";
-import VerticalBarChartStatic from "../chart_static/VerticalBarChartStatic";
+
 
 interface FormData {
   label: string;
   query: string;
 }
 
+const defaultFormData = {
+  label: "",
+  query: "",
+}
+
 const VerticalBarChartCreate: React.FC = () => {
+  const { status } = useAppSelector((state: any) => state.reducer);
   const dispatch = useAppDispatch();
-  const [formData, setFormData] = React.useState<FormData>({
-    label: "",
-    query: "",
-  });
+  const [formData, setFormData] = React.useState<FormData>(defaultFormData);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -58,6 +61,11 @@ const VerticalBarChartCreate: React.FC = () => {
     );
   };
 
+  React.useEffect(()=>{
+    if(status === "success"){
+      setFormData(defaultFormData);
+    }
+  },[status])
 
 
   return (
@@ -75,6 +83,7 @@ const VerticalBarChartCreate: React.FC = () => {
           name="label"
           sx={{ width: "50%" }}
           inputProps={{ maxLength: 89 }}
+          value={formData.label}
           onChange={handleChange}
         />
 
@@ -89,8 +98,10 @@ const VerticalBarChartCreate: React.FC = () => {
           margin="normal"
           name="query"
           sx={{ width: "50%" }}
-          onChange={handleChange}
           inputProps={{ spellCheck: false }}
+          value={formData.query}
+          onChange={handleChange}
+
    
         />
         <PrimaryButton width={"50%"} type="submit">
@@ -99,7 +110,7 @@ const VerticalBarChartCreate: React.FC = () => {
         <p className="mt-[2rem]">
               <Typography variant="body2">
                 SQL QUERY RULES: <br />
-                * First column's name should be &quot;group_name&quot; <br />
+                * First column s name should be &quot;group_name&quot; <br />
                 * Each group can only have one row of data <br />
                 * Example: <br />
               </Typography>

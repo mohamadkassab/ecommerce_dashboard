@@ -11,56 +11,64 @@ export const ROUTES = {
     DASHBOARD : '/dashboard',
     KPI: '/kpi',
     KPIADD: '/kpi/add',
-    USER: '/user'
+    USER: '/user',
+    ROLE: '/role',
+    SETTINGS: '/settings',
   };
 
-export const PROTECTED_ROUTES = [
-  ROUTES.DASHBOARD,
-  ROUTES.KPI,
-  ROUTES.KPIADD,
-  ROUTES.USER,
-]
+
 
 export const SECTIONS = [
+
   {
     title: 'Dashboard',
     path: ROUTES.DASHBOARD,
+    protected: true,
+    requiredPermissions: [],
   },
   {
     title: 'KPI',
     path: ROUTES.KPI,
+    protected: true,
+    requiredPermissions: ["kpi_r"],
   },
 
-  {
-    title: 'Sections',
+  // {
+  //   title: 'Sections',
  
-  },
-  {
-    title: 'Categories',
+  // },
+  // {
+  //   title: 'Categories',
 
-  },
+  // },
 
-  {
-    title: 'Reports',
+  // {
+  //   title: 'Reports',
   
-  },
-  {
-    title: 'Orders',
+  // },
+  // {
+  //   title: 'Orders',
  
-  },
+  // },
   // {
   //   title: 'Marketing',
   //   subsections: ['hooks', 'templates'],
   // },
   {
     title: 'Users',
+    protected: true,
+    requiredPermissions: ["user_crud","role_crud"], //OR
     subsections: [{
       title: 'users',
       path: ROUTES.USER,
+      protected: true,
+      requiredPermissions: ["user_crud"]
     }, 
     {
       title: 'roles',
-      path: ROUTES.DASHBOARD,
+      path: ROUTES.ROLE,
+      protected: true,
+      requiredPermissions: ["role_crud"]
     }],
   },
   // {
@@ -78,13 +86,45 @@ export const SECTIONS = [
 
   {
     title: 'Settings',
+    protected: true,
+    requiredPermissions: [],
+    subsections: [
+      {
+        title: 'account',
+        path: ROUTES.SETTINGS,
+        protected: true,
+        requiredPermissions: [],
+      }, 
+    ],
   },
 
-  {
-    title: 'Logs',
+  // {
+  //   title: 'Logs',
 
-  },
+  // },
 ];
+
+export const APIROUTES = {
+  SIGNIN : "/User/signin",
+
+  CREATECHART: "/Kpi/createChart",
+  DELETECHART : "/Kpi/deleteChart",
+
+  GETALLCHARTS: "/Kpi/getAllCharts",
+  GETCHARTDATABYQUERY : "/Kpi/getChartDataByQuery",
+  GETALLUSERS : "/User/getAllUsersWithRolesAndPermissions",
+  GETALLROLES : "/User/getAllRolesAndPermissions",
+  GETALLPERMISSIONS : "/User/getAllPermissions",
+
+  CREATEUSER : "/User/createUser",
+  UPDATEUSER: "/User/updateUser",
+  DELETEUSER: "/User/deleteUser",
+  CREATEROLE : "/User/createRole",
+  UPDATEROLE: "/User/updateRole",
+  DELETEROLE: "/User/deleteRole",
+
+}
+
 
 export const DUMMYDATA = {
   VerticalBarChart:{
@@ -377,18 +417,6 @@ export const DUMMYDATA = {
 
 }
 
-export const APIROUTES = {
-  SIGNIN : "/User/signin",
-  CREATEUSER : "/User/signup",
-  CREATECHART: "/Kpi/createChart",
-  GETALLCHARTS: "/Kpi/getAllCharts",
-  GETCHARTDATABYQUERY : "/Kpi/getChartDataByQuery",
-  DELETECHART : "/Kpi/deleteChart",
-  GETALLUSERS : "/User/getAllUsersWithRolesAndPermissions",
-  GETALLROLES : "/User/getAllRolesAndPermissions",
-  DELETEUSER: "/User/deleteUser",
-  UPDATEUSER: "/User/updateUser",
-}
 
   
   

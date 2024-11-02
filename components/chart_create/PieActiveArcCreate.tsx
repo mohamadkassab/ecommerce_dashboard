@@ -3,7 +3,7 @@ import PrimaryButton from "../button/PrimaryButton";
 import PieActiveArc from "../chart/PieActiveArc";
 import ChartWrapper from "../wrapper/chartWrapper";
 import PieActiveArcStatic from "../chart_static/PieActiveArcStatic";
-import { useAppDispatch } from "@/utils/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { createChart } from "@/utils/redux/actions/kpi";
 import {
   Box,
@@ -31,15 +31,19 @@ type DataItem = {
   label: string;
 };
 
+const defaultFormData = {
+  label: "",
+  numberOfGroups: 0,
+  query: "",
+}
+
+
 const PieActiveArcCreate: React.FC = () => {
+  const { status } = useAppSelector((state: any) => state.reducer);
   const dispatch = useAppDispatch();
   const [data, setData] = React.useState<DataItem[]>([]);
 
-  const [formData, setFormData] = React.useState<FormData>({
-    label: "",
-    numberOfGroups: 0,
-    query: "",
-  });
+  const [formData, setFormData] = React.useState<FormData>(defaultFormData);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -88,6 +92,12 @@ const PieActiveArcCreate: React.FC = () => {
     );
   };
 
+  React.useEffect(()=>{
+    if(status === "success"){
+      setFormData(defaultFormData);
+    }
+  },[status])
+
   return (
     <div className="flex flex-wrap w-full mt-[4rem] gap-[1rem]">
       <form onSubmit={handleSubmit} className="w-full lg:w-1/2 flex flex-col justify-start items-center">
@@ -100,6 +110,7 @@ const PieActiveArcCreate: React.FC = () => {
           name="label" 
           sx={{ width: "50%" }}
           inputProps={{ maxLength: 89 }}
+          value={formData.label}
           onChange={handleChange}
         />
 
@@ -111,6 +122,7 @@ const PieActiveArcCreate: React.FC = () => {
           margin="normal"
           name="numberOfGroups"
           sx={{ width: "50%" }}
+          value={formData.numberOfGroups}
           onChange={handleChange}
         />
 
@@ -124,8 +136,10 @@ const PieActiveArcCreate: React.FC = () => {
          margin="normal"
          name="query" 
          sx={{ width: "50%" }}
-         onChange={handleChange}
          inputProps={{ spellCheck: false }}
+         value={formData.query}
+         onChange={handleChange}
+ 
         />
         <PrimaryButton width={"50%"} type="submit">
           ADD

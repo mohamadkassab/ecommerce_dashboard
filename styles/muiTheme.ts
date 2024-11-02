@@ -39,7 +39,7 @@ const muiTheme = createTheme({
     },
     action: {
       active: "#484848", 
-      hover: "#cceaff", 
+      // hover: "inherit", 
       selected: "#ffffff",
       disabled: "#9e9e9e", 
     },

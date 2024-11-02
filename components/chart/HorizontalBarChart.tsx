@@ -51,7 +51,7 @@ export default function HorizontalBarChart({ chart }: HorizontalBarChartProps) {
 
 
   React.useEffect(() => {
-    if (dataQuery.length > 0) {
+    if (dataQuery?.length > 0) {
       const firstObject = dataQuery[0];
       const firstKey = Object.keys(firstObject).find(
         (key) => key !== "key"

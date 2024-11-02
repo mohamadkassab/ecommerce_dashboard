@@ -25,7 +25,7 @@ export default function VerticalBarChart({
         ]}
         series={seriesData || DUMMYDATA["VerticalBarChart"]["seriesData"]}
         width={500}
-        height={450}
+        height={430}
         barLabel="value"
       />
     </div>

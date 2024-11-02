@@ -4,7 +4,7 @@ import BiaxialLineChart from "../chart/BiaxialLineChart";
 import { DUMMYDATA } from "@/utils/constants";
 import ChartWrapper from "../wrapper/chartWrapper";
 import BiaxialLineChartStatic from "../chart_static/BiaxialLineChartStatic";
-import { useAppDispatch } from "@/utils/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { createChart } from "@/utils/redux/actions/kpi";
 import {
   Box,
@@ -33,15 +33,17 @@ type seriesProps = {
   showMark: boolean;
 };
 
-const BiaxialLineChartCreate: React.FC = () => {
-  const dispatch = useAppDispatch();
+const defaultFormData = {
+  label: "",
+  numberOfGroups: 0,
+  xAxisKey: "",
+  query: "",
+}
 
-  const [formData, setFormData] = React.useState<FormData>({
-    label: "",
-    numberOfGroups: 0,
-    xAxisKey: "",
-    query: "",
-  });
+const BiaxialLineChartCreate: React.FC = () => {
+  const { status } = useAppSelector((state: any) => state.reducer);
+  const dispatch = useAppDispatch();
+  const [formData, setFormData] = React.useState<FormData>(defaultFormData);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -92,6 +94,12 @@ const BiaxialLineChartCreate: React.FC = () => {
     );
   };
 
+  React.useEffect(()=>{
+    if(status === "success"){
+      setFormData(defaultFormData);
+    }
+  },[status])
+
   return (
     <div className="flex flex-wrap w-full mt-[4rem] gap-[1rem]">
       <form
@@ -107,6 +115,7 @@ const BiaxialLineChartCreate: React.FC = () => {
           name="label"
           sx={{ width: "50%" }}
           inputProps={{ maxLength: 89 }}
+          value={formData.label}
           onChange={handleChange}
         />
 
@@ -118,6 +127,7 @@ const BiaxialLineChartCreate: React.FC = () => {
           margin="normal"
           name="numberOfGroups"
           sx={{ width: "50%" }}
+          value={formData.numberOfGroups}
           onChange={handleChange}
         />
 
@@ -131,6 +141,7 @@ const BiaxialLineChartCreate: React.FC = () => {
           margin="normal"
           name="query"
           sx={{ width: "50%" }}
+          value={formData.query}
           onChange={handleChange}
           inputProps={{ spellCheck: false }}
         />
@@ -140,7 +151,7 @@ const BiaxialLineChartCreate: React.FC = () => {
         <p className="mt-[2rem]">
           <Typography variant="body2">
             SQL QUERY RULES: <br />
-            * SQL result should have a column with name "date_key" wich
+            * SQL result should have a column with name |date_key| wich
             represenets the xaxis, the data should be as type Date <br />
             * Example: <br />
           </Typography>

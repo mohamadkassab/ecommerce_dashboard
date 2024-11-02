@@ -1,4 +1,4 @@
-import { getAllUsersService, getAllRolesService, createUserService, deleteUserService, updateUserService } from "@/services/userService";
+import { getAllUsersService, getAllRolesService, createUserService, deleteUserService, updateUserService, getAllPermissionsService, createRoleService, updateRoleService, deleteRoleService } from "@/services/userService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getAllUsers = createAsyncThunk('getAllUsers', async () => {
@@ -6,12 +6,38 @@ export const getAllUsers = createAsyncThunk('getAllUsers', async () => {
     return response;
 });
 
-
 export const getAllRoles = createAsyncThunk('getAllRoles', async () => {
   const response = await getAllRolesService();
   return response;
 });
 
+export const getAllPermissions = createAsyncThunk('getAllPermissions', async () => {
+  const response = await getAllPermissionsService();
+  return response;
+});
+
+export const createRole = createAsyncThunk('createRole', async (formData: any ) => {
+  const updatedFormData = {
+    ...formData,
+    permissions: formData.permissions.map((permission: any) => permission.id)
+  };
+  const response = await createRoleService(updatedFormData);
+  return response;
+});
+
+export const updateRole = createAsyncThunk('updateRole', async (formData: any ) => {
+  const updatedFormData = {
+    ...formData,
+    permissions: formData.permissions.map((permission: any) => permission.id)
+  };
+  const response = await updateRoleService(updatedFormData);
+  return response;
+});
+
+export const deleteRole = createAsyncThunk('deleteRole', async (id: number) => {
+  const response = await deleteRoleService(id);
+  return response;
+});
 
 export const createUser = createAsyncThunk('createUser', async (formData: any ) => {
   const updatedFormData = {

@@ -18,47 +18,6 @@ import ArcDesignStatic from "@/components/chart_static/ArcDesignStatic";
 import TopNStatic from "@/components/chart_static/TopNStatic";
 import BasicColorLegendStatic from "@/components/chart_static/BasicColorLegendStatic";
 
-const VerticalBarChart = dynamic(
-  () => import("@/components/chart/VerticalBarChart"),
-  {
-    ssr: false,
-    loading: () => <LoadingPlaceholder />,
-  }
-);
-const HorizontalBarChart = dynamic(
-  () => import("@/components/chart/HorizontalBarChart"),
-  {
-    ssr: false,
-    loading: () => <LoadingPlaceholder />,
-  }
-);
-const BiaxialLineChart = dynamic(
-  () => import("@/components/chart/BiaxialLineChart"),
-  {
-    ssr: false,
-    loading: () => <LoadingPlaceholder />,
-  }
-);
-const PieActiveArc = dynamic(() => import("@/components/chart/PieActiveArc"), {
-  ssr: false,
-  loading: () => <LoadingPlaceholder />,
-});
-const ArcDesign = dynamic(() => import("@/components/chart/ArcDesign"), {
-  ssr: false,
-  loading: () => <LoadingPlaceholder />,
-});
-const BasicColorLegend = dynamic(
-  () => import("@/components/chart/BasicColorLegend"),
-  {
-    ssr: false,
-    loading: () => <LoadingPlaceholder />,
-  }
-);
-const TopN = dynamic(() => import("@/components/chart/TopN"), {
-  ssr: false,
-  loading: () => <LoadingPlaceholder />,
-});
-
 const VerticalBarChartCreate = dynamic(
   () => import("@/components/chart_create/VerticalBarChartCreate"),
   {
@@ -109,6 +68,16 @@ const BasicColorLegendCreate = dynamic(
   }
 );
 
+const chartComponents: { [key: string]: JSX.Element } = {
+  VerticalBarChart: <VerticalBarChartCreate />,
+  HorizontalBarChart: <HorizontalBarChartCreate />,
+  BiaxialLineChart: <BiaxialLineChartCreate />,
+  PieActiveArc: <PieActiveArcCreate />,
+  ArcDesign: <ArcDesignCreate />,
+  TopN: <TopNCreate />,
+  BasicColorLegend: <BasicColorLegendCreate />,
+};
+
 const KpiAddPage = () => {
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -146,23 +115,12 @@ const KpiAddPage = () => {
   const updateSelectedChartNode = (component: string) => {
     if (component) {
       setIsFirstPage(false);
-
-      const chartComponents: { [key: string]: JSX.Element } = {
-        VerticalBarChart: <VerticalBarChartCreate />,
-        HorizontalBarChart: <HorizontalBarChartCreate />,
-        BiaxialLineChart: <BiaxialLineChartCreate />,
-        PieActiveArc: <PieActiveArcCreate />,
-        ArcDesign: <ArcDesignCreate />,
-        TopN: <TopNCreate />,
-        BasicColorLegend: <BasicColorLegendCreate />,
-      };
-
       setSelectedChartNode(chartComponents[component] || null);
     }
   };
 
   return (
-    <Box className="max-w-full flex flex-col justify-center items-center max-h-full  pb-[6rem]">
+    <Box className="max-w-full flex flex-col justify-center items-center max-h-full  pb-[6rem] pt-[2rem] px-[2rem]">
           <Box className={`w-full flex justify-between sticky pb-2 px-2 ${
           isScrolled ? 'shadow-md' : ''
         }`}  sx={{ top: 0, backgroundColor: "white", zIndex: 1000 }}>

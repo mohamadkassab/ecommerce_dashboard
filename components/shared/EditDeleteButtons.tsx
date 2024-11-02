@@ -5,9 +5,10 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 interface EditDeleteButtonsProps {
   onDelete?: (e: React.FormEvent) => void;
+  onEdit?: (e: React.FormEvent) => void;
 }
 
-const EditDeleteButtons: React.FC<EditDeleteButtonsProps> = ({ onDelete }) => {
+const EditDeleteButtons: React.FC<EditDeleteButtonsProps> = ({ onDelete, onEdit }) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -25,13 +26,19 @@ const EditDeleteButtons: React.FC<EditDeleteButtonsProps> = ({ onDelete }) => {
     handleClose(); 
   };
 
+  const handleEdit = (e: React.FormEvent) =>{
+    if(onEdit){
+      onEdit(e);
+    }
+  }
+
   return (
     <Box
       display="flex"
       justifyContent="flex-end" 
       sx={{ padding: '8px' }} 
     >
-      {/* <IconButton>
+      {/* <IconButton onClick={handleEdit}>
         <EditIcon />
       </IconButton> */}
       <IconButton onClick={handleClickOpen} sx={{ color: (theme) => theme.palette.error.main }}>

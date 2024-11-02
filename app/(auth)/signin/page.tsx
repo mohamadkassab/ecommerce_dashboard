@@ -48,7 +48,6 @@ const SignInPage = () => {
   };
 
   React.useEffect(()=>{
-    console.log(status)
     if(status === "loginSuccessful"){
       dispatch(setIdle());
       redirect(ROUTES.DASHBOARD);
@@ -93,6 +92,10 @@ const SignInPage = () => {
               margin="normal"
               value={formData.password} 
               onChange={handleChange} 
+              inputProps={{
+                minLength:  6,
+                maxLength: 255,
+              }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">

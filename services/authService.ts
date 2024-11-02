@@ -1,7 +1,9 @@
 
 import { SigninModel } from '@/models/AuthModels';
-import { APIROUTES, GLOBAL_REQUEST_TIMEOUT } from '@/utils/constants';
+import { APIROUTES, AUTHTOKEN, GLOBAL_REQUEST_TIMEOUT } from '@/utils/constants';
 import axios from 'axios';
+
+import Cookies from 'js-cookie';
 
 export const siginUser = async (formData: SigninModel) => {
   try {
@@ -9,6 +11,7 @@ export const siginUser = async (formData: SigninModel) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      
       timeout: GLOBAL_REQUEST_TIMEOUT,
     });
     return response?.data;
@@ -17,7 +20,7 @@ export const siginUser = async (formData: SigninModel) => {
   }
 };
 
-export const signoutUser = async () => {
-  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/logout`);
+export const signoutService = async () => {
+    Cookies.remove(`${AUTHTOKEN}`);
 };
 

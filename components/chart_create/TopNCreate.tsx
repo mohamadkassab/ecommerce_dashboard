@@ -4,7 +4,7 @@ import PrimaryButton from "../button/PrimaryButton";
 import { DUMMYDATA } from "@/utils/constants";
 import TopN from "../chart/TopN";
 import ChartWrapper from "../wrapper/chartWrapper";
-import { useAppDispatch } from "@/utils/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { createChart } from "@/utils/redux/actions/kpi";
 import TopNStatic from "../chart_static/TopNStatic";
 import {
@@ -26,12 +26,15 @@ interface FormData {
   query: string;
 }
 
+const defaultFormData = {
+  label: "",
+  query: "",
+}
+
 const TopNCreate: React.FC = () => {
+  const { status } = useAppSelector((state: any) => state.reducer);
   const dispatch = useAppDispatch();
-  const [formData, setFormData] = React.useState<FormData>({
-    label: "",
-    query: "",
-  });
+  const [formData, setFormData] = React.useState<FormData>(defaultFormData);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -60,6 +63,12 @@ const TopNCreate: React.FC = () => {
     );
   };
 
+  React.useEffect(()=>{
+    if(status === "success"){
+      setFormData(defaultFormData);
+    }
+  },[status])
+
   return (
     <div className="flex flex-wrap w-full mt-[4rem] gap-[1rem]">
       <form onSubmit={handleSubmit} className="w-full lg:w-1/2 flex flex-col justify-start items-center">
@@ -71,8 +80,9 @@ const TopNCreate: React.FC = () => {
           margin="normal"
           name="label" // Use name attribute to identify the field
           sx={{ width: "50%" }}
-          inputProps={{ maxLength: 89 }}
+          value={formData.label}
           onChange={handleChange}
+          inputProps={{ maxLength: 89 }}
         />
 
         <TextField
@@ -85,8 +95,10 @@ const TopNCreate: React.FC = () => {
           margin="normal"
           name="query" 
           sx={{ width: "50%" }}
-          onChange={handleChange}
           inputProps={{ spellCheck: false }}
+          value={formData.query}
+          onChange={handleChange}
+
         />
         <PrimaryButton width={"50%"} type="submit">
           ADD

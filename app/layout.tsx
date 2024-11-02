@@ -3,12 +3,13 @@ import type { Metadata } from "next";
 import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 import muiTheme from "../styles/muiTheme";
 import { usePathname } from "next/navigation"; // Use `usePathname` in Next.js 14
-import { PROTECTED_ROUTES } from "@/utils/constants";
+import { SECTIONS } from "@/utils/constants";
 import "../styles/global.css";
 import AlertStack from "@/components/shared/AlertStack";
 import StoreProvider from "./StoreProvider";
-import MiniDrawer from "@/components/shared/MiniDrawer";
 import PermanentDrawerLeft from "@/components/shared/PermanentDrawerLeft";
+import React from "react";
+
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -21,7 +22,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname(); 
-  
 
   return (
     <ThemeProvider theme={muiTheme}>
@@ -29,14 +29,26 @@ export default function RootLayout({
       <StoreProvider>
         <html lang="en">
           <body className="bg-white">
-            {PROTECTED_ROUTES.includes(pathname) ? (
-              <PermanentDrawerLeft pathName={pathname}>
-                {children}
-              </PermanentDrawerLeft>
-            ) : (
-              <Box>{children}</Box>
-            )}
-
+            {
+              (() => {
+                // Find matching section or subsection
+                const matchedSection = SECTIONS.find(section => section.path === pathname) 
+                                      || SECTIONS.find(section => section.subsections?.some((sub: any) => sub?.path === pathname));
+                
+                // Determine if the route is protected
+                const isProtected = matchedSection?.protected 
+                                    || matchedSection?.subsections?.find((sub: any) => sub?.path === pathname)?.protected;
+  
+                // Render based on protection status
+                return isProtected ? (
+                  <PermanentDrawerLeft pathName={pathname}>
+                    {children}
+                  </PermanentDrawerLeft>
+                ) : (
+                  <Box>{children}</Box>
+                );
+              })()
+            }
             <AlertStack />
           </body>
         </html>

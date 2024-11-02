@@ -36,10 +36,9 @@ const KpiPage: React.FC = () => {
   };
 
   React.useEffect(()=>{
-    if(status === 'chartDeleted'){
+    if(status === 'success'){
        dispatch(setIdle());
        setRefresh(!refresh);
-
     }
   },[status])
 
@@ -49,8 +48,7 @@ const KpiPage: React.FC = () => {
     
   };
 
-
-  useEffect(() => {
+  React.useEffect(() => {
     dispatch(getAllCharts());
   }, [refresh]);
 
@@ -65,7 +63,7 @@ const KpiPage: React.FC = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  
+
 
   return (
     <Box className="w-full flex flex-col justify-center mb-[4rem] ">
@@ -89,7 +87,7 @@ const KpiPage: React.FC = () => {
         {allCharts?.map((item: KpiDetailsModel, index: number) => {
           let content;
           switch (item.chartType) {
-            case "VerticalBarChartCreate":
+            case "VerticalBarChart":
               content = (
                 <ChartWrapper
                   width={500}
@@ -97,8 +95,8 @@ const KpiPage: React.FC = () => {
                   label={item.label}
                   key={`kpi-${index}`}
                   onDelete={(e: React.FormEvent) => onDeleteChart(e, item.id)}
-                >
-                  
+                  onEdit={()=> console.log(allCharts[index])}
+                >              
                   <VerticalBarChart chart={item} />
                   
                 </ChartWrapper>

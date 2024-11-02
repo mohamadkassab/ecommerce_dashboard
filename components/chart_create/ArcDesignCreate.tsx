@@ -3,7 +3,7 @@ import { Box, Card, CardContent, TextField, Typography } from "@mui/material";
 import PrimaryButton from "../button/PrimaryButton";
 import ArcDesign from "../chart/ArcDesign";
 import ChartWrapper from "../wrapper/chartWrapper";
-import { useAppDispatch } from "@/utils/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { createChart } from "@/utils/redux/actions/kpi";
 import ArcDesignStatic from "../chart_static/ArcDesignStatic";
 
@@ -12,12 +12,15 @@ interface FormData {
   query: string;
 }
 
+const defaultFormData = {
+  label: "",
+  query: "",
+}
+
 const ArcDesignCreate: React.FC = () => {
+  const { status } = useAppSelector((state: any) => state.reducer);
   const dispatch = useAppDispatch();
-  const [formData, setFormData] = React.useState<FormData>({
-    label: "",
-    query: "",
-  });
+  const [formData, setFormData] = React.useState<FormData>(defaultFormData);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -45,6 +48,12 @@ const ArcDesignCreate: React.FC = () => {
     );
   };
 
+  React.useEffect(()=>{
+    if(status === "success"){
+      setFormData(defaultFormData);
+    }
+  },[status])
+
   return (
     <div className="flex flex-wrap w-full mt-[4rem] gap-[1rem]">
       <form
@@ -60,6 +69,7 @@ const ArcDesignCreate: React.FC = () => {
           name="label" // Use name attribute to identify the field
           sx={{ width: "50%" }}
           inputProps={{ maxLength: 89 }}
+          value={formData.label}
           onChange={handleChange}
         />
       <TextField
@@ -72,6 +82,7 @@ const ArcDesignCreate: React.FC = () => {
           margin="normal"
           name="query" 
           sx={{ width: "50%" }}
+          value={formData.query}
           onChange={handleChange}
           inputProps={{ spellCheck: false }}
 

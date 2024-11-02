@@ -2,6 +2,7 @@ import { Box, Button, Card, CardActions, CardContent, Typography } from "@mui/ma
 import EditDeleteButtons from "../shared/EditDeleteButtons";
 
 
+
 interface ChartWrapperProps  {
     children: React.ReactNode,
     width: number,
@@ -9,9 +10,10 @@ interface ChartWrapperProps  {
     label: string,
     onClick?: ()=> void,
     onDelete?: (e: React.FormEvent)=> void,
+    onEdit?: (e: React.FormEvent)=> void,
 }
 
-const ChartWrapper: React.FC<ChartWrapperProps> = ({children, width, height, label, onClick, onDelete}) =>{
+const ChartWrapper: React.FC<ChartWrapperProps> = ({children, width, height, label, onClick, onDelete, onEdit}) =>{
     return(
     
       <Box className="w-full lg:w-1/2 xl:w-1/3 flex justify-center">
@@ -41,7 +43,7 @@ const ChartWrapper: React.FC<ChartWrapperProps> = ({children, width, height, lab
         >
               {label}
             </Typography>
-            {onDelete &&  <EditDeleteButtons onDelete={onDelete}/>}
+        <EditDeleteButtons onDelete={onDelete} onEdit={onEdit}/>
             
             </div>
             {children}

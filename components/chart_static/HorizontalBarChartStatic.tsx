@@ -27,7 +27,7 @@ export default function HorizontalBarChartStatic({
   const chartSetting = {
     xAxis: [{ label: "" }],
     width: 500,
-    height: 450,
+    height: 390,
   };
 
   const handleChange = (event: SelectChangeEvent) => {

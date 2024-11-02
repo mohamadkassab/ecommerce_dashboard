@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { siginUser, signoutUser } from '@/services/authService';
+import { siginUser, signoutService } from '@/services/authService';
 import { SigninModel } from '@/models/AuthModels';
 
 
@@ -10,10 +10,15 @@ export const signin = createAsyncThunk('signin', async (credentials: { formData:
   });
 
   export const signout = createAsyncThunk('signout', async () => {
-    await signoutUser();
+    await signoutService();
   });
 
   export const setIdle = createAsyncThunk('setIdle', async () => {
     return true;
   });
+
+  export const setUser = createAsyncThunk('setUser', async () => {
+    return true;
+  });
+  
   

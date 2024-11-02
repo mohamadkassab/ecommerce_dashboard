@@ -1,3 +1,7 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
+import Cookies from 'js-cookie';
+import { AUTHTOKEN } from './constants';
 interface Property {
     id: number;
     propertyName: string;
@@ -19,3 +23,6 @@ export const findPropertyValueByKey = (
     return { minDate, maxDate };
   };
 
+  export const getToken = () => {
+    return Cookies.get(`${AUTHTOKEN}`);
+  }

@@ -1,12 +1,12 @@
   // className={`ml-[${DRAWERWIDTH}px]`}
 
-  import { DRAWERWIDTH, PROTECTED_ROUTES } from "@/utils/constants";
+  import { DRAWERWIDTH, SECTIONS} from "@/utils/constants";
   import { usePathname } from 'next/navigation';
 
   
   const LoadingElement = () => {
     const pathname = usePathname();
-    const ml = PROTECTED_ROUTES.includes(pathname) ? DRAWERWIDTH / 2 : 0 ; 
+    const ml = SECTIONS.find(section => section.path === pathname)?.protected ? DRAWERWIDTH / 2 : 0 ; 
     
     return (
       <div className={`ml-[${ml}px] flex justify-center items-center h-screen w-screen fixed top-0 left-0 bg-white bg-opacity-50 z-50`}>

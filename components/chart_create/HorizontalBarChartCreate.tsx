@@ -3,7 +3,7 @@ import PrimaryButton from "../button/PrimaryButton";
 import HorizontalBarChart from "../chart/HorizontalBarChart";
 import ChartWrapper from "../wrapper/chartWrapper";
 import { createChart } from "@/utils/redux/actions/kpi";
-import { useAppDispatch } from "@/utils/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import HorizontalBarChartStatic from "../chart_static/HorizontalBarChartStatic";
 import {
   Box,
@@ -26,15 +26,18 @@ interface FormData {
   query: string;
 }
 
+const defaultFormData = {
+  label: "",
+  key: "key",
+  numberOfOptions: 0,
+  query: "",
+}
+
 const HorizontalBarChartCreate: React.FC = () => {
+  const { status } = useAppSelector((state: any) => state.reducer);
   const dispatch = useAppDispatch();
   const [data, setData] = React.useState<DataPoint[]>([]);
-  const [formData, setFormData] = React.useState<FormData>({
-    label: "",
-    key: "key",
-    numberOfOptions: 0,
-    query: "",
-  });
+  const [formData, setFormData] = React.useState<FormData>(defaultFormData);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -89,6 +92,12 @@ const HorizontalBarChartCreate: React.FC = () => {
     );
   };
 
+  React.useEffect(()=>{
+    if(status === "success"){
+      setFormData(defaultFormData);
+    }
+  },[status])
+
   return (
     <div className="flex flex-wrap w-full mt-[4rem] gap-[1rem]">
       <form
@@ -104,6 +113,7 @@ const HorizontalBarChartCreate: React.FC = () => {
           name="label"
           sx={{ width: "50%" }}
           inputProps={{ maxLength: 89 }}
+          value={formData.label}
           onChange={handleChange}
         />
 
@@ -115,6 +125,7 @@ const HorizontalBarChartCreate: React.FC = () => {
           margin="normal"
           name="numberOfOptions"
           sx={{ width: "50%" }}
+          value={formData.numberOfOptions}
           onChange={handleChange}
         />
 
@@ -130,6 +141,7 @@ const HorizontalBarChartCreate: React.FC = () => {
          margin="normal"
          name="query" 
          sx={{ width: "50%" }}
+         value={formData.query}
          onChange={handleChange}
          inputProps={{ spellCheck: false }}
 
@@ -141,7 +153,7 @@ const HorizontalBarChartCreate: React.FC = () => {
         <p className="mt-[2rem]">
         <Typography variant="body2">
                 SQL QUERY RULES: <br />
-                * SQL result should have a column with name "key" wich represents yaxis values<br />
+                * SQL result should have a column with name |key| wich represents yaxis values<br />
                 * Example: <br />
                 
               
