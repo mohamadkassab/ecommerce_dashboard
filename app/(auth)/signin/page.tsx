@@ -23,6 +23,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { ROUTES } from "@/utils/constants";
 import { redirect } from 'next/navigation';
+import { StatusModel } from "@/models/StatusModel";
 
 interface FormData {
   username: string;
@@ -30,6 +31,7 @@ interface FormData {
 }
 
 const SignInPage = () => {
+  const router = useRouter();
   const { status } = useAppSelector((state: any) => state.reducer);
   const [formData, setFormData] = useState<FormData>({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
@@ -48,9 +50,9 @@ const SignInPage = () => {
   };
 
   React.useEffect(()=>{
-    if(status === "loginSuccessful"){
+    if(status === StatusModel.SIGNINSUCCESSFUL){
       dispatch(setIdle());
-      redirect(ROUTES.DASHBOARD);
+      router.push(ROUTES.DASHBOARD);
     }
   }, [status]);
 

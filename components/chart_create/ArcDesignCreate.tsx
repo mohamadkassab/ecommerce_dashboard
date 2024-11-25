@@ -6,6 +6,7 @@ import ChartWrapper from "../wrapper/chartWrapper";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { createChart } from "@/utils/redux/actions/kpi";
 import ArcDesignStatic from "../chart_static/ArcDesignStatic";
+import { StatusModel } from "@/models/StatusModel";
 
 interface FormData {
   label: string;
@@ -49,7 +50,7 @@ const ArcDesignCreate: React.FC = () => {
   };
 
   React.useEffect(()=>{
-    if(status === "success"){
+    if(status === StatusModel.SUCCESS){
       setFormData(defaultFormData);
     }
   },[status])

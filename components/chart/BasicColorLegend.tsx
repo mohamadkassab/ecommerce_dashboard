@@ -5,7 +5,7 @@ import { ChartsReferenceLine } from "@mui/x-charts/ChartsReferenceLine";
 import { PiecewiseColorLegend } from "@mui/x-charts/ChartsLegend";
 import { APIROUTES, DUMMYDATA } from "@/utils/constants";
 import axios from "axios";
-import { getMinMaxDates } from "@/utils/functions";
+import { getMinMaxDates } from "@/utils/helpers/funtions";
 
 
 type BasicColorLegendProps = {

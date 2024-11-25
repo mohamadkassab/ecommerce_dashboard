@@ -18,6 +18,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
+import { StatusModel } from "@/models/StatusModel";
 
 interface FormData {
   label: string;
@@ -76,7 +77,7 @@ const BasicColorLegendCreate: React.FC = () => {
   };
 
   React.useEffect(()=>{
-    if(status === "success"){
+    if(status === StatusModel.SUCCESS){
       setFormData(defaultFormData);
     }
   },[status])

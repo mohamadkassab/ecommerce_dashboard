@@ -1,7 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-
 import Cookies from 'js-cookie';
-import { AUTHTOKEN } from './constants';
+import { AUTHTOKEN } from '../constants';
 interface Property {
     id: number;
     propertyName: string;

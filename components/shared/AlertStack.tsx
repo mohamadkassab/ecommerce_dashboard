@@ -7,22 +7,23 @@ import { useAppDispatch, useAppSelector } from '@/utils/redux/hooks';
 import LoadingComponent from './LoadingComponent';
 import { setIdle } from '@/utils/redux/actions/auth';
 import CloseIcon from '@mui/icons-material/Close'; // Import the Close icon
+import { StatusModel } from '@/models/StatusModel';
 
 const AlertStack: React.FC = () => {
     const { status, error } = useAppSelector((state: any) => state.reducer);
     const [errorMessage, setErrorMessage] = useState(null);
-    const [showError, setShowError] = useState(status === "failed");
-    const [showSuccess, setShowSuccess] = useState(status === "success");
+    const [showError, setShowError] = useState(status === StatusModel.FAILED);
+    const [showSuccess, setShowSuccess] = useState(status === StatusModel.SUCCESS);
     const [countdown, setCountdown] = useState(10); // Countdown state
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (status === "failed" || error !== null) {
+        if (status === StatusModel.FAILED || error !== null) {
             setErrorMessage(error);
             dispatch(setIdle());
             setShowError(true);
             setCountdown(6); // Reset countdown on error
-        } else if (status === "success") {
+        } else if (status === StatusModel.SUCCESS) {
             dispatch(setIdle());
             setShowSuccess(true);
             setTimeout(() => {
@@ -53,7 +54,7 @@ const AlertStack: React.FC = () => {
         <Box>
             <Stack
                 spacing={2}
-                sx={{ position: "fixed", bottom: 20, left: 20, zIndex: 1400 }}
+                sx={{ position: "fixed", bottom: 20, right: 20, zIndex: 1400 }}
             >
                 {showSuccess && (
                     <Alert severity="success" variant="filled" sx={{ width: "100%", color: "white" }}>
@@ -80,7 +81,7 @@ const AlertStack: React.FC = () => {
                     </Alert>
                 )}
             </Stack>
-            {status === "loading" && (
+            { status === StatusModel.LOADING && (
                 <LoadingComponent />
             )}
         </Box>

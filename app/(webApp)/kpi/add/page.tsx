@@ -119,6 +119,7 @@ const KpiAddPage = () => {
     }
   };
 
+  
   return (
     <Box className="max-w-full flex flex-col justify-center items-center max-h-full  pb-[6rem] pt-[2rem] px-[2rem]">
           <Box className={`w-full flex justify-between sticky pb-2 px-2 ${
@@ -199,7 +200,7 @@ const KpiAddPage = () => {
               width={500}
               height={600}
               label={"Pie Active Arc"}
-              onClick={() => selectChart("PieActiveArc")}
+              onClick={() => selectChart("BiaxialLineChart")}
             >
               <PieActiveArcStatic data={DUMMYDATA["PieActiveArc"]["data"]} />
             </ChartWrapper>

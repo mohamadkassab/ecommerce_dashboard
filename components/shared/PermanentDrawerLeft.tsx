@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { signout } from "@/utils/redux/actions/auth";
 import { setUser } from "@/utils/redux/actions/auth";
+import { StatusModel } from "@/models/StatusModel";
 
 interface PermanentDrawerProps {
   pathName: string;
@@ -55,7 +56,7 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
   };
 
   React.useEffect(() => {
-    if (status === "signOutSuccessful") {
+    if (status === StatusModel.SIGNOUTSUCCESSFUL) {
       router.replace("/signin");
     }
   }, [status]);
@@ -109,7 +110,7 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
                 <ListItem
                   disablePadding
                   sx={{ display: "block", color: "white", "&:hover": {
-                    backgroundColor: "#cceaff",
+                    backgroundColor: "#cceaff", borderRadius: 2
                   }, }}
                 >
                   <ListItemButton
@@ -121,10 +122,25 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
                     sx={{
                       minHeight: 48,
                       justifyContent: "initial",
-                      px: 2.5,
+
                       color: "white", // Default text color
                       "&:hover": {
                         color: "primary.dark", // Change text color on hover
+                      },
+                      position: "relative", 
+                      "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        left: 20,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        height: "70%", 
+                        width: "3px",
+                        backgroundColor: "#cceaff", 
+                        borderRadius: "2px", 
+                      },
+                      "&:hover::before": {
+                        backgroundColor: "white", 
                       },
                     }}
                   >
@@ -152,7 +168,7 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
                   unmountOnExit
                 >
                   {section?.subsections?.map((subsection, subIndex) => {
-                       if(subsection.requiredPermissions){
+                       if(subsection.requiredPermissions && subsection.requiredPermissions.length > 0){
                         if(!subsection.requiredPermissions.some(permission => user?.permission?.includes(permission)) && user?.username !== "root@e.com"){
                           return
                         }
@@ -161,29 +177,45 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
                     <ListItem
                       key={subsection.title}
                       disablePadding
-                      sx={{ display: "block", pl: 2, color: "white",  "&:hover": {
-                        backgroundColor: "#cceaff",
+                      sx={{ display: "block", pl: 3, color: "white",  "&:hover": {
+                        backgroundColor: "#cceaff", borderRadius: 2
                       }, }}
                     >
                       <ListItemButton
-                        onClick={() => handleRouting(String(subsection.path))}
+                        onClick={() => handleRouting(String(subsection?.path))}
                         className="group min-h-[36px] justify-start px-2.5 text-white hover:text-primary-dark"
                         sx={{
                           "&:hover": {
                             color: "primary.dark",
                           },
+                          position: "relative", 
+                          "&::before": {
+                            content: '""',
+                            position: "absolute",
+                            left: 10,
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            height: "70%", 
+                            width: "3px",
+                            backgroundColor: "#FF9900", 
+                            borderRadius: "2px", 
+                          },
+                          "&:hover::before": {
+                            backgroundColor: "white", 
+                          },
+                          
                         }}
                       >
                         <ListItemIcon
                           sx={{
                             minWidth: 0,
-                            mr: 3,
+                            mr: 2,
                             justifyContent: "center",
                           }}
                         />
-                        <p className="font-medium text-base group-hover:font-bold">
-                          {subsection.title}
-                        </p>
+                        <p className="font-semibold text-base">{subsection.title}</p>
+                       
+                    
                       </ListItemButton>
                     </ListItem>
                   )})}
@@ -195,16 +227,30 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
 
           {/* Sign Out Item at the Bottom */}
           <ListItem disablePadding sx={{ display: "block", color: "white",   "&:hover": {
-                  backgroundColor: "error.main",
+                  backgroundColor: "error.main", borderRadius: 2
                 }, }}>
             <ListItemButton
               onClick={() => signoutUser()}
               sx={{
-                minHeight: 48,
+                minHeight: 42,
                 justifyContent: "initial",
                 px: 2.5,
                 color: "white",
-
+                position: "relative", 
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  left: 20,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  height: "70%", 
+                  width: "3px",
+                  backgroundColor: "error.main", 
+                  borderRadius: "2px", 
+                },
+                "&:hover::before": {
+                  backgroundColor: "white", 
+                },
               }}
             >
               <ListItemIcon
@@ -219,8 +265,11 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
           </ListItem>
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, pt: 4 }}>
+      <Box component="main" sx={{ flexGrow: 1, pt: 2,  }}>
+        <Box sx={{ }}>
         {children}
+        </Box>
+      
       </Box>
     </Box>
   );

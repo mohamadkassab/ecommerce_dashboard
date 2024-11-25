@@ -13,115 +13,168 @@ export const ROUTES = {
     KPIADD: '/kpi/add',
     USER: '/user',
     ROLE: '/role',
-    SETTINGS: '/settings',
+    ACCOUNT: '/account',
+    COUNTRY: '/country'
   };
 
-
-
-export const SECTIONS = [
-
-  {
-    title: 'Dashboard',
-    path: ROUTES.DASHBOARD,
-    protected: true,
-    requiredPermissions: [],
-  },
-  {
-    title: 'KPI',
-    path: ROUTES.KPI,
-    protected: true,
-    requiredPermissions: ["kpi_r"],
-  },
-
-  // {
-  //   title: 'Sections',
- 
-  // },
-  // {
-  //   title: 'Categories',
-
-  // },
-
-  // {
-  //   title: 'Reports',
-  
-  // },
-  // {
-  //   title: 'Orders',
- 
-  // },
-  // {
-  //   title: 'Marketing',
-  //   subsections: ['hooks', 'templates'],
-  // },
-  {
-    title: 'Users',
-    protected: true,
-    requiredPermissions: ["user_crud","role_crud"], //OR
-    subsections: [{
-      title: 'users',
-      path: ROUTES.USER,
-      protected: true,
-      requiredPermissions: ["user_crud"]
-    }, 
+  export const SECTIONS = [
     {
-      title: 'roles',
-      path: ROUTES.ROLE,
+      title: 'Dashboard',
+      path: ROUTES.DASHBOARD,
       protected: true,
-      requiredPermissions: ["role_crud"]
-    }],
-  },
-  // {
-  //   title: 'Iventory',
-  //   subsections: ['inventory', 'upload & edit', 'bulk uploads', 'valuation'],
-  // },
-  // {
-  //   title: 'Customers',
-  //   subsections: ['customers', 'inquiries'],
-  // },
-  // {
-  //   title: 'Application Configurations',
-  //   subsections: ['tax rates', 'shipping options', 'zones'],
-  // },
-
-  {
-    title: 'Settings',
-    protected: true,
-    requiredPermissions: [],
-    subsections: [
-      {
-        title: 'account',
-        path: ROUTES.SETTINGS,
-        protected: true,
-        requiredPermissions: [],
-      }, 
-    ],
-  },
-
-  // {
-  //   title: 'Logs',
-
-  // },
-];
+      requiredPermissions: [],
+    },
+    {
+      title: 'KPI',
+      path: ROUTES.KPI,
+      protected: true,
+      requiredPermissions: [""],
+    },
+    {
+      title: 'Sections',
+      protected: true,
+      requiredPermissions: [],
+    },
+    {
+      title: 'Categories',
+      protected: true,
+      requiredPermissions: [],
+    },
+    {
+      title: 'Product',
+      protected: true,
+      requiredPermissions: [""],
+      subsections: [
+        {
+          title: 'product',
+          protected: true,
+          requiredPermissions: [""],
+        },
+        {
+          title: 'product info',
+          protected: true,
+          requiredPermissions: [""],
+        },
+      ],
+    },
+    {
+      title: 'Orders',
+    },
+    {
+      title: 'Transaction',
+      protected: true,
+      requiredPermissions: [""],
+    },
+    {
+      title: 'User',
+      protected: true,
+      requiredPermissions: ["user", "role"], // OR
+      subsections: [
+        {
+          title: 'user',
+          path: ROUTES.USER,
+          protected: true,
+          requiredPermissions: ["user"],
+        },
+        {
+          title: 'role',
+          path: ROUTES.ROLE,
+          protected: true,
+          requiredPermissions: ["role"],
+        },
+      ],
+    },
+    {
+      title: 'Setup',
+      protected: true,
+      requiredPermissions: [""], // OR
+      subsections: [
+        { title: 'attribute', protected: true, requiredPermissions: [""] },
+        { title: 'country', protected: true,path: ROUTES.COUNTRY, requiredPermissions: [""] },
+        { title: 'currency', protected: true, requiredPermissions: [""] },
+        { title: 'tag', protected: true, requiredPermissions: [""] },
+        { title: 'supplier', protected: true,  requiredPermissions: [""] },
+        { title: 'brand', protected: true, requiredPermissions: [""] },
+        { title: 'year', protected: true, requiredPermissions: [""] },
+        { title: 'season', protected: true, requiredPermissions: [""] },
+      ],
+    },
+    {
+      title: 'Reports',
+    },
+    // {
+    //   title: 'Marketing',
+      
+    //   subsections: ['hooks', 'templates'],
+    // },
+    // {
+    //   title: 'Customers',
+    //   subsections: ['customers', 'inquiries'],
+    // },
+    {
+      title: 'Logs',
+      protected: true,
+      requiredPermissions: [""],
+    },
+    {
+      title: 'Settings',
+      protected: true,
+      requiredPermissions: [],
+      subsections: [
+        {
+          title: 'account',
+          path: ROUTES.ACCOUNT,
+          protected: true,
+          requiredPermissions: [],
+        },
+      ],
+    },
+  ];
 
 export const APIROUTES = {
-  SIGNIN : "/User/signin",
+  //+------------------------------------------------------------------+
+  //| User                                           
+  //+------------------------------------------------------------------+
+  SIGNIN : "/User/SignIn",
+  SIGNOUT : "/User/SignOut",
+  CREATEUSER : "/User/CreateUser",
+  UPDATEUSER: "/User/UpdateUser",
+  DELETEUSER: "/User/DeleteUser",
+  CHANGEPASSWORD: "/User/ChangePassword",
+  GETALLUSERS : "/User/GetAllUsersWithRolesAndPermissions",
 
-  CREATECHART: "/Kpi/createChart",
-  DELETECHART : "/Kpi/deleteChart",
 
-  GETALLCHARTS: "/Kpi/getAllCharts",
-  GETCHARTDATABYQUERY : "/Kpi/getChartDataByQuery",
-  GETALLUSERS : "/User/getAllUsersWithRolesAndPermissions",
-  GETALLROLES : "/User/getAllRolesAndPermissions",
-  GETALLPERMISSIONS : "/User/getAllPermissions",
+  //+------------------------------------------------------------------+
+  //| Kpi                                           
+  //+------------------------------------------------------------------+
+  CREATECHART: "/Kpi/CreateChart",
+  DELETECHART : "/Kpi/DeleteChart",
+  GETALLCHARTS: "/Kpi/GetAllCharts",
+  GETCHARTDATABYQUERY : "/Kpi/GetChartDataByQuery",
 
-  CREATEUSER : "/User/createUser",
-  UPDATEUSER: "/User/updateUser",
-  DELETEUSER: "/User/deleteUser",
-  CREATEROLE : "/User/createRole",
-  UPDATEROLE: "/User/updateRole",
-  DELETEROLE: "/User/deleteRole",
+
+  //+------------------------------------------------------------------+
+  //| Role                                           
+  //+------------------------------------------------------------------+
+  GETALLROLES : "/User/GetAllRolesAndPermissions",
+  CREATEROLE : "/User/CreateRole",
+  UPDATEROLE: "/User/UpdateRole",
+  DELETEROLE: "/User/DeleteRole",
+
+
+  //+------------------------------------------------------------------+
+  //| Permission                                           
+  //+------------------------------------------------------------------+
+  GETALLPERMISSIONS : "/User/GetAllPermissions",
+
+
+  //+------------------------------------------------------------------+
+  //| Country                                           
+  //+------------------------------------------------------------------+
+  GETALLCOUNTRIES: "/Setup/GetAllCountries",
+  CREATECOUNTRY : "/Setup/CreateCountry",
+  UPDATECOUNTRY: "/Setup/UpdateCountry",
+  DELETECOUNTRY: "/Setup/DeleteCountry",
 
 }
 

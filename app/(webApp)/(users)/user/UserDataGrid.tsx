@@ -12,12 +12,15 @@ import {
   Autocomplete,
   Typography,
   FormControl,
+  InputAdornment,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   DialogContentText,
   Divider,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 
 import {
@@ -37,33 +40,52 @@ import {
   createUser,
   deleteUser,
   updateUser,
-  getAllPermissions,
-  createRole,
-  updateRole,
-  deleteRole,
 } from "@/utils/redux/actions/user";
+import IconButton from "@mui/material/IconButton";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { StatusModel } from "@/models/StatusModel";
 
 
 // Start Dynamic components
-interface permissionProps {
+interface roleProps {
   id: number;
-  permissionName: string;
+  roleName: string;
+  permissions: any[];
 }
 
 interface rowProps {
   id?: number;
-  roleName?: string;
-  permissions: permissionProps[];
+  username: string;
+  firstName: string;
+  lastName: string;
+  dob: Date;
+  phone: string;
+  address: string;
+  password: string;
+  roles: roleProps[];
+  permissions?: { id: string; permissionName: string }[];
+  updatedAt?: Date;
+  updatedBy?: string;
+  failedLoginAttempts: Number;
+  isActive: boolean;
 }
 
-
-const RoleDataGrid = () => {
+const UserDataGrid = () => {
 
   const defaultValues = {
-    roleName: "",
-    permissions: [],
+    username: "",
+    firstName: "",
+    lastName: "",
+    dob: new Date(),
+    phone: "",
+    address: "",
+    roles: [],
+    password: "",
+    failedLoginAttempts: 0,
+    isActive: true,
   };
 
+  
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",
@@ -74,19 +96,53 @@ const RoleDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "roleName", headerName: "Role Name", flex: 1, editable: false },
+    { field: "username", headerName: "Username", flex: 1, editable: false },
+    { field: "firstName", headerName: "First Name", flex: 1, editable: false },
+    { field: "lastName", headerName: "Last Name", flex: 1, editable: false },
     {
-      field: "permissions",
-      headerName: "Permissions",
+      field: "dob",
+      headerName: "DOB",
+      type: "date",
+      flex: 0.5,
+      align: "left",
+      headerAlign: "left",
+      valueGetter: (params) => {
+        return new Date(params);
+      },
+      editable: false,
+    },
+    { field: "phone", headerName: "Phone", flex: 1, editable: false },
+    { field: "address", headerName: "Address", flex: 1, editable: false },
+    {
+      field: "roles",
+      headerName: "Roles",
       flex: 1,
       renderCell: (params) => {
-        const itemsDisplayed =
-          params.value.map((permission: permissionProps) => permission.permissionName).join(", ") ||
-          "No permissions assigned";
-        return <span>{itemsDisplayed}</span>;
+        const rolesDisplay =
+          params.value.map((role: roleProps) => role.roleName).join(", ") ||
+          "No roles assigned";
+        return <span>{rolesDisplay}</span>;
       },
-      editable: false
+      editable: false,
     },
+
+
+    {
+      field: "updatedAt",
+      headerName: "Updated At",
+      type: "date",
+      valueGetter: (params) => {
+        return new Date(params);
+      },
+      flex: 1,
+      editable: false,
+    },
+  
+    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
+    { field: "failedLoginAttempts", headerName: "Failed logins",   type: "number",     align: "center",
+      headerAlign: "center", flex: 1, editable: false },
+    { field: "isActive", headerName: "Is Active",     type: "boolean",      align: "center",
+      headerAlign: "center", flex: 1, editable: false },
     {
       field: "actions",
       type: "actions",
@@ -112,7 +168,7 @@ const RoleDataGrid = () => {
           />,
         ];
       },
-      editable: false
+      editable: false,
     },
   ];
   // End Dynamic components
@@ -143,7 +199,8 @@ const RoleDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const {allRoles, allPermissions } = useAppSelector((state: any) => state.reducer);
+  const {allUsers, allRoles } = useAppSelector((state: any) => state.reducer); // Dynamic component
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false); // Dynamic component
   const [isEditMode, setIsEditMode] = React.useState(false);
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
@@ -151,8 +208,12 @@ const RoleDataGrid = () => {
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = React.useState(false);
   const [itemToDelete, setItemToDelete] = React.useState<rowProps | null>(null);
   const [refresh, setRefresh] = React.useState(false);
-  const {status, error} = useAppSelector((state: any) => state.reducer);
+  const { status } = useAppSelector((state: any) => state.reducer);
   const [loading, setLoading] = React.useState(false);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
 
   const handleOpenCreate = () => setOpenCreate(true);
   const handleCloseCreate = () => setOpenCreate(false);
@@ -161,19 +222,19 @@ const RoleDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(createRole(formData)); // Dynamic component
+    dispatch(createUser(formData)); // Dynamic component
     handleCloseCreate();
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(updateRole(formData)); // Dynamic component
+    dispatch(updateUser(formData)); // Dynamic component
     handleCloseEdit();
   };
 
   const handleConfirmDelete = () => {
     try {
-      dispatch(deleteRole(Number(itemToDelete?.id))); // Dynamic component
+      dispatch(deleteUser(Number(itemToDelete?.id))); // Dynamic component
       setOpenDeleteConfirmation(false);
     } catch (e) {}
   };
@@ -198,6 +259,11 @@ const RoleDataGrid = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleChangeBoolean = (e: any) => {
+    const { name, checked } = e.target;
+    setFormData({ ...formData, [name]: checked });
+  };
+
   const handleArrayChange = (key: string, newValue: any) => {
     if (Array.isArray(newValue)) {
       setFormData((prevState) => ({
@@ -208,7 +274,7 @@ const RoleDataGrid = () => {
   };
 
   React.useEffect(() => {
-    if (status === "skeletonLoading") {
+    if (status === StatusModel.SKELETONLOADING) {
       if (loading !== true) {
         setLoading(true);
       }
@@ -218,16 +284,15 @@ const RoleDataGrid = () => {
   }, [status]);
 
   React.useEffect(() => {
-    if (status === "success") {
+    if (status === StatusModel.SUCCESS) {
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    setLoading(true);
-    dispatch(getAllRoles());
-    dispatch(getAllPermissions());
+    dispatch(getAllRoles()); 
+    dispatch(getAllUsers());
   }, [refresh]);
 
   const columnsForms = [
@@ -242,15 +307,88 @@ const RoleDataGrid = () => {
       showOnEdit: false,
     },
     {
-      field: "roleName",
-      caption: "Role Name",
+      field: "username",
+      caption: "Username",
+      type: "email",
+      required: true,
+      value: formData?.username,
+      onChange: handleChange,
+      inputProps: {
+        minLength: 4,
+        maxLength: 255,
+      },
+      disabled: isEditMode ? true : false,
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+    {
+      field: "firstName",
+      caption: "First Name",
       type: "text",
       required: true,
-      value: formData?.roleName,
+      value: formData?.firstName,
+      onChange: handleChange,
+      inputProps: {
+        minLength: 2,
+        maxLength: 255,
+      },
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+    {
+      field: "lastName",
+      caption: "Last Name",
+      type: "text",
+      required: true,
+      value: formData?.lastName,
+      onChange: handleChange,
+      inputProps: {
+        minLength: 2,
+        maxLength: 255,
+      },
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+    {
+      field: "dob",
+      caption: "DOB",
+      type: "date",
+      required: true,
+      value: formData?.dob,
+      onChange: handleChange,
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+    {
+      field: "phone",
+      caption: "Phone",
+      type: "tel",
+      required: true,
+      value: formData?.phone,
       onChange: handleChange,
       inputProps: {
         minLength: 1,
         maxLength: 50,
+        onInput: (e: React.FormEvent<HTMLInputElement>) => {
+          const target = e.target as HTMLInputElement;
+          target.value = target.value
+            .replace(/[^0-9+]/g, "")
+            .replace(/(?!^)\+/g, "");
+        },
+      },
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+    {
+      field: "address",
+      caption: "Address",
+      type: "text",
+      required: false,
+      value: formData?.address,
+      onChange: handleChange,
+      inputProps: {
+        minLength: 0,
+        maxLength: 255,
       },
       showOnCreate: true,
       showOnEdit: true,
@@ -263,55 +401,123 @@ const RoleDataGrid = () => {
           <Autocomplete
             multiple
             disableCloseOnSelect
-            options={allPermissions || []}
-            getOptionLabel={(option) => option.permissionName}
-            value={formData.permissions}
+            options={allRoles || []}
+            getOptionLabel={(option) => option.roleName}
+            value={formData.roles}
             onChange={(event, newValue) => {
-              handleArrayChange("permissions", newValue);
+              handleArrayChange("roles", newValue);
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            renderOption={(props, option, { selected }) => {
-              const isSelected = formData.permissions.some(permission => permission.id === option.id);
+            renderOption={(props, option) => {
+              const isSelected = formData.roles.some(role => role.id === option.id);
               return (
                 <li {...props}>
-                  <Checkbox checked={selected} />
-                  <ListItemText primary={option.permissionName} />
+                  <Checkbox checked={isSelected} />
+                  <ListItemText primary={option.roleName} />
                 </li>
               );
             }}
             renderInput={(params) => (
-              /*Dynamic component*/
-              <TextField {...params} variant="outlined" label="Select Permissions" />
+               /*Dynamic component*/
+              <TextField {...params} variant="outlined" label="Select Roles" />
             )}
           />
         </FormControl>
       ),
     },
-  ];
+    {
+      showOnEdit: true,
+      showOnCreate: true,
+      component: (
+        <TextField
+          key={`CreateForm-password`}
+          name="password"
+          label="Password"
+          type={isPasswordVisible ? "text" : "password"}
+          required={isEditMode ? false : true}
+          value={formData?.password}
+          onChange={handleChange}
+          variant="outlined"
+          margin="normal"
+          fullWidth
+          autoComplete="off" 
+          placeholder={
+            isEditMode
+              ? "Leave empty to keep current password"
+              : "Enter a new password"
+          }
+          helperText={
+            isEditMode
+              ? "Leave empty if you do not wish to change the password"
+              : ""
+          }
+          inputProps={{
+            minLength:  6,
+            maxLength: 255,
+          }}
 
+          FormHelperTextProps={{
+            sx: {
+              color: 'warning.main',  
+            },
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={togglePasswordVisibility} edge="end">
+                  {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      ),
+    },
+    {
+      showOnCreate: true,
+      showOnEdit: true,
+      component:(
+        <FormControlLabel
+        key={`CreateForm-isActive`}
+        label="Is Active"
+
+        control={
+          <Switch
+            name={`isActive`}
+            checked={Boolean(formData?.isActive)} 
+            onChange={(e) => handleChangeBoolean(e)}
+          />
+        }
+
+  
+      />
+      )
+    },
+  ];
   // End Dynamic components
 
   return (
     <Box
-      sx={{
-        height: "94vh",
-        width: "calc(100vw - 240px)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingX: "16px",
-        "& .actions": {
-          color: "text.secondary",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
-      }}
+    sx={{
+      height: "calc(100vh - 100px)",
+      maxWidth: "calc(100vw - 240px)",
+      borderRadius: 2,
+      paddingX: 2,
+    
+      "& .actions": {
+        color: "text.secondary",
+      },
+      "& .textPrimary": {
+        color: "text.primary",
+      },
+    }}
     >
+    <Typography variant="h4" sx={{ textAlign: 'center', width:"100%" }}>
+      Users
+    </Typography>
       <DataGrid
-        rows={allRoles}   // Start Dynamic components
+        rows={allUsers} // Start Dynamic components
         columns={columnsDataGrid}
-        editMode="row"
         disableRowSelectionOnClick
         loading={loading}
         slots={{
@@ -324,6 +530,7 @@ const RoleDataGrid = () => {
           },
         }}
         sx={{
+          mt:1,
           "& .MuiDataGrid-columnHeaders": {
             borderBottom: "2px solid",
             borderColor: "primary.main",
@@ -389,6 +596,7 @@ const RoleDataGrid = () => {
                     type={item?.type}
                     label={item?.caption}
                     value={item?.value}
+                    disabled={item?.disabled ? true : false}
                     onChange={item?.onChange}
                     inputProps={item?.inputProps ? item.inputProps : undefined}
                     variant="outlined"
@@ -407,6 +615,7 @@ const RoleDataGrid = () => {
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
             >
+               {/* Cancel Button */}
               <Button
                 variant="outlined"
                 color="secondary"
@@ -503,6 +712,7 @@ const RoleDataGrid = () => {
                     name={item?.field}
                     required={item?.required}
                     type={item?.type}
+                    disabled={item?.disabled ? true : false}
                     label={item?.caption}
                     value={item?.value}
                     onChange={item?.onChange}
@@ -523,6 +733,7 @@ const RoleDataGrid = () => {
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
             >
+              {/* Cancel Button */}
               <Button
                 variant="outlined"
                 color="secondary"
@@ -582,9 +793,8 @@ const RoleDataGrid = () => {
               variant="body1"
               sx={{ fontWeight: "bold", color: "error.main" }}
             >
-              
-              {/*Dynamic component */}
-              {itemToDelete?.roleName}  
+                {/*Dynamic component */}
+              {itemToDelete?.username}
             </Typography>
             &nbsp;?
           </DialogContentText>
@@ -615,4 +825,4 @@ const RoleDataGrid = () => {
   );
 };
 
-export default RoleDataGrid;
+export default UserDataGrid;

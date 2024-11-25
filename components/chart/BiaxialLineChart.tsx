@@ -2,7 +2,7 @@ import * as React from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { APIROUTES } from '@/utils/constants';
 import axios from 'axios';
-import { getMinMaxDates } from '@/utils/functions';
+import { getMinMaxDates } from '@/utils/helpers/funtions';
 
 
 

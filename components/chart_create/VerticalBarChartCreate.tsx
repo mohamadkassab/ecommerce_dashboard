@@ -17,6 +17,7 @@ import VerticalBarChart from "../chart/VerticalBarChart";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { createChart } from "@/utils/redux/actions/kpi";
 import ChartWrapper from "../wrapper/chartWrapper";
+import { StatusModel } from "@/models/StatusModel";
 
 
 interface FormData {
@@ -62,7 +63,7 @@ const VerticalBarChartCreate: React.FC = () => {
   };
 
   React.useEffect(()=>{
-    if(status === "success"){
+    if(status === StatusModel.SUCCESS){
       setFormData(defaultFormData);
     }
   },[status])

@@ -19,6 +19,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditDeleteButtons from "@/components/shared/EditDeleteButtons";
 import { setIdle } from "@/utils/redux/actions/auth";
+import { StatusModel } from "@/models/StatusModel";
 
 
 
@@ -34,9 +35,10 @@ const KpiPage: React.FC = () => {
   const onAdd = () => {
     router.push("/kpi/add");
   };
+  
 
   React.useEffect(()=>{
-    if(status === 'success'){
+    if(status === StatusModel.SUCCESS){
        dispatch(setIdle());
        setRefresh(!refresh);
     }
@@ -66,7 +68,19 @@ const KpiPage: React.FC = () => {
 
 
   return (
-    <Box className="w-full flex flex-col justify-center mb-[4rem] ">
+    <Box
+    sx={{
+      height: "96.6vh",
+      borderRadius: 2,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "start",
+      pt:1,
+    }}
+  >
+    <Typography variant="h4" sx={{ textAlign: 'center', width:"100%" }}>
+      KPI
+    </Typography>
       <Box className={`w-full flex justify-between sticky pb-2 px-2 ${
           isScrolled ? 'shadow-md' : ''
         }`}  sx={{ top: 0, backgroundColor: "white", zIndex: 1000 }}>
@@ -78,7 +92,7 @@ const KpiPage: React.FC = () => {
           </IconButton>
         </div>
         <div className="w-1/3 flex justify-center">
-          <Typography variant="h4">Kpi</Typography>
+
         </div>
         <div className="w-1/3"></div>
       </Box>

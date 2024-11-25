@@ -38,7 +38,6 @@ export function middleware(request: NextRequest) {
           } else {
             return NextResponse.redirect(new URL(ROUTES.DASHBOARD, request.url));
           }
-
         }
       }
     }

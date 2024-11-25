@@ -7,12 +7,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import {
   TextField,
   Modal,
-  Checkbox,
-  ListItemText,
-  Autocomplete,
   Typography,
-  FormControl,
-  InputAdornment,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -32,56 +27,25 @@ import {
 } from "@mui/x-data-grid";
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
-import {
-  getAllUsers,
-  getAllRoles,
-  createUser,
-  deleteUser,
-  updateUser,
-} from "@/utils/redux/actions/user";
-import IconButton from "@mui/material/IconButton";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { StatusModel } from "@/models/StatusModel";
+import { createCountry, deleteCountry, getAllCountries, updateCountry } from "@/utils/redux/actions/country";
 
 
 // Start Dynamic components
-interface roleProps {
-  id: number;
-  roleName: string;
-  permissions: any[];
-}
-
 interface rowProps {
   id?: number;
-  isNew?: boolean;
-  username: string;
-  firstName: string;
-  lastName: string;
-  dob: Date;
-  phone: string;
-  address: string;
-  password: string;
-  roles: roleProps[];
-  permissions?: { id: string; permissionName: string }[];
-  createdAt?: Date;
+  name: string;
+  code: string;
   updatedAt?: Date;
-  createdBy?: string;
   updatedBy?: string;
 }
 
-const UserDataGrid = () => {
-
+const CountryDataGrid = () => {
   const defaultValues = {
-    username: "",
-    firstName: "",
-    lastName: "",
-    dob: new Date(),
-    phone: "",
-    address: "",
-    roles: [],
-    password: "",
+    name: "",
+    code: "",
   };
 
-  
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",
@@ -92,46 +56,8 @@ const UserDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "username", headerName: "Username", flex: 1, editable: false },
-    { field: "firstName", headerName: "First Name", flex: 1, editable: false },
-    { field: "lastName", headerName: "Last Name", flex: 1, editable: false },
-    {
-      field: "dob",
-      headerName: "DOB",
-      type: "date",
-      flex: 0.5,
-      align: "left",
-      headerAlign: "left",
-      valueGetter: (params) => {
-        return new Date(params);
-      },
-      editable: false,
-    },
-    { field: "phone", headerName: "Phone", flex: 1, editable: false },
-    { field: "address", headerName: "Address", flex: 1, editable: false },
-    {
-      field: "roles",
-      headerName: "Roles",
-      flex: 1,
-      renderCell: (params) => {
-        const rolesDisplay =
-          params.value.map((role: roleProps) => role.roleName).join(", ") ||
-          "No roles assigned";
-        return <span>{rolesDisplay}</span>;
-      },
-      editable: false,
-    },
-
-    {
-      field: "createdAt",
-      headerName: "Created At",
-      type: "date",
-      valueGetter: (params) => {
-        return new Date(params);
-      },
-      flex: 1,
-      editable: false,
-    },
+    { field: "name", headerName: "Name", flex: 1, editable: false },
+    { field: "code", headerName: "Code", flex: 1, editable: false },
     {
       field: "updatedAt",
       headerName: "Updated At",
@@ -142,7 +68,7 @@ const UserDataGrid = () => {
       flex: 1,
       editable: false,
     },
-    { field: "createdBy", headerName: "Created By", flex: 1, editable: false },
+  
     { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
     {
       field: "actions",
@@ -177,7 +103,6 @@ const UserDataGrid = () => {
   function EditToolbar() {
     const handleClickAddRecord = () => {
       setFormData(defaultValues);
-      setIsEditMode(false);
       handleOpenCreate();
     };
 
@@ -200,21 +125,15 @@ const UserDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const {allUsers, allRoles } = useAppSelector((state: any) => state.reducer);
-  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
-  const [isEditMode, setIsEditMode] = React.useState(false);
+  const {allCountries } = useAppSelector((state: any) => state.reducer); // Dynamic component
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = React.useState(false);
   const [itemToDelete, setItemToDelete] = React.useState<rowProps | null>(null);
   const [refresh, setRefresh] = React.useState(false);
-  const { status, error } = useAppSelector((state: any) => state.reducer);
+  const { status } = useAppSelector((state: any) => state.reducer);
   const [loading, setLoading] = React.useState(false);
-
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible(!isPasswordVisible);
-  };
 
   const handleOpenCreate = () => setOpenCreate(true);
   const handleCloseCreate = () => setOpenCreate(false);
@@ -223,26 +142,25 @@ const UserDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(createUser(formData)); // Dynamic component
+    dispatch(createCountry(formData)); // Dynamic component
     handleCloseCreate();
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(updateUser(formData)); // Dynamic component
+    dispatch(updateCountry(formData)); // Dynamic component
     handleCloseEdit();
   };
 
   const handleConfirmDelete = () => {
     try {
-      dispatch(deleteUser(Number(itemToDelete?.id))); // Dynamic component
+      dispatch(deleteCountry(Number(itemToDelete?.id))); // Dynamic component
       setOpenDeleteConfirmation(false);
     } catch (e) {}
   };
 
   const handleUpdateClick = (row: rowProps) => () => { 
     setFormData(row);
-    setIsEditMode(true);
     handleOpenEdit();
   };
 
@@ -260,17 +178,8 @@ const UserDataGrid = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleArrayChange = (key: string, newValue: any) => {
-    if (Array.isArray(newValue)) {
-      setFormData((prevState) => ({
-        ...prevState,
-        [`${key}`]: newValue,
-      }));
-    }
-  };
-
   React.useEffect(() => {
-    if (status === "skeletonLoading") {
+    if (status === StatusModel.SKELETONLOADING) {
       if (loading !== true) {
         setLoading(true);
       }
@@ -280,16 +189,14 @@ const UserDataGrid = () => {
   }, [status]);
 
   React.useEffect(() => {
-    if (status === "success") {
+    if (status === StatusModel.SUCCESS) {
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    setLoading(true);
-    dispatch(getAllRoles());
-    dispatch(getAllUsers());
+    dispatch(getAllCountries());
   }, [refresh]);
 
   const columnsForms = [
@@ -304,194 +211,57 @@ const UserDataGrid = () => {
       showOnEdit: false,
     },
     {
-      field: "username",
-      caption: "Username",
-      type: "email",
+      field: "name",
+      caption: "Name",
+      type: "text",
       required: true,
-      value: formData?.username,
+      value: formData?.name,
       onChange: handleChange,
       inputProps: {
         minLength: 4,
-        maxLength: 50,
-      },
-      disabled: isEditMode ? true : false,
-      showOnCreate: true,
-      showOnEdit: true,
-    },
-    {
-      field: "firstName",
-      caption: "First Name",
-      type: "text",
-      required: true,
-      value: formData?.firstName,
-      onChange: handleChange,
-      inputProps: {
-        minLength: 2,
-        maxLength: 50,
-      },
-      showOnCreate: true,
-      showOnEdit: true,
-    },
-    {
-      field: "lastName",
-      caption: "Last Name",
-      type: "text",
-      required: true,
-      value: formData?.lastName,
-      onChange: handleChange,
-      inputProps: {
-        minLength: 2,
-        maxLength: 50,
-      },
-      showOnCreate: true,
-      showOnEdit: true,
-    },
-    {
-      field: "dob",
-      caption: "DOB",
-      type: "date",
-      required: true,
-      value: formData?.dob,
-      onChange: handleChange,
-      showOnCreate: true,
-      showOnEdit: true,
-    },
-    {
-      field: "phone",
-      caption: "Phone",
-      type: "tel",
-      required: true,
-      value: formData?.phone,
-      onChange: handleChange,
-      inputProps: {
-        minLength: 1,
-        maxLength: 50,
-        onInput: (e: React.FormEvent<HTMLInputElement>) => {
-          const target = e.target as HTMLInputElement;
-          target.value = target.value
-            .replace(/[^0-9+]/g, "")
-            .replace(/(?!^)\+/g, "");
-        },
-      },
-      showOnCreate: true,
-      showOnEdit: true,
-    },
-    {
-      field: "address",
-      caption: "Address",
-      type: "text",
-      required: false,
-      value: formData?.address,
-      onChange: handleChange,
-      inputProps: {
-        minLength: 0,
         maxLength: 255,
       },
       showOnCreate: true,
       showOnEdit: true,
     },
     {
+      field: "code",
+      caption: "Code",
+      type: "text",
+      required: true,
+      value: formData?.code,
+      onChange: handleChange,
+      inputProps: {
+        minLength: 2,
+        maxLength: 255,
+      },
       showOnCreate: true,
       showOnEdit: true,
-      component: (
-        <FormControl key={`CreateForm-roles`} fullWidth margin="normal">
-          <Autocomplete
-            multiple
-            disableCloseOnSelect
-            options={allRoles || []}
-            getOptionLabel={(option) => option.roleName}
-            value={formData.roles}
-            onChange={(event, newValue) => {
-              handleArrayChange("roles", newValue);
-            }}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            renderOption={(props, option) => {
-              const isSelected = formData.roles.some(role => role.id === option.id);
-              return (
-                <li {...props}>
-                  <Checkbox checked={isSelected} />
-                  <ListItemText primary={option.roleName} />
-                </li>
-              );
-            }}
-            renderInput={(params) => (
-               /*Dynamic component*/
-              <TextField {...params} variant="outlined" label="Select Roles" />
-            )}
-          />
-        </FormControl>
-      ),
-    },
-    {
-      showOnEdit: true,
-      showOnCreate: true,
-      component: (
-        <TextField
-          key={`CreateForm-password`}
-          name="password"
-          label="Password"
-          type={isPasswordVisible ? "text" : "password"}
-          required={isEditMode ? false : true}
-          value={formData?.password}
-          onChange={handleChange}
-          variant="outlined"
-          margin="normal"
-          fullWidth
-          autoComplete="off" 
-          placeholder={
-            isEditMode
-              ? "Leave empty to keep current password"
-              : "Enter a new password"
-          }
-          helperText={
-            isEditMode
-              ? "Leave empty if you do not wish to change the password"
-              : ""
-          }
-          inputProps={{
-            minLength:  6,
-            maxLength: 255,
-          }}
-
-          FormHelperTextProps={{
-            sx: {
-              color: 'warning.main',  
-            },
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={togglePasswordVisibility} edge="end">
-                  {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      ),
     },
   ];
   // End Dynamic components
 
   return (
     <Box
-      sx={{
-        height: "94vh",
-        width: "calc(100vw - 240px)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingX: "16px",
-        "& .actions": {
-          color: "text.secondary",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
-      }}
+    sx={{
+      height: "calc(100vh - 100px)",
+      maxWidth: "calc(100vw - 240px)",
+      borderRadius: 2,
+      paddingX: 2,
+    
+      "& .actions": {
+        color: "text.secondary",
+      },
+      "& .textPrimary": {
+        color: "text.primary",
+      },
+    }}
     >
+    <Typography variant="h4" sx={{ textAlign: 'center', width:"100%" }}>
+      Country
+    </Typography>
       <DataGrid
-        rows={allUsers} // Start Dynamic components
+        rows={allCountries} // Start Dynamic components
         columns={columnsDataGrid}
         disableRowSelectionOnClick
         loading={loading}
@@ -505,6 +275,7 @@ const UserDataGrid = () => {
           },
         }}
         sx={{
+          mt:1,
           "& .MuiDataGrid-columnHeaders": {
             borderBottom: "2px solid",
             borderColor: "primary.main",
@@ -559,9 +330,7 @@ const UserDataGrid = () => {
           <form onSubmit={handleCreate}>
             {columnsForms.map((item, index) => {
               if (item?.showOnCreate) {
-                if (item?.component !== undefined) {
-                  return item.component;
-                }
+
                 return (
                   <TextField
                     key={`CreateForm-${item?.field}`}
@@ -570,7 +339,6 @@ const UserDataGrid = () => {
                     type={item?.type}
                     label={item?.caption}
                     value={item?.value}
-                    disabled={item?.disabled ? true : false}
                     onChange={item?.onChange}
                     inputProps={item?.inputProps ? item.inputProps : undefined}
                     variant="outlined"
@@ -589,6 +357,7 @@ const UserDataGrid = () => {
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
             >
+               {/* Cancel Button */}
               <Button
                 variant="outlined"
                 color="secondary"
@@ -676,16 +445,12 @@ const UserDataGrid = () => {
           <form onSubmit={handleUpdate}>
             {columnsForms.map((item, index) => {
               if (item?.showOnEdit) {
-                if (item?.component !== undefined) {
-                  return item.component;
-                }
                 return (
                   <TextField
                     key={`CreateForm-${item?.field}`}
                     name={item?.field}
                     required={item?.required}
                     type={item?.type}
-                    disabled={item?.disabled ? true : false}
                     label={item?.caption}
                     value={item?.value}
                     onChange={item?.onChange}
@@ -706,6 +471,7 @@ const UserDataGrid = () => {
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
             >
+              {/* Cancel Button */}
               <Button
                 variant="outlined"
                 color="secondary"
@@ -766,7 +532,7 @@ const UserDataGrid = () => {
               sx={{ fontWeight: "bold", color: "error.main" }}
             >
                 {/*Dynamic component */}
-              {itemToDelete?.username}
+              {itemToDelete?.name}
             </Typography>
             &nbsp;?
           </DialogContentText>
@@ -797,4 +563,4 @@ const UserDataGrid = () => {
   );
 };
 
-export default UserDataGrid;
+export default CountryDataGrid;
