@@ -9,5 +9,5 @@ export const getAllChartsService = async () =>
   apiRequest('GET', APIROUTES.GETALLCHARTS);
 
 export const deleteChartService = async (id: number) =>
-  apiRequest('DELETE', APIROUTES.DELETECHART, { id });
+  apiRequest('DELETE', `${APIROUTES.DELETECHART}/${id}`);
 

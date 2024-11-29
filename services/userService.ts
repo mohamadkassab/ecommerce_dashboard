@@ -17,8 +17,10 @@ export const createRoleService = async (formData: any) =>
 export const updateRoleService = async (formData: any) =>
   apiRequest('PUT', APIROUTES.UPDATEROLE, formData);
 
-export const deleteRoleService = async (formData: any) =>
-  apiRequest('DELETE', APIROUTES.DELETEROLE, formData);
+export const deleteRoleService = async (id: number) =>{
+  apiRequest('DELETE', `${APIROUTES.DELETEROLE}/${id}`);
+}
+ 
 
 export const createUserService = async (formData: any) =>
   apiRequest('POST', APIROUTES.CREATEUSER, formData);
@@ -26,5 +28,5 @@ export const createUserService = async (formData: any) =>
 export const updateUserService = async (formData: any) =>
   apiRequest('PUT', APIROUTES.UPDATEROLE, formData);
 
-export const deleteUserService = async (formData: any) =>
-  apiRequest('DELETE', APIROUTES.DELETEROLE, formData);
+export const deleteUserService = async (id: number) =>
+  apiRequest('DELETE', `${APIROUTES.DELETEUSER}/${id}`);

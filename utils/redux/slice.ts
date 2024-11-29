@@ -9,7 +9,7 @@ import { createRole, createUser, deleteRole, deleteUser, getAllPermissions, getA
 import jwt from 'jsonwebtoken';
 import { changePassword } from './actions/account';
 import { StatusModel } from '@/models/StatusModel';
-import { createCountry, deleteCountry, getAllCountries, updateCountry } from './actions/country';
+import { createCategory, createCountry, createSeason, createSection, createTag, createYear, deleteCategory, deleteCountry, deleteSeason, deleteSection, deleteTag, deleteYear, getAllCategories, getAllCountries, getAllSeasons, getAllSections, getAllTags, getAllYears, updateCategory, updateCountry, updateSeason, updateSection, updateTag, updateYear } from './actions/setup';
 
 interface UserToken {
   username: string;
@@ -30,9 +30,13 @@ interface InitialState {
   allRoles?: any[];
   allPermissions?: any[];
   allCountries?: any[];
+  allCategories?: any[];
+  allSeasons?: any[];
+  allSections?: any[];
+  allYears?: any[];
+  allTags?: any[];
   status: StatusModel;
   error: string | null | object;
-
 }
 
 const initialState: InitialState = {
@@ -53,6 +57,13 @@ const decodeAndVerifyToken = (token: string | undefined): UserToken | null => {
 };
 
 //+------------------------------------------------------------------+
+//| Helper function to check if payload contains error                                          
+//+------------------------------------------------------------------+
+function isErrorPayload(payload: any): payload is { error: any } {
+  return payload && typeof payload.error !== "undefined";
+}
+
+//+------------------------------------------------------------------+
 //| Utility to handle common async action states (pending, fulfilled, rejected)                                          
 //+------------------------------------------------------------------+
 const handleAsyncAction = <T>(
@@ -67,7 +78,13 @@ const handleAsyncAction = <T>(
     })
     .addCase(action.fulfilled, (state, action) => {
       onSuccess(state, action);
-      state.status = StatusModel.SUCCESS;
+      console.log(action.payload)
+      if (isErrorPayload(action.payload)) {
+        state.error = action.payload.error.message || "Failed";
+        state.status = StatusModel.FAILED;
+      }else{
+        state.status = StatusModel.SUCCESS;
+      }
     })
     .addCase(action.rejected, (state, action) => {
       state.error = action.error?.message || null;
@@ -87,14 +104,18 @@ const handleAsyncActionWithoutSuccess = <T>(
     })
     .addCase(action.fulfilled, (state, action) => {
       onSuccess(state, action);
-      state.status = StatusModel.OK;
+      if (isErrorPayload(action.payload)) {
+        state.error = action.payload.error.message || "Failed";
+        state.status = StatusModel.FAILED;
+      }else{
+        state.status = StatusModel.OK;
+      }
     })
     .addCase(action.rejected, (state, action) => {
       state.error = action.error?.message || null;
       state.status = StatusModel.FAILED;
     });
 };
-
 
 const slice = createSlice({
   name: 'slice',
@@ -103,118 +124,173 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      //+------------------------------------------------------------------+
-      //| Set Idle                                            
-      //+------------------------------------------------------------------+
-      builder.addCase(setIdle.fulfilled, (state) => {
-        state.status = StatusModel.IDLE;
-        state.error = null;
-      });
+    //+------------------------------------------------------------------+
+    //| Set Idle                                            
+    //+------------------------------------------------------------------+
+    builder.addCase(setIdle.fulfilled, (state) => {
+      state.status = StatusModel.IDLE;
+      state.error = null;
+    });
 
+    //+------------------------------------------------------------------+
+    //| User                                            
+    //+------------------------------------------------------------------+
+    builder.addCase(signin.pending, (state) => {
+      state.status = StatusModel.LOADING;
+    })
+    .addCase(signin.fulfilled, (state, action) => {
+      if (action.payload) {
+        const decodedToken = jwt.decode(action.payload) as UserToken | null;
+        if (decodedToken) {
+          state.user = decodedToken;
+        }
+        const expirationMinutes = 720;
+        const expirationDate = new Date();
+        expirationDate.setTime(expirationDate.getTime() + expirationMinutes * 60 * 1000);
 
-      //+------------------------------------------------------------------+
-      //| User                                            
-      //+------------------------------------------------------------------+
-      builder.addCase(signin.pending, (state) => {
-        state.status = StatusModel.LOADING;
-      })
-      .addCase(signin.fulfilled, (state, action) => {
-        if (action.payload) {
-          const decodedToken = jwt.decode(action.payload) as UserToken | null;
+        Cookies.set(AUTHTOKEN, action.payload, {
+          expires: expirationDate,
+          secure: true,
+          sameSite: 'Strict',
+        });
+        state.status = StatusModel.SIGNINSUCCESSFUL;
+      } else {
+        state.status = StatusModel.FAILED;
+      }
+    })
+    .addCase(signin.rejected, (state, action) => {
+      state.error = action.error?.message || null;
+      state.status = StatusModel.FAILED;
+    });
+    builder.addCase(signout.fulfilled, (state) => {
+      state.status = StatusModel.SIGNOUTSUCCESSFUL;
+      state.user = null;
+      Cookies.remove(AUTHTOKEN);
+    });
+    builder.addCase(setUser.fulfilled, (state) => {
+      if (!state.user) {
+        const jwtToken = Cookies.get(AUTHTOKEN);
+        if (jwtToken) {
+          const decodedToken = decodeAndVerifyToken(jwtToken);
           if (decodedToken) {
             state.user = decodedToken;
           }
-          const expirationMinutes = 720;
-          const expirationDate = new Date();
-          expirationDate.setTime(expirationDate.getTime() + expirationMinutes * 60 * 1000);
-
-          Cookies.set(AUTHTOKEN, action.payload, {
-            expires: expirationDate,
-            secure: true,
-            sameSite: 'Strict',
-          });
-          state.status = StatusModel.SIGNINSUCCESSFUL;
-        } else {
-          state.status = StatusModel.FAILED;
         }
-      })
-      .addCase(signin.rejected, (state, action) => {
-        state.error = action.error?.message || null;
-        state.status = StatusModel.FAILED;
-      });
-      builder.addCase(signout.fulfilled, (state) => {
-        state.status = StatusModel.SIGNOUTSUCCESSFUL;
-        state.user = null;
-        Cookies.remove(AUTHTOKEN);
-      });
-      builder.addCase(setUser.fulfilled, (state) => {
-        if (!state.user) {
-          const jwtToken = Cookies.get(AUTHTOKEN);
-          if (jwtToken) {
-            const decodedToken = decodeAndVerifyToken(jwtToken);
-            if (decodedToken) {
-              state.user = decodedToken;
-            }
-          }
-        }
-      });
-      handleAsyncActionWithoutSuccess(builder, getAllUsers, (state, action) => {
-        state.allUsers = action.payload || [];
-      });
-      handleAsyncAction(builder, createUser, () => {});
-      handleAsyncAction(builder, updateUser, () => {});
-      handleAsyncAction(builder, deleteUser, () => {});
-      handleAsyncAction(builder, changePassword, () => {});
+      }
+    });
+    handleAsyncActionWithoutSuccess(builder, getAllUsers, (state, action) => {
+      state.allUsers = action.payload || [];
+    });
+    handleAsyncAction(builder, createUser, () => {});
+    handleAsyncAction(builder, updateUser, () => {});
+    handleAsyncAction(builder, deleteUser, () => {});
+    handleAsyncAction(builder, changePassword, () => {});
 
+    //+------------------------------------------------------------------+
+    //| Kpi                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllCharts, (state, action) => {
+      if (!action.payload.error) {
+        state.allCharts = action.payload || [];
+      }
+    });
+    handleAsyncAction(builder, createChart, () => {});
+    handleAsyncAction(builder, deleteChart, () => {});
 
-      //+------------------------------------------------------------------+
-      //| Kpi                                            
-      //+------------------------------------------------------------------+
-      handleAsyncActionWithoutSuccess(builder, getAllCharts, (state, action) => {
-        if (!action.payload.error) {
-          state.allCharts = action.payload || [];
-        }
-      });
-      handleAsyncAction(builder, createChart, () => {});
-      handleAsyncAction(builder, deleteChart, () => {});
+    //+------------------------------------------------------------------+
+    //| Role                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllRoles, (state, action) => {
+      if (!action.payload.error) {
+        state.allRoles = action.payload || [];
+      }
+    });
+    handleAsyncAction(builder, createRole, () => {});
+    handleAsyncAction(builder, updateRole, () => {});
+    handleAsyncAction(builder, deleteRole, () => {});
 
+    //+------------------------------------------------------------------+
+    //| Permission                                           
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllPermissions, (state, action) => {
+      if (!action.payload.error) {
+        state.allPermissions = action.payload || [];
+      }
+    });
+    
+    //+------------------------------------------------------------------+
+    //| Country                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllCountries, (state, action) => {
+      if (!action.payload.error) {
+        state.allCountries = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createCountry, () => {});
+    handleAsyncAction(builder, updateCountry, () => {});
+    handleAsyncAction(builder, deleteCountry, () => {});
 
-      //+------------------------------------------------------------------+
-      //| Role                                            
-      //+------------------------------------------------------------------+
-      handleAsyncActionWithoutSuccess(builder, getAllRoles, (state, action) => {
-        if (!action.payload.error) {
-          state.allRoles = action.payload || [];
-        }
-      });
-      handleAsyncAction(builder, createRole, () => {});
-      handleAsyncAction(builder, updateRole, () => {});
-      handleAsyncAction(builder, deleteRole, () => {});
+    //+------------------------------------------------------------------+
+    //| Category                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllCategories, (state, action) => {
+      if (!action.payload.error) {
+        state.allCategories = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createCategory, () => {});
+    handleAsyncAction(builder, updateCategory, () => {});
+    handleAsyncAction(builder, deleteCategory, () => {});
 
-   
-      //+------------------------------------------------------------------+
-      //| Permission                                           
-      //+------------------------------------------------------------------+
-      handleAsyncActionWithoutSuccess(builder, getAllPermissions, (state, action) => {
-        if (!action.payload.error) {
-          state.allPermissions = action.payload || [];
-        }
-      });
+    //+------------------------------------------------------------------+
+    //| Season                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllSeasons, (state, action) => {
+      if (!action.payload.error) {
+        state.allSeasons = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createSeason, () => {});
+    handleAsyncAction(builder, updateSeason, () => {});
+    handleAsyncAction(builder, deleteSeason, () => {});
+
+    //+------------------------------------------------------------------+
+    //| Section                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllSections, (state, action) => {
+      if (!action.payload.error) {
+        state.allSections = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createSection, () => {});
+    handleAsyncAction(builder, updateSection, () => {});
+    handleAsyncAction(builder, deleteSection, () => {});
+
+    //+------------------------------------------------------------------+
+    //| Year                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllYears, (state, action) => {
+      if (!action.payload.error) {
+        state.allYears = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createYear, () => {});
+    handleAsyncAction(builder, updateYear, () => {});
+    handleAsyncAction(builder, deleteYear, () => {});
+
+    //+------------------------------------------------------------------+
+    //| Tag                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllTags, (state, action) => {
+      if (!action.payload.error) {
+        state.allTags = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createTag, () => {});
+    handleAsyncAction(builder, updateTag, () => {});
+    handleAsyncAction(builder, deleteTag, () => {});
+
       
-
-      //+------------------------------------------------------------------+
-      //| Country                                            
-      //+------------------------------------------------------------------+
-      handleAsyncActionWithoutSuccess(builder, getAllCountries, (state, action) => {
-        if (!action.payload.error) {
-          state.allCountries = action.payload || [];
-        }
-        
-      });
-      handleAsyncAction(builder, createCountry, () => {});
-      handleAsyncAction(builder, updateCountry, () => {});
-      handleAsyncAction(builder, deleteCountry, () => {});
-
   },
 });
 
@@ -225,7 +301,7 @@ export default slice.reducer;
 
 
 
-// //+------------------------------------------------------------------+
+//        //+------------------------------------------------------------------+
 //       //| Create Chart                                            
 //       //+------------------------------------------------------------------+
 //       .addCase(createChart.pending, (state) => {

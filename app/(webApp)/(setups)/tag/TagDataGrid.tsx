@@ -28,21 +28,21 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import { createCountry, deleteCountry, getAllCountries, updateCountry } from "@/utils/redux/actions/setup";
+import { createTag, deleteTag, getAllTags, updateTag } from "@/utils/redux/actions/setup";
+
+
 
 // Start Dynamic components
 interface rowProps {
   id?: number;
   name: string;
-  code: string;
   updatedAt?: Date;
   updatedBy?: string;
 }
 
-const CountryDataGrid = () => {
+const TagDataGrid = () => {
   const defaultValues = {
     name: "",
-    code: "",
   };
 
   const columnsDataGrid: GridColDef[] = [
@@ -56,7 +56,6 @@ const CountryDataGrid = () => {
       editable: false,
     },
     { field: "name", headerName: "Name", flex: 1, editable: false },
-    { field: "code", headerName: "Code", flex: 1, editable: false },
     {
       field: "updatedAt",
       headerName: "Updated At",
@@ -124,7 +123,7 @@ const CountryDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const {allCountries } = useAppSelector((state: any) => state.reducer); // Dynamic component
+  const {allTags} = useAppSelector((state: any) => state.reducer); // Dynamic component
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
@@ -141,19 +140,19 @@ const CountryDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(createCountry(formData)); // Dynamic component
+    dispatch(createTag(formData)); // Dynamic component
     handleCloseCreate();
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(updateCountry(formData)); // Dynamic component
+    dispatch(updateTag(formData)); // Dynamic component
     handleCloseEdit();
   };
 
   const handleConfirmDelete = () => {
     try {
-      dispatch(deleteCountry(Number(itemToDelete?.id))); // Dynamic component
+      dispatch(deleteTag(Number(itemToDelete?.id))); // Dynamic component
       setOpenDeleteConfirmation(false);
     } catch (e) {}
   };
@@ -195,7 +194,7 @@ const CountryDataGrid = () => {
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllCountries());
+    dispatch(getAllTags());
   }, [refresh]);
 
   const columnsForms = [
@@ -215,20 +214,6 @@ const CountryDataGrid = () => {
       type: "text",
       required: true,
       value: formData?.name,
-      onChange: handleChange,
-      inputProps: {
-        minLength: 1,
-        maxLength: 255,
-      },
-      showOnCreate: true,
-      showOnEdit: true,
-    },
-    {
-      field: "code",
-      caption: "Code",
-      type: "text",
-      required: true,
-      value: formData?.code,
       onChange: handleChange,
       inputProps: {
         minLength: 1,
@@ -257,10 +242,10 @@ const CountryDataGrid = () => {
     }}
     >
     <Typography variant="h4" sx={{ textAlign: 'center', width:"100%" }}>
-      Country
+      Tag
     </Typography>
       <DataGrid
-        rows={allCountries} // Start Dynamic components
+        rows={allTags} // Start Dynamic components
         columns={columnsDataGrid}
         disableRowSelectionOnClick
         loading={loading}
@@ -562,4 +547,4 @@ const CountryDataGrid = () => {
   );
 };
 
-export default CountryDataGrid;
+export default TagDataGrid;

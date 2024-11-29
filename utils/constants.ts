@@ -14,7 +14,12 @@ export const ROUTES = {
     USER: '/user',
     ROLE: '/role',
     ACCOUNT: '/account',
-    COUNTRY: '/country'
+    COUNTRY: '/country',
+    CATEGORY: '/category',
+    SEASON: '/season',
+    SECTION: '/section',
+    YEAR: '/year',
+    TAG: '/tag',
   };
 
   export const SECTIONS = [
@@ -29,16 +34,6 @@ export const ROUTES = {
       path: ROUTES.KPI,
       protected: true,
       requiredPermissions: [""],
-    },
-    {
-      title: 'Sections',
-      protected: true,
-      requiredPermissions: [],
-    },
-    {
-      title: 'Categories',
-      protected: true,
-      requiredPermissions: [],
     },
     {
       title: 'Product',
@@ -89,14 +84,16 @@ export const ROUTES = {
       protected: true,
       requiredPermissions: [""], // OR
       subsections: [
-        { title: 'attribute', protected: true, requiredPermissions: [""] },
-        { title: 'country', protected: true,path: ROUTES.COUNTRY, requiredPermissions: [""] },
+        { title: 'attribute', protected: true, requiredPermissions: ["attribute"] },
+        { title: 'country', protected: true, path:ROUTES.COUNTRY, requiredPermissions: ["country"] },
+        { title: 'category', protected: true, path:ROUTES.CATEGORY, requiredPermissions: ["category"] },
         { title: 'currency', protected: true, requiredPermissions: [""] },
-        { title: 'tag', protected: true, requiredPermissions: [""] },
+        { title: 'tag', protected: true, path:ROUTES.TAG, requiredPermissions: [""] },
         { title: 'supplier', protected: true,  requiredPermissions: [""] },
         { title: 'brand', protected: true, requiredPermissions: [""] },
-        { title: 'year', protected: true, requiredPermissions: [""] },
-        { title: 'season', protected: true, requiredPermissions: [""] },
+        { title: 'year', protected: true, path:ROUTES.YEAR, requiredPermissions: [""] },
+        { title: 'season', protected: true, path:ROUTES.SEASON, requiredPermissions: ["season"] },
+        { title: 'section', protected: true, path:ROUTES.SECTION, requiredPermissions: ["section"] },
       ],
     },
     {
@@ -143,7 +140,6 @@ export const APIROUTES = {
   CHANGEPASSWORD: "/User/ChangePassword",
   GETALLUSERS : "/User/GetAllUsersWithRolesAndPermissions",
 
-
   //+------------------------------------------------------------------+
   //| Kpi                                           
   //+------------------------------------------------------------------+
@@ -151,7 +147,6 @@ export const APIROUTES = {
   DELETECHART : "/Kpi/DeleteChart",
   GETALLCHARTS: "/Kpi/GetAllCharts",
   GETCHARTDATABYQUERY : "/Kpi/GetChartDataByQuery",
-
 
   //+------------------------------------------------------------------+
   //| Role                                           
@@ -161,12 +156,10 @@ export const APIROUTES = {
   UPDATEROLE: "/User/UpdateRole",
   DELETEROLE: "/User/DeleteRole",
 
-
   //+------------------------------------------------------------------+
   //| Permission                                           
   //+------------------------------------------------------------------+
   GETALLPERMISSIONS : "/User/GetAllPermissions",
-
 
   //+------------------------------------------------------------------+
   //| Country                                           
@@ -176,6 +169,45 @@ export const APIROUTES = {
   UPDATECOUNTRY: "/Setup/UpdateCountry",
   DELETECOUNTRY: "/Setup/DeleteCountry",
 
+  //+------------------------------------------------------------------+
+  //| Category                                           
+  //+------------------------------------------------------------------+
+  GETALLCATEGORIES: "/Setup/GetAllCategories",
+  CREATECATEGORY : "/Setup/CreateCategory",
+  UPDATECATEGORY: "/Setup/UpdateCategory",
+  DELETECATEGORY: "/Setup/DeleteCategory",
+
+  //+------------------------------------------------------------------+
+  //| Season                                          
+  //+------------------------------------------------------------------+
+  GETALLSEASONS: "/Setup/GetAllSeasons",
+  CREATESEASON: "/Setup/CreateSeason",
+  UPDATESEASON: "/Setup/UpdateSeason",
+  DELETESEASON: "/Setup/DeleteSeason",
+
+  //+------------------------------------------------------------------+
+  //| Section                                          
+  //+------------------------------------------------------------------+
+  GETALLSECTIONS: "/Setup/GetAllSections",
+  CREATESECTION: "/Setup/CreateSection",
+  UPDATESECTION: "/Setup/UpdateSection",
+  DELETESECTION: "/Setup/DeleteSection",
+
+  //+------------------------------------------------------------------+
+  //| Year                                          
+  //+------------------------------------------------------------------+
+  GETALLYEARS: "/Setup/GetAllYears",
+  CREATEYEAR: "/Setup/CreateYear",
+  UPDATEYEAR: "/Setup/UpdateYear",
+  DELETEYEAR: "/Setup/DeleteYear",
+
+  //+------------------------------------------------------------------+
+  //| Tag                                          
+  //+------------------------------------------------------------------+
+  GETALLTAGS: "/Setup/GetAllTags",
+  CREATETAG: "/Setup/CreateTag",
+  UPDATETAG: "/Setup/UpdateTag",
+  DELETETAG: "/Setup/DeleteTag",
 }
 
 
