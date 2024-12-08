@@ -1,4 +1,4 @@
-import { createCategoryService, createCountryService, createSeasonService, createSectionService, createTagService, createYearService, deleteCategoryService, deleteCountryService, deleteSeasonService, deleteSectionService, deleteTagService, deleteYearService, getAllCategoriesService, getAllCountriesService, getAllSeasonsService, getAllSectionsService, getAllTagsService, getAllYearsService, updateCategoryService, updateCountryService, updateSeasonService, updateSectionService, updateTagService, updateYearService } from "@/services/setupService";
+import { createAttributeService, createBrandService, createCategoryService, createCountryService, createSeasonService, createSectionService, createTagService, createYearService, deleteAttributeService, deleteBrandService, deleteCategoryService, deleteCountryService, deleteSeasonService, deleteSectionService, deleteTagService, deleteYearService, getAllAttributesService, getAllBrandsService, getAllCategoriesService, getAllCountriesService, getAllSeasonsService, getAllSectionsService, getAllTagsService, getAllYearsService, updateAttributeService, updateBrandService, updateCategoryService, updateCountryService, updateSeasonService, updateSectionService, updateTagService, updateYearService } from "@/services/setupService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 //+------------------------------------------------------------------+
@@ -29,11 +29,19 @@ export const getAllSections = createAsyncThunk('getAllSections', async () => {
     return response;
 });
 export const createSection = createAsyncThunk('createSection', async (formData: any ) => {
-  const response = await createSectionService(formData);
+  const updatedFormData = {
+    ...formData,
+    categories: formData.categories.map((item: any) => item.id)
+  };
+  const response = await createSectionService(updatedFormData);
   return response;
 });
 export const updateSection = createAsyncThunk('updateSection', async (formData: any ) => {
-  const response = await updateSectionService(formData);
+  const updatedFormData = {
+    ...formData,
+    categories: formData.categories.map((item: any) => item.id)
+  };
+  const response = await updateSectionService(updatedFormData);
   return response;
 });
 export const deleteSection = createAsyncThunk('deleteSection', async (id: number) => {
@@ -109,17 +117,74 @@ export const getAllTags = createAsyncThunk('getAllTags', async () => {
   return response;
 });
 export const createTag = createAsyncThunk('createTag', async (formData: any ) => {
-const response = await createTagService(formData);
-return response;
+  const response = await createTagService(formData);
+  return response;
 });
 export const updateTag= createAsyncThunk('updateTag', async (formData: any ) => {
-const response = await updateTagService(formData);
-return response;
+  const response = await updateTagService(formData);
+  return response;
 });
 export const deleteTag= createAsyncThunk('deleteTag', async (id: number) => {
-const response = await deleteTagService(id);
-return response;
+  const response = await deleteTagService(id);
+  return response;
 });
   
-  
-  
+//+------------------------------------------------------------------+
+//| Attribute                                           
+//+------------------------------------------------------------------+
+export const getAllAttributes = createAsyncThunk('getAllAttributes', async () => {
+  const response = await getAllAttributesService();
+  return response;
+});
+export const createAttribute = createAsyncThunk('createAttribute', async (formData: any ) => {
+  const response = await createAttributeService(formData);
+  return response;
+});
+export const updateAttribute= createAsyncThunk('updateAttribute', async (formData: any ) => {
+  const response = await updateAttributeService(formData);
+  return response;
+});
+export const deleteAttribute= createAsyncThunk('deleteAttribute', async (id: number) => {
+  const response = await deleteAttributeService(id);
+  return response;
+});
+
+//+------------------------------------------------------------------+
+//| Brand                                           
+//+------------------------------------------------------------------+
+export const getAllBrands = createAsyncThunk('getAllBrands', async () => {
+  const response = await getAllBrandsService();
+  return response;
+});
+export const createBrand = createAsyncThunk('createBrand', async (formData: any ) => {
+  const { country, logoFile, ...restOfFormData } = formData;
+  const updatedFormData = new FormData();
+  Object.keys(restOfFormData).forEach(key => {
+    updatedFormData.append(key, restOfFormData[key]);
+  });
+  if (logoFile) {
+    updatedFormData.append('logoFile', logoFile);
+  }
+  updatedFormData.append('countryId', formData?.country?.id);
+  console.log(updatedFormData)
+  const response = await createBrandService(updatedFormData);
+  return response;
+});
+export const updateBrand = createAsyncThunk('updateBrand', async (formData: any) => {
+  const { updatedBy, updatedAt, country, logoFile, ...restOfFormData } = formData;
+  const updatedFormData = new FormData();
+  Object.keys(restOfFormData).forEach(key => {
+    updatedFormData.append(key, restOfFormData[key]);
+  });
+  if (logoFile && logoFile instanceof File) {
+    updatedFormData.append('logoFile', logoFile);
+  }
+  updatedFormData.append('countryId', formData?.country?.id);
+  console.log(updatedFormData)
+  const response = await updateBrandService(updatedFormData);
+  return response;
+});
+export const deleteBrand = createAsyncThunk('deleteBrand', async (id: number) => {
+  const response = await deleteBrandService(id);
+  return response;
+});

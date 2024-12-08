@@ -229,9 +229,6 @@ const KpiPage: React.FC = () => {
                       </Box>
                       );
                       break;
-
-
-            
             default:
               break;
           }

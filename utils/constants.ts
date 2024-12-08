@@ -20,6 +20,8 @@ export const ROUTES = {
     SECTION: '/section',
     YEAR: '/year',
     TAG: '/tag',
+    ATTRIBUTE: '/attribute',
+    BRAND: '/brand',
   };
 
   export const SECTIONS = [
@@ -84,13 +86,13 @@ export const ROUTES = {
       protected: true,
       requiredPermissions: [""], // OR
       subsections: [
-        { title: 'attribute', protected: true, requiredPermissions: ["attribute"] },
+        { title: 'attribute', protected: true, path:ROUTES.ATTRIBUTE, requiredPermissions: ["attribute"] },
         { title: 'country', protected: true, path:ROUTES.COUNTRY, requiredPermissions: ["country"] },
         { title: 'category', protected: true, path:ROUTES.CATEGORY, requiredPermissions: ["category"] },
         { title: 'currency', protected: true, requiredPermissions: [""] },
         { title: 'tag', protected: true, path:ROUTES.TAG, requiredPermissions: [""] },
         { title: 'supplier', protected: true,  requiredPermissions: [""] },
-        { title: 'brand', protected: true, requiredPermissions: [""] },
+        { title: 'brand', protected: true, path:ROUTES.BRAND, requiredPermissions: [""] },
         { title: 'year', protected: true, path:ROUTES.YEAR, requiredPermissions: [""] },
         { title: 'season', protected: true, path:ROUTES.SEASON, requiredPermissions: ["season"] },
         { title: 'section', protected: true, path:ROUTES.SECTION, requiredPermissions: ["section"] },
@@ -138,7 +140,7 @@ export const APIROUTES = {
   UPDATEUSER: "/User/UpdateUser",
   DELETEUSER: "/User/DeleteUser",
   CHANGEPASSWORD: "/User/ChangePassword",
-  GETALLUSERS : "/User/GetAllUsersWithRolesAndPermissions",
+  GETALLUSERS : "/User/GetAllUsersWithRoles",
 
   //+------------------------------------------------------------------+
   //| Kpi                                           
@@ -208,6 +210,22 @@ export const APIROUTES = {
   CREATETAG: "/Setup/CreateTag",
   UPDATETAG: "/Setup/UpdateTag",
   DELETETAG: "/Setup/DeleteTag",
+
+  //+------------------------------------------------------------------+
+  //| Attribute                                          
+  //+------------------------------------------------------------------+
+  GETALLATTRIBUTES: "/Setup/GetAllAttributesWithOptions",
+  CREATEATTRIBUTE: "/Setup/CreateAttribute",
+  UPDATEATTRIBUTE: "/Setup/UpdateAttribute",
+  DELETEATTRIBUTE: "/Setup/DeleteAttribute",
+
+  //+------------------------------------------------------------------+
+  //| Brand                                          
+  //+------------------------------------------------------------------+
+  GETALLBRANDS: "/Setup/GetAllBrands",
+  CREATEBRAND: "/Setup/CreateBrand",
+  UPDATEBRAND: "/Setup/UpdateBrand",
+  DELETEBRAND: "/Setup/DeleteBrand",
 }
 
 
@@ -287,9 +305,6 @@ export const DUMMYDATA = {
         36205.574, 38014.137, 39752.207, 40715.434, 38962.938, 41109.582, 43189, 43320,
         43413, 43922, 44293, 44689, 45619.785, 46177.617,
       ],
-      
-      
-
   },
 
   PieActiveArc:{
@@ -499,7 +514,6 @@ export const DUMMYDATA = {
       { year: new Date(2024, 0, 1), value: 1.2314565 },
     ]
   }
-
 }
 
 

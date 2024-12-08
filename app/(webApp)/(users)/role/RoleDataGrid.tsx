@@ -48,20 +48,22 @@ import { StatusModel } from "@/models/StatusModel";
 // Start Dynamic components
 interface permissionProps {
   id: number;
-  permissionName: string;
+  name: string;
 }
 
 interface rowProps {
   id?: number;
-  roleName?: string;
+  name?: string;
   permissions: permissionProps[];
+  updatedAt?: Date;
+  updatedBy?: string;
 }
 
 
 const RoleDataGrid = () => {
 
   const defaultValues = {
-    roleName: "",
+    name: "",
     permissions: [],
   };
 
@@ -75,19 +77,30 @@ const RoleDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "roleName", headerName: "Role Name", flex: 1, editable: false },
+    { field: "name", headerName: "Name", flex: 1, editable: false },
     {
       field: "permissions",
       headerName: "Permissions",
       flex: 1,
       renderCell: (params) => {
         const itemsDisplayed =
-          params.value.map((permission: permissionProps) => permission.permissionName).join(", ") ||
+          params?.value?.map((permission: permissionProps) => permission.name).join(", ") ||
           "No permissions assigned";
         return <span>{itemsDisplayed}</span>;
       },
       editable: false
     },
+    {
+      field: "updatedAt",
+      headerName: "Updated At",
+      type: "date",
+      valueGetter: (params) => {
+        return new Date(params);
+      },
+      flex: 1,
+      editable: false,
+    },
+    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
     {
       field: "actions",
       type: "actions",
@@ -121,7 +134,6 @@ const RoleDataGrid = () => {
   function EditToolbar() {
     const handleClickAddRecord = () => {
       setFormData(defaultValues);
-      setIsEditMode(false);
       handleOpenCreate();
     };
 
@@ -143,9 +155,9 @@ const RoleDataGrid = () => {
     );
   }
 
+
   const dispatch = useAppDispatch();
   const {allRoles, allPermissions } = useAppSelector((state: any) => state.reducer); // Dynamic component
-  const [isEditMode, setIsEditMode] = React.useState(false);
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
@@ -181,7 +193,6 @@ const RoleDataGrid = () => {
 
   const handleUpdateClick = (row: rowProps) => () => { 
     setFormData(row);
-    setIsEditMode(true);
     handleOpenEdit();
   };
 
@@ -194,9 +205,12 @@ const RoleDataGrid = () => {
     setOpenDeleteConfirmation(false);
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleArrayChange = (key: string, newValue: any) => {
@@ -242,11 +256,11 @@ const RoleDataGrid = () => {
       showOnEdit: false,
     },
     {
-      field: "roleName",
-      caption: "Role Name",
+      field: "name",
+      caption: "Name",
       type: "text",
       required: true,
-      value: formData?.roleName,
+      value: formData?.name,
       onChange: handleChange,
       inputProps: {
         minLength: 1,
@@ -264,7 +278,7 @@ const RoleDataGrid = () => {
             multiple
             disableCloseOnSelect
             options={allPermissions || []}
-            getOptionLabel={(option) => option.permissionName}
+            getOptionLabel={(option) => option.name}
             value={formData.permissions}
             onChange={(event, newValue) => {
               handleArrayChange("permissions", newValue);
@@ -275,7 +289,7 @@ const RoleDataGrid = () => {
               return (
                 <li {...props}>
                   <Checkbox checked={selected} />
-                  <ListItemText primary={option.permissionName} />
+                  <ListItemText primary={option.name} />
                 </li>
               );
             }}
@@ -502,7 +516,7 @@ const RoleDataGrid = () => {
                 }
                 return (
                   <TextField
-                    key={`CreateForm-${item?.field}`}
+                    key={`EditForm-${item?.field}`}
                     name={item?.field}
                     required={item?.required}
                     type={item?.type}
@@ -587,7 +601,7 @@ const RoleDataGrid = () => {
             >
               
               {/*Dynamic component */}
-              {itemToDelete?.roleName}  
+              {itemToDelete?.name}  
             </Typography>
             &nbsp;?
           </DialogContentText>

@@ -19,11 +19,15 @@ const AccountPage = () => {
 
   const [formData, setFormData] = useState<any>(defaultValues);
   const { status } = useAppSelector((state: any) => state.reducer);
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(changePassword(formData));

@@ -49,8 +49,7 @@ import { StatusModel } from "@/models/StatusModel";
 // Start Dynamic components
 interface roleProps {
   id: number;
-  roleName: string;
-  permissions: any[];
+  name: string;
 }
 
 interface rowProps {
@@ -63,7 +62,6 @@ interface rowProps {
   address: string;
   password: string;
   roles: roleProps[];
-  permissions?: { id: string; permissionName: string }[];
   updatedAt?: Date;
   updatedBy?: string;
   failedLoginAttempts: Number;
@@ -85,7 +83,6 @@ const UserDataGrid = () => {
     isActive: true,
   };
 
-  
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",
@@ -119,14 +116,12 @@ const UserDataGrid = () => {
       flex: 1,
       renderCell: (params) => {
         const rolesDisplay =
-          params.value.map((role: roleProps) => role.roleName).join(", ") ||
+          params?.value?.map((role: roleProps) => role.name).join(", ") ||
           "No roles assigned";
         return <span>{rolesDisplay}</span>;
       },
       editable: false,
     },
-
-
     {
       field: "updatedAt",
       headerName: "Updated At",
@@ -254,14 +249,20 @@ const UserDataGrid = () => {
     setOpenDeleteConfirmation(false);
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleChangeBoolean = (e: any) => {
+  const handleChangeBoolean = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
-    setFormData({ ...formData, [name]: checked });
+    setFormData((prev: any) => ({
+      ...prev,
+      [name]: checked,
+    }));
   };
 
   const handleArrayChange = (key: string, newValue: any) => {
@@ -402,7 +403,7 @@ const UserDataGrid = () => {
             multiple
             disableCloseOnSelect
             options={allRoles || []}
-            getOptionLabel={(option) => option.roleName}
+            getOptionLabel={(option) => option.name}
             value={formData.roles}
             onChange={(event, newValue) => {
               handleArrayChange("roles", newValue);
@@ -413,7 +414,7 @@ const UserDataGrid = () => {
               return (
                 <li {...props}>
                   <Checkbox checked={isSelected} />
-                  <ListItemText primary={option.roleName} />
+                  <ListItemText primary={option.name} />
                 </li>
               );
             }}
@@ -488,8 +489,6 @@ const UserDataGrid = () => {
             onChange={(e) => handleChangeBoolean(e)}
           />
         }
-
-  
       />
       )
     },
@@ -708,7 +707,7 @@ const UserDataGrid = () => {
                 }
                 return (
                   <TextField
-                    key={`CreateForm-${item?.field}`}
+                    key={`EditForm-${item?.field}`}
                     name={item?.field}
                     required={item?.required}
                     type={item?.type}

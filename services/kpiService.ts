@@ -1,5 +1,5 @@
 import { APIROUTES } from '@/utils/constants';
-import apiRequest from '@/utils/helpers/apiRequest';
+import {apiRequest} from '@/utils/helpers/apiRequest';
 
 
 export const createChartService = async (formData: any) =>

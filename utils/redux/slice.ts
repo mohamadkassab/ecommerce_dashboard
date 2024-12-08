@@ -9,7 +9,7 @@ import { createRole, createUser, deleteRole, deleteUser, getAllPermissions, getA
 import jwt from 'jsonwebtoken';
 import { changePassword } from './actions/account';
 import { StatusModel } from '@/models/StatusModel';
-import { createCategory, createCountry, createSeason, createSection, createTag, createYear, deleteCategory, deleteCountry, deleteSeason, deleteSection, deleteTag, deleteYear, getAllCategories, getAllCountries, getAllSeasons, getAllSections, getAllTags, getAllYears, updateCategory, updateCountry, updateSeason, updateSection, updateTag, updateYear } from './actions/setup';
+import { createAttribute, createBrand, createCategory, createCountry, createSeason, createSection, createTag, createYear, deleteAttribute, deleteBrand, deleteCategory, deleteCountry, deleteSeason, deleteSection, deleteTag, deleteYear, getAllAttributes, getAllBrands, getAllCategories, getAllCountries, getAllSeasons, getAllSections, getAllTags, getAllYears, updateAttribute, updateBrand, updateCategory, updateCountry, updateSeason, updateSection, updateTag, updateYear } from './actions/setup';
 
 interface UserToken {
   username: string;
@@ -35,6 +35,8 @@ interface InitialState {
   allSections?: any[];
   allYears?: any[];
   allTags?: any[];
+  allAttributes?: any[];
+  allBrands?: any[];
   status: StatusModel;
   error: string | null | object;
 }
@@ -78,7 +80,6 @@ const handleAsyncAction = <T>(
     })
     .addCase(action.fulfilled, (state, action) => {
       onSuccess(state, action);
-      console.log(action.payload)
       if (isErrorPayload(action.payload)) {
         state.error = action.payload.error.message || "Failed";
         state.status = StatusModel.FAILED;
@@ -289,6 +290,30 @@ const slice = createSlice({
     handleAsyncAction(builder, createTag, () => {});
     handleAsyncAction(builder, updateTag, () => {});
     handleAsyncAction(builder, deleteTag, () => {});
+
+    //+------------------------------------------------------------------+
+    //| Attribute                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllAttributes, (state, action) => {
+      if (!action.payload.error) {
+        state.allAttributes = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createAttribute, () => {});
+    handleAsyncAction(builder, updateAttribute, () => {});
+    handleAsyncAction(builder, deleteAttribute, () => {});
+
+    //+------------------------------------------------------------------+
+    //| Brand                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllBrands, (state, action) => {
+      if (!action.payload.error) {
+        state.allBrands = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createBrand, () => {});
+    handleAsyncAction(builder, updateBrand, () => {});
+    handleAsyncAction(builder, deleteBrand, () => {});
 
       
   },

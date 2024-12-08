@@ -1,5 +1,5 @@
 import { APIROUTES } from '@/utils/constants';
-import apiRequest from '@/utils/helpers/apiRequest';
+import {apiRequest, apiRequestWithFile} from '@/utils/helpers/apiRequest';
 
 //+------------------------------------------------------------------+
 //| Season                                           
@@ -15,7 +15,6 @@ export const updateSeasonService = async (formData: any) =>
 
 export const deleteSeasonService = async (id: number) =>
     apiRequest('DELETE',  `${APIROUTES.DELETESEASON}/${id}`);
-
 
 //+------------------------------------------------------------------+
 //| Section                                           
@@ -75,7 +74,7 @@ export const updateYearService = async (formData: any) =>
     apiRequest('PUT', APIROUTES.UPDATEYEAR, formData);
   
 export const deleteYearService = async (id: number) =>
-    apiRequest('DELETE',  `${APIROUTES.DELETEYEAR}/${id}`);
+    apiRequest('DELETE', `${APIROUTES.DELETEYEAR}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Tag                                           
@@ -91,3 +90,33 @@ export const updateTagService = async (formData: any) =>
   
 export const deleteTagService = async (id: number) =>
     apiRequest('DELETE',  `${APIROUTES.DELETETAG}/${id}`);
+
+//+------------------------------------------------------------------+
+//| Attribute                                           
+//+------------------------------------------------------------------+
+export const getAllAttributesService = async () =>
+    apiRequest('GET', APIROUTES.GETALLATTRIBUTES);
+  
+export const createAttributeService = async (formData: any) =>
+    apiRequest('POST', APIROUTES.CREATEATTRIBUTE, formData);
+  
+export const updateAttributeService = async (formData: any) =>
+    apiRequest('PUT', APIROUTES.UPDATEATTRIBUTE, formData);
+  
+export const deleteAttributeService = async (id: number) =>
+    apiRequest('DELETE',  `${APIROUTES.DELETEATTRIBUTE}/${id}`);
+
+//+------------------------------------------------------------------+
+//| Brand                                           
+//+------------------------------------------------------------------+
+export const getAllBrandsService = async () =>
+    apiRequest('GET', APIROUTES.GETALLBRANDS);
+  
+export const createBrandService = async (formData: any) =>
+    apiRequestWithFile('POST', APIROUTES.CREATEBRAND, formData);
+  
+export const updateBrandService = async (formData: any) =>
+    apiRequestWithFile('PUT', APIROUTES.UPDATEBRAND, formData);
+  
+export const deleteBrandService = async (id: number) =>
+    apiRequest('DELETE',  `${APIROUTES.DELETEBRAND}/${id}`);

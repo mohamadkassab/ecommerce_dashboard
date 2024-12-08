@@ -14,6 +14,10 @@ import {
   DialogActions,
   DialogContentText,
   Divider,
+  FormControl,
+  Autocomplete,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
 
 import {
@@ -28,13 +32,20 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import { createSection, deleteSection, getAllSections, updateSection } from "@/utils/redux/actions/setup";
+import { createSection, deleteSection, getAllCategories, getAllSections, updateSection } from "@/utils/redux/actions/setup";
+
 
 
 // Start Dynamic components
+interface categoryProps {
+  id: number;
+  name: string;
+}
+
 interface rowProps {
   id?: number;
   name: string;
+  categories: categoryProps[];
   updatedAt?: Date;
   updatedBy?: string;
 }
@@ -42,6 +53,7 @@ interface rowProps {
 const SectionDataGrid = () => {
   const defaultValues = {
     name: "",
+    categories: [],
   };
 
   const columnsDataGrid: GridColDef[] = [
@@ -55,6 +67,18 @@ const SectionDataGrid = () => {
       editable: false,
     },
     { field: "name", headerName: "Name", flex: 1, editable: false },
+    {
+      field: "categories",
+      headerName: "Categories",
+      flex: 1,
+      renderCell: (params) => {
+        const itemsDisplayed =
+          params?.value?.map((item: categoryProps) => item.name).join(", ") ||
+          "No values assigned";
+        return <span>{itemsDisplayed}</span>;
+      },
+      editable: false
+    },
     {
       field: "updatedAt",
       headerName: "Updated At",
@@ -122,7 +146,7 @@ const SectionDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const {allSections} = useAppSelector((state: any) => state.reducer); // Dynamic component
+  const {allSections, allCategories} = useAppSelector((state: any) => state.reducer); // Dynamic component
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
@@ -170,9 +194,21 @@ const SectionDataGrid = () => {
     setOpenDeleteConfirmation(false);
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleArrayChange = (key: string, newValue: any) => {
+    if (Array.isArray(newValue)) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [`${key}`]: newValue,
+      }));
+    }
   };
 
   React.useEffect(() => {
@@ -194,6 +230,7 @@ const SectionDataGrid = () => {
   // Start Dynamic components
   React.useEffect(() => {
     dispatch(getAllSections());
+    dispatch(getAllCategories());
   }, [refresh]);
 
   const columnsForms = [
@@ -220,6 +257,37 @@ const SectionDataGrid = () => {
       },
       showOnCreate: true,
       showOnEdit: true,
+    },
+    {
+      showOnCreate: true,
+      showOnEdit: true,
+      component: (
+        <FormControl key={`CreateForm-categories`} fullWidth margin="normal">
+          <Autocomplete
+            multiple
+            disableCloseOnSelect
+            options={allCategories || []}
+            getOptionLabel={(option) => option.name}
+            value={formData.categories}
+            onChange={(event, newValue) => {
+              handleArrayChange("categories", newValue);
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            renderOption={(props, option, { selected }) => {
+              return (
+                <li {...props}>
+                  <Checkbox checked={selected} />
+                  <ListItemText primary={option.name} />
+                </li>
+              );
+            }}
+            renderInput={(params) => (
+              /*Dynamic component*/
+              <TextField {...params} variant="outlined" label="Select Categories" />
+            )}
+          />
+        </FormControl>
+      ),
     },
   ];
   // End Dynamic components
@@ -313,7 +381,9 @@ const SectionDataGrid = () => {
           <form onSubmit={handleCreate}>
             {columnsForms.map((item, index) => {
               if (item?.showOnCreate) {
-
+                if (item?.component !== undefined) {
+                  return item.component;
+                }
                 return (
                   <TextField
                     key={`CreateForm-${item?.field}`}
@@ -428,9 +498,12 @@ const SectionDataGrid = () => {
           <form onSubmit={handleUpdate}>
             {columnsForms.map((item, index) => {
               if (item?.showOnEdit) {
+                if (item?.component !== undefined) {
+                  return item.component;
+                }
                 return (
                   <TextField
-                    key={`CreateForm-${item?.field}`}
+                    key={`EditForm-${item?.field}`}
                     name={item?.field}
                     required={item?.required}
                     type={item?.type}

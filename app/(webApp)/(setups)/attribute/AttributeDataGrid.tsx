@@ -14,6 +14,10 @@ import {
   DialogActions,
   DialogContentText,
   Divider,
+  FormControl,
+  Autocomplete,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
 
 import {
@@ -28,20 +32,23 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import { createCategory, deleteCategory, getAllCategories, updateCategory } from "@/utils/redux/actions/setup";
+import { createAttribute, createCategory, deleteAttribute, deleteCategory, getAllAttributes, getAllCategories, updateAttribute, updateCategory } from "@/utils/redux/actions/setup";
+
 
 
 // Start Dynamic components
 interface rowProps {
   id?: number;
   name: string;
+  options: string[];
   updatedAt?: Date;
   updatedBy?: string;
 }
 
-const CategoryDataGrid = () => {
+const AttributeDataGrid = () => {
   const defaultValues = {
     name: "",
+    options: [],
   };
 
   const columnsDataGrid: GridColDef[] = [
@@ -55,6 +62,18 @@ const CategoryDataGrid = () => {
       editable: false,
     },
     { field: "name", headerName: "Name", flex: 1, editable: false },
+    {
+      field: "options",
+      headerName: "Options",
+      flex: 1,
+      renderCell: (params) => {
+        const itemsDisplayed =
+          params?.value?.map((item: string) => item).join(", ") ||
+          "No options assigned";
+        return <span>{itemsDisplayed}</span>;
+      },
+      editable: false
+    },
     {
       field: "updatedAt",
       headerName: "Updated At",
@@ -122,7 +141,7 @@ const CategoryDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const {allCategories } = useAppSelector((state: any) => state.reducer); // Dynamic component
+  const {allAttributes} = useAppSelector((state: any) => state.reducer); // Dynamic component
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
@@ -139,19 +158,19 @@ const CategoryDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(createCategory(formData)); // Dynamic component
+    dispatch(createAttribute(formData)); // Dynamic component
     handleCloseCreate();
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(updateCategory(formData)); // Dynamic component
+    dispatch(updateAttribute(formData)); // Dynamic component
     handleCloseEdit();
   };
 
   const handleConfirmDelete = () => {
     try {
-      dispatch(deleteCategory(Number(itemToDelete?.id))); // Dynamic component
+      dispatch(deleteAttribute(Number(itemToDelete?.id))); // Dynamic component
       setOpenDeleteConfirmation(false);
     } catch (e) {}
   };
@@ -178,6 +197,15 @@ const CategoryDataGrid = () => {
     }));
   };
 
+  const handleArrayChange = (key: string, newValue: any) => {
+    if (Array.isArray(newValue)) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [`${key}`]: newValue,
+      }));
+    }
+  };
+
   React.useEffect(() => {
     if (status === StatusModel.SKELETONLOADING) {
       if (loading !== true) {
@@ -196,7 +224,7 @@ const CategoryDataGrid = () => {
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllCategories()); // Dynamic component
+    dispatch(getAllAttributes()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [
@@ -224,6 +252,36 @@ const CategoryDataGrid = () => {
       showOnCreate: true,
       showOnEdit: true,
     },
+    {
+      showOnCreate: true,
+      showOnEdit: true,
+      component: (
+        <FormControl key={`CreateForm-options`} fullWidth margin="normal">
+          <Autocomplete
+            multiple
+            disableCloseOnSelect
+            freeSolo
+            options={formData.options || []}
+            value={formData.options || []}
+            onChange={(event, newValue) => {
+              handleArrayChange("options", newValue);
+            }}
+            renderOption={(props, item, { selected }) => {
+              return (
+                <li {...props}>
+                  <Checkbox checked={selected} />
+                  <ListItemText primary={item}  />
+                </li>
+              );
+            }}
+            renderInput={(params) => (
+              <TextField {...params} variant="outlined" label="Options" />
+            )}
+          />
+        </FormControl>
+      ),
+    },
+    
   ];
   // End Dynamic components
 
@@ -244,10 +302,10 @@ const CategoryDataGrid = () => {
     }}
     >
     <Typography variant="h4" sx={{ textAlign: 'center', width:"100%" }}>
-      Category
+      Attribute
     </Typography>
       <DataGrid
-        rows={allCategories} // Start Dynamic components
+        rows={allAttributes} // Start Dynamic components
         columns={columnsDataGrid}
         disableRowSelectionOnClick
         loading={loading}
@@ -316,7 +374,9 @@ const CategoryDataGrid = () => {
           <form onSubmit={handleCreate}>
             {columnsForms.map((item, index) => {
               if (item?.showOnCreate) {
-                
+                if (item?.component !== undefined) {
+                  return item.component;
+                }
                 return (
                   <TextField
                     key={`CreateForm-${item?.field}`}
@@ -431,9 +491,12 @@ const CategoryDataGrid = () => {
           <form onSubmit={handleUpdate}>
             {columnsForms.map((item, index) => {
               if (item?.showOnEdit) {
+                if (item?.component !== undefined) {
+                  return item.component;
+                }
                 return (
                   <TextField
-                    key={`EditForm-${item?.field}`}
+                    key={`CreateForm-${item?.field}`}
                     name={item?.field}
                     required={item?.required}
                     type={item?.type}
@@ -549,4 +612,4 @@ const CategoryDataGrid = () => {
   );
 };
 
-export default CategoryDataGrid;
+export default AttributeDataGrid;

@@ -1,5 +1,5 @@
 import { APIROUTES } from '@/utils/constants';
-import apiRequest from '@/utils/helpers/apiRequest';
+import {apiRequest} from '@/utils/helpers/apiRequest';
 
 
 export const getAllUsersService = async () =>
@@ -26,7 +26,7 @@ export const createUserService = async (formData: any) =>
   apiRequest('POST', APIROUTES.CREATEUSER, formData);
 
 export const updateUserService = async (formData: any) =>
-  apiRequest('PUT', APIROUTES.UPDATEROLE, formData);
+  apiRequest('PUT', APIROUTES.UPDATEUSER, formData);
 
 export const deleteUserService = async (id: number) =>
   apiRequest('DELETE', `${APIROUTES.DELETEUSER}/${id}`);

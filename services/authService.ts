@@ -1,7 +1,7 @@
 
 import { SigninModel } from '@/models/AuthModels';
 import { APIROUTES, AUTHTOKEN, GLOBAL_REQUEST_TIMEOUT } from '@/utils/constants';
-import apiRequest from '@/utils/helpers/apiRequest';
+import {apiRequest} from '@/utils/helpers/apiRequest';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 

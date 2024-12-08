@@ -54,6 +54,8 @@ export const updateUser = createAsyncThunk('updateUser', async (formData: any ) 
     roles: formData.roles.map((role: any) => role.id)
   };
   const response = await updateUserService(updatedFormData);
+  console.log(updatedFormData)
+  console.log(response)
   return response;
 });
 

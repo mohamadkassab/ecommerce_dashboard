@@ -171,9 +171,12 @@ const TagDataGrid = () => {
     setOpenDeleteConfirmation(false);
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   React.useEffect(() => {
@@ -431,7 +434,7 @@ const TagDataGrid = () => {
               if (item?.showOnEdit) {
                 return (
                   <TextField
-                    key={`CreateForm-${item?.field}`}
+                    key={`EditForm-${item?.field}`}
                     name={item?.field}
                     required={item?.required}
                     type={item?.type}
