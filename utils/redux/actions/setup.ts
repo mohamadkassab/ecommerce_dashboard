@@ -1,4 +1,4 @@
-import { createAttributeService, createBrandService, createCategoryService, createCountryService, createSeasonService, createSectionService, createTagService, createYearService, deleteAttributeService, deleteBrandService, deleteCategoryService, deleteCountryService, deleteSeasonService, deleteSectionService, deleteTagService, deleteYearService, getAllAttributesService, getAllBrandsService, getAllCategoriesService, getAllCountriesService, getAllSeasonsService, getAllSectionsService, getAllTagsService, getAllYearsService, updateAttributeService, updateBrandService, updateCategoryService, updateCountryService, updateSeasonService, updateSectionService, updateTagService, updateYearService } from "@/services/setupService";
+import { createAttributeService, createBrandService, createCategoryService, createCountryService, createCurrencyService, createSeasonService, createSectionService, createTagService, createYearService, deleteAttributeService, deleteBrandService, deleteCategoryService, deleteCountryService, deleteCurrencyService, deleteSeasonService, deleteSectionService, deleteTagService, deleteYearService, getAllAttributesService, getAllBrandsService, getAllCategoriesService, getAllCountriesService, getAllCurrenciesService, getAllSeasonsService, getAllSectionsService, getAllTagsService, getAllYearsService, updateAttributeService, updateBrandService, updateCategoryService, updateCountryService, updateCurrencyService, updateSeasonService, updateSectionService, updateTagService, updateYearService } from "@/services/setupService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 //+------------------------------------------------------------------+
@@ -157,7 +157,7 @@ export const getAllBrands = createAsyncThunk('getAllBrands', async () => {
   return response;
 });
 export const createBrand = createAsyncThunk('createBrand', async (formData: any ) => {
-  const { country, logoFile, ...restOfFormData } = formData;
+  const { logoFile, ...restOfFormData } = formData;
   const updatedFormData = new FormData();
   Object.keys(restOfFormData).forEach(key => {
     updatedFormData.append(key, restOfFormData[key]);
@@ -165,13 +165,11 @@ export const createBrand = createAsyncThunk('createBrand', async (formData: any 
   if (logoFile) {
     updatedFormData.append('logoFile', logoFile);
   }
-  updatedFormData.append('countryId', formData?.country?.id);
-  console.log(updatedFormData)
   const response = await createBrandService(updatedFormData);
   return response;
 });
 export const updateBrand = createAsyncThunk('updateBrand', async (formData: any) => {
-  const { updatedBy, updatedAt, country, logoFile, ...restOfFormData } = formData;
+  const { updatedBy, updatedAt, logoFile, ...restOfFormData } = formData;
   const updatedFormData = new FormData();
   Object.keys(restOfFormData).forEach(key => {
     updatedFormData.append(key, restOfFormData[key]);
@@ -179,8 +177,6 @@ export const updateBrand = createAsyncThunk('updateBrand', async (formData: any)
   if (logoFile && logoFile instanceof File) {
     updatedFormData.append('logoFile', logoFile);
   }
-  updatedFormData.append('countryId', formData?.country?.id);
-  console.log(updatedFormData)
   const response = await updateBrandService(updatedFormData);
   return response;
 });
@@ -188,3 +184,24 @@ export const deleteBrand = createAsyncThunk('deleteBrand', async (id: number) =>
   const response = await deleteBrandService(id);
   return response;
 });
+
+//+------------------------------------------------------------------+
+//| Currency                                           
+//+------------------------------------------------------------------+
+export const getAllCurrencies = createAsyncThunk('getAllCurrencies', async () => {
+  const response = await getAllCurrenciesService();
+  return response;
+});
+export const createCurrency = createAsyncThunk('createCurrency', async (formData: any ) => {
+  const response = await createCurrencyService(formData);
+  return response;
+});
+export const updateCurrency = createAsyncThunk('updateCurrency', async (formData: any) => {
+  const response = await updateCurrencyService(formData);
+  return response;
+});
+export const deleteCurrency = createAsyncThunk('deleteCurrency', async (id: number) => {
+  const response = await deleteCurrencyService(id);
+  return response;
+});
+

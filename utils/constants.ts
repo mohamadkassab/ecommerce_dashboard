@@ -226,6 +226,14 @@ export const APIROUTES = {
   CREATEBRAND: "/Setup/CreateBrand",
   UPDATEBRAND: "/Setup/UpdateBrand",
   DELETEBRAND: "/Setup/DeleteBrand",
+
+  //+------------------------------------------------------------------+
+  //| Brand                                          
+  //+------------------------------------------------------------------+
+  GETALLCURRENCIES: "/Setup/GetAllCurrencies",
+  CREATECURRENCY: "/Setup/CreateCurrency",
+  UPDATECURRENCY: "/Setup/UpdateCurrency",
+  DELETECURRENCY: "/Setup/DeleteCurrency",
 }
 
 

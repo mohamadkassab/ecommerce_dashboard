@@ -120,3 +120,18 @@ export const updateBrandService = async (formData: any) =>
   
 export const deleteBrandService = async (id: number) =>
     apiRequest('DELETE',  `${APIROUTES.DELETEBRAND}/${id}`);
+
+//+------------------------------------------------------------------+
+//| Currency                                           
+//+------------------------------------------------------------------+
+export const getAllCurrenciesService = async () =>
+    apiRequest('GET', APIROUTES.GETALLCURRENCIES);
+  
+export const createCurrencyService = async (formData: any) =>
+    apiRequestWithFile('POST', APIROUTES.CREATECURRENCY, formData);
+  
+export const updateCurrencyService = async (formData: any) =>
+    apiRequestWithFile('PUT', APIROUTES.UPDATECURRENCY, formData);
+  
+export const deleteCurrencyService = async (id: number) =>
+    apiRequest('DELETE',  `${APIROUTES.DELETECURRENCY}/${id}`);

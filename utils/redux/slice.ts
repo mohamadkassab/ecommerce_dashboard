@@ -224,8 +224,8 @@ const slice = createSlice({
     //+------------------------------------------------------------------+
     handleAsyncActionWithoutSuccess(builder, getAllCountries, (state, action) => {
       if (!action.payload.error) {
-        state.allCountries = action.payload || [];
-      }       
+        state.allCountries = (action.payload || []).map((item: any) => item?.name);
+      }     
     });
     handleAsyncAction(builder, createCountry, () => {});
     handleAsyncAction(builder, updateCountry, () => {});

@@ -47,24 +47,16 @@ import {
   getAllBrands,
   getAllCategories,
   getAllCountries,
-  updateAttribute,
   updateBrand,
-  updateCategory,
 } from "@/utils/redux/actions/setup";
 
 // Start Dynamic components
-interface countryProps {
-  id: number;
-  name: string;
-  code: string;
-}
-
 interface rowProps {
   id?: number;
   name: string;
-  website?: string;
+  website?: string | null;
   logoFile: File | null;
-  country: countryProps | null;
+  country: string | null;
   updatedAt?: Date;
   updatedBy?: string;
 }
@@ -103,9 +95,6 @@ const BrandDataGrid = () => {
       field: "country",
       headerName: "Country",
       flex: 1,
-      renderCell: (params) => {
-        return <span>{params?.value?.name}</span>;
-      },
       editable: false,
     },
     {
@@ -175,18 +164,15 @@ const BrandDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const { allBrands, allCountries } = useAppSelector(
-    (state: any) => state.reducer
-  ); // Dynamic component
+  const {allBrands, allCountries} = useAppSelector((state: any) => state.reducer); // Dynamic component
   const [imagePreview, setImagePreview] = React.useState<string | null>(null);
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] =
-    React.useState(false);
+  const [openDeleteConfirmation, setOpenDeleteConfirmation] = React.useState(false);
   const [itemToDelete, setItemToDelete] = React.useState<rowProps | null>(null);
   const [refresh, setRefresh] = React.useState(false);
-  const { status } = useAppSelector((state: any) => state.reducer);
+  const {status} = useAppSelector((state: any) => state.reducer);
   const [loading, setLoading] = React.useState(false);
 
   const handleOpenCreate = () => {
@@ -256,7 +242,6 @@ const BrandDataGrid = () => {
     if (!file.size || !file.type) {
       return;
     }
-    console.log(file)
     const previewUrl = URL.createObjectURL(file);
     setImagePreview(previewUrl);
 
@@ -343,17 +328,17 @@ const BrandDataGrid = () => {
         <FormControl key={`CreateForm-countries`} fullWidth margin="normal">
           <Autocomplete
             options={allCountries || []}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option) => option}
             value={formData?.country}
             onChange={(event, newValue) => {
               handleChangeCountry(newValue);
             }}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
+            isOptionEqualToValue={(option, value) => option === value}
             renderOption={(props, option, { selected }) => {
               return (
                 <li {...props}>
                   <Checkbox checked={selected} />
-                  <ListItemText primary={option.name} />
+                  <ListItemText primary={option} />
                 </li>
               );
             }}
@@ -365,6 +350,7 @@ const BrandDataGrid = () => {
                 required
               />
             )}
+            freeSolo={false}
           />
         </FormControl>
       ),
