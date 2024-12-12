@@ -29,22 +29,17 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import { createCountry, deleteCountry, getAllCountries, updateCountry } from "@/utils/redux/actions/setup";
+import { CountryModel } from "@/models/CountryModel";
 
 // Start Dynamic components
-interface rowProps {
-  id?: number;
-  name: string;
-  code: string;
-  updatedAt?: Date;
-  updatedBy?: string;
-}
+interface rowProps extends CountryModel{}
+
+const defaultValues = {
+  name: "",
+  code: "",
+};
 
 const CountryDataGrid = () => {
-  const defaultValues = {
-    name: "",
-    code: "",
-  };
-
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",

@@ -29,22 +29,18 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import { createTag, deleteTag, getAllTags, updateTag } from "@/utils/redux/actions/setup";
+import { TagModel } from "@/models/TagModel";
 
 
 
 // Start Dynamic components
-interface rowProps {
-  id?: number;
-  name: string;
-  updatedAt?: Date;
-  updatedBy?: string;
-}
+interface rowProps extends TagModel {}
+
+const defaultValues = {
+  name: "",
+};
 
 const TagDataGrid = () => {
-  const defaultValues = {
-    name: "",
-  };
-
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",

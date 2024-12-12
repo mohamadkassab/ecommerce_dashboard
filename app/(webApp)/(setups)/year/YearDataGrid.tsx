@@ -29,21 +29,17 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import { createYear, deleteYear, getAllYears, updateYear } from "@/utils/redux/actions/setup";
+import { YearModel } from "@/models/YearModel";
 
 
 // Start Dynamic components
-interface rowProps {
-  id?: number;
-  name: string;
-  updatedAt?: Date;
-  updatedBy?: string;
-}
+interface rowProps extends YearModel {}
+
+const defaultValues = {
+  name: "",
+};
 
 const YearDataGrid = () => {
-  const defaultValues = {
-    name: "",
-  };
-
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",

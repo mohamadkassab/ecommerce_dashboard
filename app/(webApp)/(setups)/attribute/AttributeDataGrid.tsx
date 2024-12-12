@@ -33,24 +33,19 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import { createAttribute, createCategory, deleteAttribute, deleteCategory, getAllAttributes, getAllCategories, updateAttribute, updateCategory } from "@/utils/redux/actions/setup";
+import { AttributeModel } from "@/models/AttributeModel";
 
 
 
 // Start Dynamic components
-interface rowProps {
-  id?: number;
-  name: string;
-  options: string[];
-  updatedAt?: Date;
-  updatedBy?: string;
-}
+interface rowProps extends AttributeModel {}
+
+const defaultValues = {
+  name: "",
+  options: [],
+};
 
 const AttributeDataGrid = () => {
-  const defaultValues = {
-    name: "",
-    options: [],
-  };
-
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",
@@ -256,7 +251,7 @@ const AttributeDataGrid = () => {
       showOnCreate: true,
       showOnEdit: true,
       component: (
-        <FormControl key={`CreateForm-options`} fullWidth margin="normal">
+        <FormControl key={`form-options`} fullWidth margin="normal">
           <Autocomplete
             multiple
             disableCloseOnSelect

@@ -44,45 +44,29 @@ import {
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { StatusModel } from "@/models/StatusModel";
+import { UserModel } from "@/models/UserModel";
+import { RoleWithoutPermissionsModel } from "@/models/RoleWithoutPermissionsModel";
 
 
 // Start Dynamic components
-interface roleProps {
-  id: number;
-  name: string;
+interface rowProps extends UserModel{
+  password: string;
 }
 
-interface rowProps {
-  id?: number;
-  username: string;
-  firstName: string;
-  lastName: string;
-  dob: Date;
-  phone: string;
-  address: string;
-  password: string;
-  roles: roleProps[];
-  updatedAt?: Date;
-  updatedBy?: string;
-  failedLoginAttempts: Number;
-  isActive: boolean;
-}
+const defaultValues = {
+  userName: "",
+  firstName: "",
+  lastName: "",
+  dob: new Date(),
+  phone: "",
+  address: "",
+  roles: [],
+  password: "",
+  failedLoginAttempts: 0,
+  isActive: true,
+};
 
 const UserDataGrid = () => {
-
-  const defaultValues = {
-    username: "",
-    firstName: "",
-    lastName: "",
-    dob: new Date(),
-    phone: "",
-    address: "",
-    roles: [],
-    password: "",
-    failedLoginAttempts: 0,
-    isActive: true,
-  };
-
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",
@@ -116,7 +100,7 @@ const UserDataGrid = () => {
       flex: 1,
       renderCell: (params) => {
         const rolesDisplay =
-          params?.value?.map((role: roleProps) => role.name).join(", ") ||
+          params?.value?.map((role: RoleWithoutPermissionsModel) => role.name).join(", ") ||
           "No roles assigned";
         return <span>{rolesDisplay}</span>;
       },
@@ -312,7 +296,7 @@ const UserDataGrid = () => {
       caption: "Username",
       type: "email",
       required: true,
-      value: formData?.username,
+      value: formData?.userName,
       onChange: handleChange,
       inputProps: {
         minLength: 4,
@@ -410,7 +394,7 @@ const UserDataGrid = () => {
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             renderOption={(props, option) => {
-              const isSelected = formData.roles.some(role => role.id === option.id);
+              const isSelected = formData?.roles?.some(role => role.id === option.id);
               return (
                 <li {...props}>
                   <Checkbox checked={isSelected} />
@@ -793,7 +777,7 @@ const UserDataGrid = () => {
               sx={{ fontWeight: "bold", color: "error.main" }}
             >
                 {/*Dynamic component */}
-              {itemToDelete?.username}
+              {itemToDelete?.userName}
             </Typography>
             &nbsp;?
           </DialogContentText>

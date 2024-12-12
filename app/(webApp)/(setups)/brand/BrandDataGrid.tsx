@@ -47,28 +47,22 @@ import {
   getAllBrands,
   getAllCategories,
   getAllCountries,
+  getAllCountryNames,
   updateBrand,
 } from "@/utils/redux/actions/setup";
+import { BrandModel } from "@/models/BrandModel";
 
 // Start Dynamic components
-interface rowProps {
-  id?: number;
-  name: string;
-  website?: string | null;
-  logoFile: File | null;
-  country: string | null;
-  updatedAt?: Date;
-  updatedBy?: string;
-}
+interface rowProps extends BrandModel{};
+
+const defaultValues = {
+  name: "",
+  website: "",
+  logoFile: null,
+  country: null,
+};
 
 const BrandDataGrid = () => {
-  const defaultValues = {
-    name: "",
-    website: "",
-    logoFile: null,
-    country: null,
-  };
-
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",
@@ -164,7 +158,7 @@ const BrandDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const {allBrands, allCountries} = useAppSelector((state: any) => state.reducer); // Dynamic component
+  const {allBrands, allCountryNames} = useAppSelector((state: any) => state.reducer); // Dynamic component
   const [imagePreview, setImagePreview] = React.useState<string | null>(null);
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
@@ -280,7 +274,7 @@ const BrandDataGrid = () => {
   // Start Dynamic components
   React.useEffect(() => {
     dispatch(getAllBrands()); // Dynamic component
-    dispatch(getAllCountries()); // Dynamic component
+    dispatch(getAllCountryNames()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [
@@ -327,7 +321,7 @@ const BrandDataGrid = () => {
       component: (
         <FormControl key={`CreateForm-countries`} fullWidth margin="normal">
           <Autocomplete
-            options={allCountries || []}
+            options={allCountryNames || []}
             getOptionLabel={(option) => option}
             value={formData?.country}
             onChange={(event, newValue) => {

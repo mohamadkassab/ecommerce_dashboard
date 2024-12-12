@@ -1,4 +1,4 @@
-import { createAttributeService, createBrandService, createCategoryService, createCountryService, createCurrencyService, createSeasonService, createSectionService, createTagService, createYearService, deleteAttributeService, deleteBrandService, deleteCategoryService, deleteCountryService, deleteCurrencyService, deleteSeasonService, deleteSectionService, deleteTagService, deleteYearService, getAllAttributesService, getAllBrandsService, getAllCategoriesService, getAllCountriesService, getAllCurrenciesService, getAllSeasonsService, getAllSectionsService, getAllTagsService, getAllYearsService, updateAttributeService, updateBrandService, updateCategoryService, updateCountryService, updateCurrencyService, updateSeasonService, updateSectionService, updateTagService, updateYearService } from "@/services/setupService";
+import { createAttributeService, createBrandService, createCategoryService, createCountryService, createCurrencyService, createPaymentMService, createSeasonService, createSectionService, createShippingMService, createSupplierService, createTagService, createYearService, deleteAttributeService, deleteBrandService, deleteCategoryService, deleteCountryService, deleteCurrencyService, deletePaymentMService, deleteSeasonService, deleteSectionService, deleteShippingMService, deleteSupplierService, deleteTagService, deleteYearService, getAllAttributesService, getAllBrandsService, getAllCategoriesService, getAllCountriesService, getAllCurrenciesService, getAllPaymentMService, getAllSeasonsService, getAllSectionsService, getAllShippingMService, getAllSuppliersService, getAllTagsService, getAllYearsService, updateAttributeService, updateBrandService, updateCategoryService, updateCountryService, updateCurrencyService, updatePaymentMService, updateSeasonService, updateSectionService, updateShippingMService, updateSupplierService, updateTagService, updateYearService } from "@/services/setupService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 //+------------------------------------------------------------------+
@@ -75,6 +75,10 @@ export const deleteSeason = createAsyncThunk('deleteSeason', async (id: number) 
 export const getAllCountries = createAsyncThunk('getAllCountries', async () => {
     const response = await getAllCountriesService();
     return response;
+});
+export const getAllCountryNames = createAsyncThunk('getAllCountryNames', async () => {
+  const response = await getAllCountriesService();
+  return response;
 });
 export const createCountry = createAsyncThunk('createCountry', async (formData: any ) => {
   const response = await createCountryService(formData);
@@ -157,26 +161,18 @@ export const getAllBrands = createAsyncThunk('getAllBrands', async () => {
   return response;
 });
 export const createBrand = createAsyncThunk('createBrand', async (formData: any ) => {
-  const { logoFile, ...restOfFormData } = formData;
   const updatedFormData = new FormData();
-  Object.keys(restOfFormData).forEach(key => {
-    updatedFormData.append(key, restOfFormData[key]);
+  Object.keys(formData).forEach(key => {
+    updatedFormData.append(key, formData[key]);
   });
-  if (logoFile) {
-    updatedFormData.append('logoFile', logoFile);
-  }
   const response = await createBrandService(updatedFormData);
   return response;
 });
 export const updateBrand = createAsyncThunk('updateBrand', async (formData: any) => {
-  const { updatedBy, updatedAt, logoFile, ...restOfFormData } = formData;
   const updatedFormData = new FormData();
-  Object.keys(restOfFormData).forEach(key => {
-    updatedFormData.append(key, restOfFormData[key]);
+  Object.keys(formData).forEach(key => {
+    updatedFormData.append(key, formData[key]);
   });
-  if (logoFile && logoFile instanceof File) {
-    updatedFormData.append('logoFile', logoFile);
-  }
   const response = await updateBrandService(updatedFormData);
   return response;
 });
@@ -204,4 +200,81 @@ export const deleteCurrency = createAsyncThunk('deleteCurrency', async (id: numb
   const response = await deleteCurrencyService(id);
   return response;
 });
+
+//+------------------------------------------------------------------+
+//| Supplier                                           
+//+------------------------------------------------------------------+
+export const getAllSuppliers = createAsyncThunk('getAllSuppliers', async () => {
+  const response = await getAllSuppliersService();
+  return response;
+});
+export const createSupplier = createAsyncThunk('createSupplier', async (formData: any ) => {
+  const response = await createSupplierService(formData);
+  return response;
+});
+export const updateSupplier = createAsyncThunk('updateSupplier', async (formData: any) => {
+  const response = await updateSupplierService(formData);
+  return response;
+});
+export const deleteSupplier = createAsyncThunk('deleteSupplier', async (id: number) => {
+  const response = await deleteSupplierService(id);
+  return response;
+});
+
+//+------------------------------------------------------------------+
+//| Shipping method                                           
+//+------------------------------------------------------------------+
+export const getAllShippingM = createAsyncThunk('getAllShippingM', async () => {
+  const response = await getAllShippingMService();
+  return response;
+});
+export const createShippingM = createAsyncThunk('createShippingM', async (formData: any ) => {
+  const updatedFormData = new FormData();
+  Object.keys(formData).forEach(key => {
+    updatedFormData.append(key, formData[key]);
+  });
+  const response = await createShippingMService(updatedFormData);
+  return response;
+});
+export const updateShippingM = createAsyncThunk('updateShippingM', async (formData: any) => {
+  const updatedFormData = new FormData();
+  Object.keys(formData).forEach(key => {
+    updatedFormData.append(key, formData[key]);
+  });
+  const response = await updateShippingMService(updatedFormData);
+  return response;
+});
+export const deleteShippingM = createAsyncThunk('deleteShippingM', async (id: number) => {
+  const response = await deleteShippingMService(id);
+  return response;
+});
+
+//+------------------------------------------------------------------+
+//| Payment method                                           
+//+------------------------------------------------------------------+
+export const getAllPaymentM = createAsyncThunk('getAllPaymentM', async () => {
+  const response = await getAllPaymentMService();
+  return response;
+});
+export const createPaymentM = createAsyncThunk('createPaymentM', async (formData: any ) => {
+  const updatedFormData = new FormData();
+  Object.keys(formData).forEach(key => {
+    updatedFormData.append(key, formData[key]);
+  });
+  const response = await createPaymentMService(updatedFormData);
+  return response;
+});
+export const updatePaymentM = createAsyncThunk('updatePaymentM', async (formData: any) => {
+  const updatedFormData = new FormData();
+  Object.keys(formData).forEach(key => {
+    updatedFormData.append(key, formData[key]);
+  });
+  const response = await updatePaymentMService(updatedFormData);
+  return response;
+});
+export const deletePaymentM = createAsyncThunk('deletePaymentM', async (id: number) => {
+  const response = await deletePaymentMService(id);
+  return response;
+});
+
 

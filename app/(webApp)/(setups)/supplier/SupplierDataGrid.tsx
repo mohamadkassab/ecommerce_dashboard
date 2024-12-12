@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import Image from "next/image";
 import {
   TextField,
   Modal,
@@ -32,27 +33,40 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import { createSection, deleteSection, getAllCategories, getAllSections, updateSection } from "@/utils/redux/actions/setup";
-import { CategoryModel } from "@/models/CategoryModel";
-
-
+import {
+  createAttribute,
+  createBrand,
+  createCategory,
+  createCurrency,
+  createSupplier,
+  deleteAttribute,
+  deleteBrand,
+  deleteCategory,
+  deleteCurrency,
+  deleteSupplier,
+  getAllAttributes,
+  getAllBrands,
+  getAllCategories,
+  getAllCountries,
+  getAllCountryNames,
+  getAllCurrencies,
+  getAllSuppliers,
+  updateBrand,
+  updateCurrency,
+  updateSupplier,
+} from "@/utils/redux/actions/setup";
 
 // Start Dynamic components
-interface categoryProps {
-  id: number;
-  name: string;
-}
-
-interface rowProps extends CategoryModel {
-  categories: categoryProps[];
-}
+interface rowProps extends SupplierModel {}
 
 const defaultValues = {
   name: "",
-  categories: [],
+  symbol: "",
+  exchangeRateUsd: 1,
+  country: null,
 };
 
-const SectionDataGrid = () => {
+const SupplierDataGrid = () => {
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",
@@ -64,18 +78,12 @@ const SectionDataGrid = () => {
       editable: false,
     },
     { field: "name", headerName: "Name", flex: 1, editable: false },
-    {
-      field: "categories",
-      headerName: "Categories",
-      flex: 1,
-      renderCell: (params) => {
-        const itemsDisplayed =
-          params?.value?.map((item: categoryProps) => item.name).join(", ") ||
-          "No values assigned";
-        return <span>{itemsDisplayed}</span>;
-      },
-      editable: false
-    },
+    { field: "phone", headerName: "Phone", flex: 1, editable: false },
+    { field: "address", headerName: "Address", flex: 1, editable: false },
+    { field: "city", headerName: "City", flex: 1, editable: false },
+    { field: "email", headerName: "Email", flex: 1, editable: false },
+    { field: "website", headerName: "Website", flex: 1, editable: false },
+    { field: "country", headerName: "Country", flex: 1, editable: false },
     {
       field: "updatedAt",
       headerName: "Updated At",
@@ -86,7 +94,6 @@ const SectionDataGrid = () => {
       flex: 1,
       editable: false,
     },
-  
     { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
     {
       field: "actions",
@@ -143,41 +150,43 @@ const SectionDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const {allSections, allCategories} = useAppSelector((state: any) => state.reducer); // Dynamic component
+  const {allSuppliers, allCountryNames} = useAppSelector((state: any) => state.reducer); // Dynamic component
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = React.useState(false);
   const [itemToDelete, setItemToDelete] = React.useState<rowProps | null>(null);
   const [refresh, setRefresh] = React.useState(false);
-  const { status } = useAppSelector((state: any) => state.reducer);
+  const {status} = useAppSelector((state: any) => state.reducer);
   const [loading, setLoading] = React.useState(false);
 
-  const handleOpenCreate = () => setOpenCreate(true);
+  const handleOpenCreate = () => {
+    setOpenCreate(true);
+  };
   const handleCloseCreate = () => setOpenCreate(false);
   const handleOpenEdit = () => setOpenEdit(true);
   const handleCloseEdit = () => setOpenEdit(false);
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    dispatch(createSection(formData)); // Dynamic component
+    e.preventDefault();
+    dispatch(createSupplier(formData)); // Dynamic component
     handleCloseCreate();
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    dispatch(updateSection(formData)); // Dynamic component
+    e.preventDefault();
+    dispatch(updateSupplier(formData)); // Dynamic component
     handleCloseEdit();
   };
 
   const handleConfirmDelete = () => {
     try {
-      dispatch(deleteSection(Number(itemToDelete?.id))); // Dynamic component
+      dispatch(deleteSupplier(Number(itemToDelete?.id))); // Dynamic component
       setOpenDeleteConfirmation(false);
     } catch (e) {}
   };
 
-  const handleUpdateClick = (row: rowProps) => () => { 
+  const handleUpdateClick = (row: rowProps) => () => {
     setFormData(row);
     handleOpenEdit();
   };
@@ -199,13 +208,11 @@ const SectionDataGrid = () => {
     }));
   };
 
-  const handleArrayChange = (key: string, newValue: any) => {
-    if (Array.isArray(newValue)) {
-      setFormData((prevState) => ({
-        ...prevState,
-        [`${key}`]: newValue,
-      }));
-    }
+  const handleChangeCountry = (newValue: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      country: newValue,
+    }));
   };
 
   React.useEffect(() => {
@@ -224,10 +231,11 @@ const SectionDataGrid = () => {
     }
   }, [status]);
 
+
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllSections());
-    dispatch(getAllCategories());
+    dispatch(getAllSuppliers()); // Dynamic component
+    dispatch(getAllCountryNames()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [
@@ -256,32 +264,95 @@ const SectionDataGrid = () => {
       showOnEdit: true,
     },
     {
+      field: "phone",
+      caption: "Phone",
+      type: "text",
+      value: formData?.phone,
+      onChange: handleChange,
+      inputProps: {
+        maxLength: 255,
+      },
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+    {
+      field: "address",
+      caption: "Address",
+      type: "text",
+      value: formData?.address,
+      onChange: handleChange,
+      inputProps: {
+        maxLength: 255,
+      },
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+    {
+      field: "city",
+      caption: "City",
+      type: "text",
+      value: formData?.city,
+      onChange: handleChange,
+      inputProps: {
+        maxLength: 255,
+      },
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+    {
+      field: "email",
+      caption: "Email",
+      type: "text",
+      value: formData?.email,
+      onChange: handleChange,
+      inputProps: {
+        maxLength: 255,
+      },
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+    {
+      field: "website",
+      caption: "Website",
+      type: "text",
+      value: formData?.website,
+      onChange: handleChange,
+      inputProps: {
+        maxLength: 255,
+      },
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+    {
       showOnCreate: true,
       showOnEdit: true,
       component: (
-        <FormControl key={`CreateForm-categories`} fullWidth margin="normal">
+        <FormControl key={`CreateForm-countries`} fullWidth margin="normal">
           <Autocomplete
-            multiple
-            disableCloseOnSelect
-            options={allCategories || []}
-            getOptionLabel={(option) => option.name}
-            value={formData.categories}
+            options={allCountryNames || []}
+            getOptionLabel={(option) => option}
+            value={formData?.country}
             onChange={(event, newValue) => {
-              handleArrayChange("categories", newValue);
+              handleChangeCountry(newValue);
             }}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
+            isOptionEqualToValue={(option, value) => option === value}
             renderOption={(props, option, { selected }) => {
               return (
                 <li {...props}>
                   <Checkbox checked={selected} />
-                  <ListItemText primary={option.name} />
+                  <ListItemText primary={option} />
                 </li>
               );
             }}
             renderInput={(params) => (
-              /*Dynamic component*/
-              <TextField {...params} variant="outlined" label="Select Categories" />
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Select Country"
+                required
+              />
             )}
+            freeSolo={false}
           />
         </FormControl>
       ),
@@ -291,25 +362,25 @@ const SectionDataGrid = () => {
 
   return (
     <Box
-    sx={{
-      height: "calc(100vh - 100px)",
-      maxWidth: "calc(100vw - 240px)",
-      borderRadius: 2,
-      paddingX: 2,
-    
-      "& .actions": {
-        color: "text.secondary",
-      },
-      "& .textPrimary": {
-        color: "text.primary",
-      },
-    }}
+      sx={{
+        height: "calc(100vh - 100px)",
+        maxWidth: "calc(100vw - 240px)",
+        borderRadius: 2,
+        paddingX: 2,
+
+        "& .actions": {
+          color: "text.secondary",
+        },
+        "& .textPrimary": {
+          color: "text.primary",
+        },
+      }}
     >
-    <Typography variant="h4" sx={{ textAlign: 'center', width:"100%" }}>
-      Section
-    </Typography>
+      <Typography variant="h4" sx={{ textAlign: "center", width: "100%" }}>
+        Supplier
+      </Typography>
       <DataGrid
-        rows={allSections} // Start Dynamic components
+        rows={allSuppliers} // Start Dynamic components
         columns={columnsDataGrid}
         disableRowSelectionOnClick
         loading={loading}
@@ -323,7 +394,7 @@ const SectionDataGrid = () => {
           },
         }}
         sx={{
-          mt:1,
+          mt: 1,
           "& .MuiDataGrid-columnHeaders": {
             borderBottom: "2px solid",
             borderColor: "primary.main",
@@ -354,8 +425,8 @@ const SectionDataGrid = () => {
             p: 4,
             maxHeight: "90vh",
             width: {
-              xs: "90vw",   
-              md: "600px", 
+              xs: "90vw",
+              md: "600px",
             },
             transition: "all 0.3s ease-in-out",
             overflow: "auto",
@@ -374,79 +445,87 @@ const SectionDataGrid = () => {
           </Typography>
 
           <Divider sx={{ mb: 1 }} />
-
           <form onSubmit={handleCreate}>
-            {columnsForms.map((item, index) => {
-              if (item?.showOnCreate) {
-                if (item?.component !== undefined) {
-                  return item.component;
-                }
-                return (
-                  <TextField
-                    key={`CreateForm-${item?.field}`}
-                    name={item?.field}
-                    required={item?.required}
-                    type={item?.type}
-                    label={item?.caption}
-                    value={item?.value}
-                    onChange={item?.onChange}
-                    inputProps={item?.inputProps ? item.inputProps : undefined}
+              <div>
+                {columnsForms.map((item, index) => {
+                  if (item?.showOnCreate) {
+                    if (item?.component !== undefined) {
+                      return item.component;
+                    }
+                    return (
+                      <TextField
+                        key={`CreateForm-${item?.field}`}
+                        name={item?.field}
+                        required={item?.required}
+                        type={item?.type}
+                        label={item?.caption}
+                        value={item?.value}
+                        onChange={item?.onChange}
+                        inputProps={
+                          item?.inputProps ? item.inputProps : undefined
+                        }
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        sx={{
+                          borderRadius: "8px",
+                          backgroundColor: "background.default",
+                          boxShadow: "inset 0 1px 3px rgba(0, 0, 0, 0.1)",
+                        }}
+                      />
+                    );
+                  }
+                })}
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    mt: 3,
+                  }}
+                >
+                  {/* Cancel Button */}
+                  <Button
                     variant="outlined"
-                    margin="normal"
-                    fullWidth
+                    color="secondary"
+                    onClick={handleCloseCreate}
                     sx={{
+                      width: "48%",
+                      py: 1.5,
                       borderRadius: "8px",
-                      backgroundColor: "background.default",
-                      boxShadow: "inset 0 1px 3px rgba(0, 0, 0, 0.1)",
+                      textTransform: "none",
+                      ":hover": {
+                        backgroundColor: "secondary.light",
+                        color: "secondary.contrastText",
+                      },
                     }}
-                  />
-                );
-              }
-            })}
+                  >
+                    Cancel
+                  </Button>
 
-            <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
-            >
-               {/* Cancel Button */}
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleCloseCreate}
-                sx={{
-                  width: "48%",
-                  py: 1.5,
-                  borderRadius: "8px",
-                  textTransform: "none",
-                  ":hover": {
-                    backgroundColor: "secondary.light",
-                    color: "secondary.contrastText",
-                  },
-                }}
-              >
-                Cancel
-              </Button>
-
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                sx={{
-                  width: "48%",
-                  py: 1.5,
-                  borderRadius: "8px",
-                  backgroundColor: "primary.main",
-                  textTransform: "none",
-                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                  ":hover": {
-                    backgroundColor: "primary.dark",
-                    boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.15)",
-                  },
-                }}
-              >
-                Submit
-              </Button>
-            </Box>
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      width: "48%",
+                      py: 1.5,
+                      borderRadius: "8px",
+                      backgroundColor: "primary.main",
+                      textTransform: "none",
+                      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                      ":hover": {
+                        backgroundColor: "primary.dark",
+                        boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.15)",
+                      },
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </Box>
+          
+            </div>
           </form>
         </Box>
       </Modal>
@@ -471,8 +550,8 @@ const SectionDataGrid = () => {
             p: 4,
             maxHeight: "90vh",
             width: {
-              xs: "90vw",   
-              md: "600px", 
+              xs: "90vw",
+              md: "600px",
             },
             transition: "all 0.3s ease-in-out",
             overflow: "auto",
@@ -489,81 +568,90 @@ const SectionDataGrid = () => {
           >
             Edit Entry
           </Typography>
-
           <Divider sx={{ mb: 1 }} />
-
           <form onSubmit={handleUpdate}>
-            {columnsForms.map((item, index) => {
-              if (item?.showOnEdit) {
-                if (item?.component !== undefined) {
-                  return item.component;
-                }
-                return (
-                  <TextField
-                    key={`EditForm-${item?.field}`}
-                    name={item?.field}
-                    required={item?.required}
-                    type={item?.type}
-                    label={item?.caption}
-                    value={item?.value}
-                    onChange={item?.onChange}
-                    inputProps={item?.inputProps ? item.inputProps : undefined}
+
+              <div>
+                {columnsForms.map((item, index) => {
+                  if (item?.showOnEdit) {
+                    if (item?.component !== undefined) {
+                      return item.component;
+                    }
+                    return (
+                      <TextField
+                        key={`EditForm-${item?.field}`}
+                        name={item?.field}
+                        required={item?.required}
+                        type={item?.type}
+                        label={item?.caption}
+                        value={item?.value}
+                        onChange={item?.onChange}
+                        inputProps={
+                          item?.inputProps ? item.inputProps : undefined
+                        }
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        sx={{
+                          borderRadius: "8px",
+                          backgroundColor: "background.default",
+                          boxShadow: "inset 0 1px 3px rgba(0, 0, 0, 0.1)",
+                        }}
+                      />
+                    );
+                  }
+                })}
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    mt: 3,
+                  }}
+                >
+                  {/* Cancel Button */}
+                  <Button
                     variant="outlined"
-                    margin="normal"
-                    fullWidth
+                    color="secondary"
+                    onClick={handleCloseEdit}
                     sx={{
+                      width: "48%",
+                      py: 1.5,
                       borderRadius: "8px",
-                      backgroundColor: "background.default",
-                      boxShadow: "inset 0 1px 3px rgba(0, 0, 0, 0.1)",
+                      textTransform: "none",
+                      ":hover": {
+                        backgroundColor: "secondary.light",
+                        color: "secondary.contrastText",
+                      },
                     }}
-                  />
-                );
-              }
-            })}
+                  >
+                    Cancel
+                  </Button>
 
-            <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
-            >
-              {/* Cancel Button */}
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleCloseEdit}
-                sx={{
-                  width: "48%",
-                  py: 1.5,
-                  borderRadius: "8px",
-                  textTransform: "none",
-                  ":hover": {
-                    backgroundColor: "secondary.light",
-                    color: "secondary.contrastText",
-                  },
-                }}
-              >
-                Cancel
-              </Button>
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      width: "48%",
+                      py: 1.5,
+                      borderRadius: "8px",
+                      backgroundColor: "primary.main",
+                      textTransform: "none",
+                      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                      ":hover": {
+                        backgroundColor: "primary.dark",
+                        boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.15)",
+                      },
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </Box>
+              </div>
 
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                sx={{
-                  width: "48%",
-                  py: 1.5,
-                  borderRadius: "8px",
-                  backgroundColor: "primary.main",
-                  textTransform: "none",
-                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                  ":hover": {
-                    backgroundColor: "primary.dark",
-                    boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.15)",
-                  },
-                }}
-              >
-                Submit
-              </Button>
-            </Box>
+          
           </form>
         </Box>
       </Modal>
@@ -584,7 +672,7 @@ const SectionDataGrid = () => {
               variant="body1"
               sx={{ fontWeight: "bold", color: "error.main" }}
             >
-                {/*Dynamic component */}
+              {/*Dynamic component */}
               {itemToDelete?.name}
             </Typography>
             &nbsp;?
@@ -616,4 +704,4 @@ const SectionDataGrid = () => {
   );
 };
 
-export default SectionDataGrid;
+export default SupplierDataGrid;

@@ -43,30 +43,20 @@ import {
   deleteRole,
 } from "@/utils/redux/actions/user";
 import { StatusModel } from "@/models/StatusModel";
+import { RoleModel } from "@/models/RoleModel";
+import { PermissionModel } from "@/models/PermissionModel";
 
 
 // Start Dynamic components
-interface permissionProps {
-  id: number;
-  name: string;
-}
+interface rowProps extends RoleModel {}
 
-interface rowProps {
-  id?: number;
-  name?: string;
-  permissions: permissionProps[];
-  updatedAt?: Date;
-  updatedBy?: string;
-}
+const defaultValues = {
+  name: "",
+  permissions: [],
+};
 
 
 const RoleDataGrid = () => {
-
-  const defaultValues = {
-    name: "",
-    permissions: [],
-  };
-
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",
@@ -84,7 +74,7 @@ const RoleDataGrid = () => {
       flex: 1,
       renderCell: (params) => {
         const itemsDisplayed =
-          params?.value?.map((permission: permissionProps) => permission.name).join(", ") ||
+          params?.value?.map((permission: PermissionModel) => permission.name).join(", ") ||
           "No permissions assigned";
         return <span>{itemsDisplayed}</span>;
       },
@@ -285,7 +275,7 @@ const RoleDataGrid = () => {
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             renderOption={(props, option, { selected }) => {
-              const isSelected = formData.permissions.some(permission => permission.id === option.id);
+              const isSelected = formData?.permissions?.some(permission => permission.id === option.id);
               return (
                 <li {...props}>
                   <Checkbox checked={selected} />

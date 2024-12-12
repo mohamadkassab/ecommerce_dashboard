@@ -4,7 +4,6 @@ export interface KpiModel {
     description: string;
 }
 
-
 export interface CreateKpiModel {
     label: string;
     query: string;
@@ -13,9 +12,9 @@ export interface CreateKpiModel {
         propertyName : string,
         propertyValue: string
     }[];
-  }
+}
 
-  export interface KpiDetailsModel {
+export interface KpiDetailsModel {
     id: number;
     label: string;
     query: string;
@@ -24,5 +23,4 @@ export interface CreateKpiModel {
         propertyName : string,
         propertyValue: string
     }[];
-  }
-  
+}

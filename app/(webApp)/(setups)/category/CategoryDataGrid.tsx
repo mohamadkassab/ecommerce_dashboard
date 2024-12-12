@@ -29,21 +29,17 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import { createCategory, deleteCategory, getAllCategories, updateCategory } from "@/utils/redux/actions/setup";
+import { CategoryModel } from "@/models/CategoryModel";
 
 
 // Start Dynamic components
-interface rowProps {
-  id?: number;
-  name: string;
-  updatedAt?: Date;
-  updatedBy?: string;
-}
+interface rowProps extends CategoryModel {}
+
+const defaultValues = {
+  name: "",
+};
 
 const CategoryDataGrid = () => {
-  const defaultValues = {
-    name: "",
-  };
-
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",

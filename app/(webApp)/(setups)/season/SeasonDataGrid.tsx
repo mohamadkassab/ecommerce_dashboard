@@ -29,19 +29,16 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import { createSeason, deleteSeason, getAllSeasons, updateSeason } from "@/utils/redux/actions/setup";
+import { SeasonModel } from "@/models/SeasonModel";
 
 // Start Dynamic components
-interface rowProps {
-  id?: number;
-  name: string;
-  updatedAt?: Date;
-  updatedBy?: string;
-}
+interface rowProps extends SeasonModel {}
+
+const defaultValues = {
+  name: "",
+};
 
 const SeasonDataGrid = () => {
-  const defaultValues = {
-    name: "",
-  };
 
   const columnsDataGrid: GridColDef[] = [
     {

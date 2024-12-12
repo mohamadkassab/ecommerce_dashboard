@@ -9,34 +9,43 @@ import { createRole, createUser, deleteRole, deleteUser, getAllPermissions, getA
 import jwt from 'jsonwebtoken';
 import { changePassword } from './actions/account';
 import { StatusModel } from '@/models/StatusModel';
-import { createAttribute, createBrand, createCategory, createCountry, createSeason, createSection, createTag, createYear, deleteAttribute, deleteBrand, deleteCategory, deleteCountry, deleteSeason, deleteSection, deleteTag, deleteYear, getAllAttributes, getAllBrands, getAllCategories, getAllCountries, getAllSeasons, getAllSections, getAllTags, getAllYears, updateAttribute, updateBrand, updateCategory, updateCountry, updateSeason, updateSection, updateTag, updateYear } from './actions/setup';
+import { createAttribute, createBrand, createCategory, createCountry, createCurrency, createPaymentM, createSeason, createSection, createShippingM, createSupplier, createTag, createYear, deleteAttribute, deleteBrand, deleteCategory, deleteCountry, deleteCurrency, deletePaymentM, deleteSeason, deleteSection, deleteShippingM, deleteSupplier, deleteTag, deleteYear, getAllAttributes, getAllBrands, getAllCategories, getAllCountries, getAllCountryNames, getAllCurrencies, getAllPaymentM, getAllSeasons, getAllSections, getAllShippingM, getAllSuppliers, getAllTags, getAllYears, updateAttribute, updateBrand, updateCategory, updateCountry, updateCurrency, updatePaymentM, updateSeason, updateSection, updateShippingM, updateSupplier, updateTag, updateYear } from './actions/setup';
+import { TokenModel } from '@/models/TokenModel';
+import { ChartModel } from '@/models/ChartModel';
+import { UserModel } from '@/models/UserModel';
+import { RoleModel } from '@/models/RoleModel';
+import { PermissionModel } from '@/models/PermissionModel';
+import { CountryModel } from '@/models/CountryModel';
+import { CategoryModel } from '@/models/CategoryModel';
+import { SeasonModel } from '@/models/SeasonModel';
+import { SectionModel } from '@/models/SectionModel';
+import { YearModel } from '@/models/YearModel';
+import { TagModel } from '@/models/TagModel';
+import { AttributeModel } from '@/models/AttributeModel';
+import { BrandModel } from '@/models/BrandModel';
+import { ShippingMModel } from '@/models/ShippingMModel';
+import { PaymentMModel } from '@/models/PaymentMModel';
 
-interface UserToken {
-  username: string;
-  jti: string;
-  role: string;
-  permission: string[];
-  nbf: number;
-  exp: number;
-  iat: number;
-  iss: string;
-  aud: string;
-}
 
 interface InitialState {
-  user?: UserToken | null;
-  allCharts?: any[];
-  allUsers?: any[];
-  allRoles?: any[];
-  allPermissions?: any[];
-  allCountries?: any[];
-  allCategories?: any[];
-  allSeasons?: any[];
-  allSections?: any[];
-  allYears?: any[];
-  allTags?: any[];
-  allAttributes?: any[];
-  allBrands?: any[];
+  user?: TokenModel | null;
+  allCharts?: ChartModel[];
+  allUsers?: UserModel[];
+  allRoles?: RoleModel[];
+  allPermissions?: PermissionModel[];
+  allCountries?: CountryModel[];
+  allCountryNames?: string[];
+  allCategories?: CategoryModel[];
+  allSeasons?: SeasonModel[];
+  allSections?: SectionModel[];
+  allYears?: YearModel[];
+  allTags?: TagModel[];
+  allAttributes?: AttributeModel[];
+  allBrands?: BrandModel[];
+  allCurrencies?: CurrencyModel[];
+  allSuppliers?: SupplierModel[];
+  allShippingM?: ShippingMModel[];
+  allPaymentM?: PaymentMModel[];
   status: StatusModel;
   error: string | null | object;
 }
@@ -49,9 +58,9 @@ const initialState: InitialState = {
 //+------------------------------------------------------------------+
 //| Helper function to decode and verify JWT token                                           
 //+------------------------------------------------------------------+
-const decodeAndVerifyToken = (token: string | undefined): UserToken | null => {
+const decodeAndVerifyToken = (token: string | undefined): TokenModel | null => {
   if (!token) return null;
-  const decoded = jwt.decode(token) as UserToken | null;
+  const decoded = jwt.decode(token) as TokenModel | null;
   if (decoded?.exp && decoded.exp > Math.floor(Date.now() / 1000)) {
     return decoded;
   }
@@ -141,7 +150,7 @@ const slice = createSlice({
     })
     .addCase(signin.fulfilled, (state, action) => {
       if (action.payload) {
-        const decodedToken = jwt.decode(action.payload) as UserToken | null;
+        const decodedToken = jwt.decode(action.payload) as TokenModel | null;
         if (decodedToken) {
           state.user = decodedToken;
         }
@@ -162,7 +171,7 @@ const slice = createSlice({
     .addCase(signin.rejected, (state, action) => {
       state.error = action.error?.message || null;
       state.status = StatusModel.FAILED;
-    });
+    });    
     builder.addCase(signout.fulfilled, (state) => {
       state.status = StatusModel.SIGNOUTSUCCESSFUL;
       state.user = null;
@@ -224,7 +233,13 @@ const slice = createSlice({
     //+------------------------------------------------------------------+
     handleAsyncActionWithoutSuccess(builder, getAllCountries, (state, action) => {
       if (!action.payload.error) {
-        state.allCountries = (action.payload || []).map((item: any) => item?.name);
+        // state.allCountries = (action.payload || []).map((item: any) => item?.name);
+        state.allCountries = action.payload || [];
+      }     
+    });
+    handleAsyncActionWithoutSuccess(builder, getAllCountryNames, (state, action) => {
+      if (!action.payload.error) {
+        state.allCountryNames = (action.payload || []).map((item: any) => item?.name);
       }     
     });
     handleAsyncAction(builder, createCountry, () => {});
@@ -315,7 +330,53 @@ const slice = createSlice({
     handleAsyncAction(builder, updateBrand, () => {});
     handleAsyncAction(builder, deleteBrand, () => {});
 
-      
+    //+------------------------------------------------------------------+
+    //| Currency                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllCurrencies, (state, action) => {
+      if (!action.payload.error) {
+        state.allCurrencies = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createCurrency, () => {});
+    handleAsyncAction(builder, updateCurrency, () => {});
+    handleAsyncAction(builder, deleteCurrency, () => {});
+    
+    //+------------------------------------------------------------------+
+    //| Supplier                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllSuppliers, (state, action) => {
+      if (!action.payload.error) {
+        state.allSuppliers = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createSupplier, () => {});
+    handleAsyncAction(builder, updateSupplier, () => {});
+    handleAsyncAction(builder, deleteSupplier, () => {});
+
+    //+------------------------------------------------------------------+
+    //| Shipping method                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllShippingM, (state, action) => {
+      if (!action.payload.error) {
+        state.allSuppliers = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createShippingM, () => {});
+    handleAsyncAction(builder, updateShippingM, () => {});
+    handleAsyncAction(builder, deleteShippingM, () => {});
+
+    //+------------------------------------------------------------------+
+    //| Payment method                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllPaymentM, (state, action) => {
+      if (!action.payload.error) {
+        state.allPaymentM = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createPaymentM, () => {});
+    handleAsyncAction(builder, updatePaymentM, () => {});
+    handleAsyncAction(builder, deletePaymentM, () => {});   
   },
 });
 

@@ -22,6 +22,8 @@ export const ROUTES = {
     TAG: '/tag',
     ATTRIBUTE: '/attribute',
     BRAND: '/brand',
+    CURRENCY: '/currency',
+    SUPPLIER: '/supplier',
   };
 
   export const SECTIONS = [
@@ -89,9 +91,9 @@ export const ROUTES = {
         { title: 'attribute', protected: true, path:ROUTES.ATTRIBUTE, requiredPermissions: ["attribute"] },
         { title: 'country', protected: true, path:ROUTES.COUNTRY, requiredPermissions: ["country"] },
         { title: 'category', protected: true, path:ROUTES.CATEGORY, requiredPermissions: ["category"] },
-        { title: 'currency', protected: true, requiredPermissions: [""] },
+        { title: 'currency', protected: true, path:ROUTES.CURRENCY,requiredPermissions: [""] },
         { title: 'tag', protected: true, path:ROUTES.TAG, requiredPermissions: [""] },
-        { title: 'supplier', protected: true,  requiredPermissions: [""] },
+        { title: 'supplier', protected: true, path:ROUTES.SUPPLIER, requiredPermissions: [""] },
         { title: 'brand', protected: true, path:ROUTES.BRAND, requiredPermissions: [""] },
         { title: 'year', protected: true, path:ROUTES.YEAR, requiredPermissions: [""] },
         { title: 'season', protected: true, path:ROUTES.SEASON, requiredPermissions: ["season"] },
@@ -228,12 +230,36 @@ export const APIROUTES = {
   DELETEBRAND: "/Setup/DeleteBrand",
 
   //+------------------------------------------------------------------+
-  //| Brand                                          
+  //| Currency                                          
   //+------------------------------------------------------------------+
   GETALLCURRENCIES: "/Setup/GetAllCurrencies",
   CREATECURRENCY: "/Setup/CreateCurrency",
   UPDATECURRENCY: "/Setup/UpdateCurrency",
   DELETECURRENCY: "/Setup/DeleteCurrency",
+
+  //+------------------------------------------------------------------+
+  //| Supplier                                          
+  //+------------------------------------------------------------------+
+  GETALLSUPPLIERS: "/Setup/GetAllSuppliers",
+  CREATESUPPLIER: "/Setup/CreateSupplier",
+  UPDATESUPPLIER: "/Setup/UpdateSupplier",
+  DELETESUPPLIER: "/Setup/DeleteSupplier",
+
+  //+------------------------------------------------------------------+
+  //| Shipping method                                          
+  //+------------------------------------------------------------------+
+  GETALLSHIPPINGM: "/Setup/GetAllShippingM",
+  CREATESHIPPINGM: "/Setup/CreateShippingM",
+  UPDATESHIPPINGM: "/Setup/UpdateShippingM",
+  DELETESHIPPINGM: "/Setup/DeleteShippingM",
+
+  //+------------------------------------------------------------------+
+  //| Payment method                                          
+  //+------------------------------------------------------------------+
+  GETALLPAYMENTM: "/Setup/GetAllPaymentM",
+  CREATEPAYMENTM: "/Setup/CreatePaymentM",
+  UPDATEPAYMENTM: "/Setup/UpdatePaymentM",
+  DELETEPAYMENTM: "/Setup/DeletePaymentM",
 }
 
 

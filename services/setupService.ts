@@ -14,7 +14,7 @@ export const updateSeasonService = async (formData: any) =>
     apiRequest('PUT', APIROUTES.UPDATESEASON, formData);
 
 export const deleteSeasonService = async (id: number) =>
-    apiRequest('DELETE',  `${APIROUTES.DELETESEASON}/${id}`);
+    apiRequest('DELETE', `${APIROUTES.DELETESEASON}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Section                                           
@@ -29,7 +29,7 @@ export const updateSectionService = async (formData: any) =>
     apiRequest('PUT', APIROUTES.UPDATESECTION, formData);
   
 export const deleteSectionService = async (id: number) =>
-    apiRequest('DELETE',  `${APIROUTES.DELETESECTION}/${id}`);
+    apiRequest('DELETE', `${APIROUTES.DELETESECTION}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Country                                           
@@ -59,7 +59,7 @@ export const updateCategoryService = async (formData: any) =>
     apiRequest('PUT', APIROUTES.UPDATECATEGORY, formData);
   
 export const deleteCategoryService = async (id: number) =>
-    apiRequest('DELETE',  `${APIROUTES.DELETECATEGORY}/${id}`);
+    apiRequest('DELETE', `${APIROUTES.DELETECATEGORY}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Year                                           
@@ -89,7 +89,7 @@ export const updateTagService = async (formData: any) =>
     apiRequest('PUT', APIROUTES.UPDATETAG, formData);
   
 export const deleteTagService = async (id: number) =>
-    apiRequest('DELETE',  `${APIROUTES.DELETETAG}/${id}`);
+    apiRequest('DELETE', `${APIROUTES.DELETETAG}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Attribute                                           
@@ -104,7 +104,7 @@ export const updateAttributeService = async (formData: any) =>
     apiRequest('PUT', APIROUTES.UPDATEATTRIBUTE, formData);
   
 export const deleteAttributeService = async (id: number) =>
-    apiRequest('DELETE',  `${APIROUTES.DELETEATTRIBUTE}/${id}`);
+    apiRequest('DELETE', `${APIROUTES.DELETEATTRIBUTE}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Brand                                           
@@ -119,7 +119,7 @@ export const updateBrandService = async (formData: any) =>
     apiRequestWithFile('PUT', APIROUTES.UPDATEBRAND, formData);
   
 export const deleteBrandService = async (id: number) =>
-    apiRequest('DELETE',  `${APIROUTES.DELETEBRAND}/${id}`);
+    apiRequest('DELETE', `${APIROUTES.DELETEBRAND}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Currency                                           
@@ -128,10 +128,55 @@ export const getAllCurrenciesService = async () =>
     apiRequest('GET', APIROUTES.GETALLCURRENCIES);
   
 export const createCurrencyService = async (formData: any) =>
-    apiRequestWithFile('POST', APIROUTES.CREATECURRENCY, formData);
+    apiRequest('POST', APIROUTES.CREATECURRENCY, formData);
   
 export const updateCurrencyService = async (formData: any) =>
-    apiRequestWithFile('PUT', APIROUTES.UPDATECURRENCY, formData);
+    apiRequest('PUT', APIROUTES.UPDATECURRENCY, formData);
   
 export const deleteCurrencyService = async (id: number) =>
-    apiRequest('DELETE',  `${APIROUTES.DELETECURRENCY}/${id}`);
+    apiRequest('DELETE', `${APIROUTES.DELETECURRENCY}/${id}`);
+
+//+------------------------------------------------------------------+
+//| Supplier                                           
+//+------------------------------------------------------------------+
+export const getAllSuppliersService = async () =>
+    apiRequest('GET', APIROUTES.GETALLSUPPLIERS);
+  
+export const createSupplierService = async (formData: any) =>
+    apiRequest('POST', APIROUTES.CREATESUPPLIER, formData);
+  
+export const updateSupplierService = async (formData: any) =>
+    apiRequest('PUT', APIROUTES.UPDATESUPPLIER, formData);
+  
+export const deleteSupplierService = async (id: number) =>
+    apiRequest('DELETE', `${APIROUTES.DELETESUPPLIER}/${id}`);
+
+//+------------------------------------------------------------------+
+//| Shipping method                                           
+//+------------------------------------------------------------------+
+export const getAllShippingMService = async () =>
+    apiRequest('GET', APIROUTES.GETALLSHIPPINGM);
+  
+export const createShippingMService = async (formData: any) =>
+    apiRequestWithFile('POST', APIROUTES.CREATESHIPPINGM, formData);
+  
+export const updateShippingMService = async (formData: any) =>
+    apiRequestWithFile('PUT', APIROUTES.UPDATESHIPPINGM, formData);
+  
+export const deleteShippingMService = async (id: number) =>
+    apiRequest('DELETE', `${APIROUTES.DELETESHIPPINGM}/${id}`);
+
+//+------------------------------------------------------------------+
+//| Payment method                                           
+//+------------------------------------------------------------------+
+export const getAllPaymentMService = async () =>
+    apiRequest('GET', APIROUTES.GETALLPAYMENTM);
+  
+export const createPaymentMService = async (formData: any) =>
+    apiRequestWithFile('POST', APIROUTES.CREATEPAYMENTM, formData);
+  
+export const updatePaymentMService = async (formData: any) =>
+    apiRequestWithFile('PUT', APIROUTES.UPDATEPAYMENTM, formData);
+  
+export const deletePaymentMService = async (id: number) =>
+    apiRequest('DELETE', `${APIROUTES.DELETEPAYMENTM}/${id}`);
