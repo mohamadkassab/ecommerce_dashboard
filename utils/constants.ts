@@ -6,164 +6,161 @@ export const AUTHTOKEN = "ecommerce_api_authToken";
 export const GLOBAL_REQUEST_TIMEOUT = 10000;
 
 export const ROUTES = {
-    ROOT: '/',
-    SIGNIN: '/signin',
-    DASHBOARD : '/dashboard',
-    KPI: '/kpi',
-    KPIADD: '/kpi/add',
-    USER: '/user',
-    ROLE: '/role',
-    ACCOUNT: '/account',
-    COUNTRY: '/country',
-    CATEGORY: '/category',
-    SEASON: '/season',
-    SECTION: '/section',
-    YEAR: '/year',
-    TAG: '/tag',
-    ATTRIBUTE: '/attribute',
-    BRAND: '/brand',
-    CURRENCY: '/currency',
-    SUPPLIER: '/supplier',
-  };
+  ATTRIBUTE: '/attribute',
+  BRAND: '/brand',
+  CATEGORY: '/category',
+  COUNTRY: '/country',
+  CURRENCY: '/currency',
+  KPI: '/kpi',
+  KPIADD: '/kpi/add',
+  PAYMENTM: '/payment-method',
+  PERMISSION: '/permission',
+  ROOT: '/',
+  ROLE: '/role',
+  SEASON: '/season',
+  SECTION: '/section',
+  SHIPPINGM: '/shipping-method',
+  SUPPLIER: '/supplier',
+  TAG: '/tag',
+  USER: '/user',
+  YEAR: '/year',
+  DASHBOARD: '/dashboard',
+  ACCOUNT: '/account',
+  SIGNIN: '/signin',
+};
 
-  export const SECTIONS = [
-    {
-      title: 'Dashboard',
-      path: ROUTES.DASHBOARD,
-      protected: true,
-      requiredPermissions: [],
-    },
-    {
-      title: 'KPI',
-      path: ROUTES.KPI,
-      protected: true,
-      requiredPermissions: [""],
-    },
-    {
-      title: 'Product',
-      protected: true,
-      requiredPermissions: [""],
-      subsections: [
-        {
-          title: 'product',
-          protected: true,
-          requiredPermissions: [""],
-        },
-        {
-          title: 'product info',
-          protected: true,
-          requiredPermissions: [""],
-        },
-      ],
-    },
-    {
-      title: 'Orders',
-    },
-    {
-      title: 'Transaction',
-      protected: true,
-      requiredPermissions: [""],
-    },
-    {
-      title: 'User',
-      protected: true,
-      requiredPermissions: ["user", "role"], // OR
-      subsections: [
-        {
-          title: 'user',
-          path: ROUTES.USER,
-          protected: true,
-          requiredPermissions: ["user"],
-        },
-        {
-          title: 'role',
-          path: ROUTES.ROLE,
-          protected: true,
-          requiredPermissions: ["role"],
-        },
-      ],
-    },
-    {
-      title: 'Setup',
-      protected: true,
-      requiredPermissions: [""], // OR
-      subsections: [
-        { title: 'attribute', protected: true, path:ROUTES.ATTRIBUTE, requiredPermissions: ["attribute"] },
-        { title: 'country', protected: true, path:ROUTES.COUNTRY, requiredPermissions: ["country"] },
-        { title: 'category', protected: true, path:ROUTES.CATEGORY, requiredPermissions: ["category"] },
-        { title: 'currency', protected: true, path:ROUTES.CURRENCY,requiredPermissions: [""] },
-        { title: 'tag', protected: true, path:ROUTES.TAG, requiredPermissions: [""] },
-        { title: 'supplier', protected: true, path:ROUTES.SUPPLIER, requiredPermissions: [""] },
-        { title: 'brand', protected: true, path:ROUTES.BRAND, requiredPermissions: [""] },
-        { title: 'year', protected: true, path:ROUTES.YEAR, requiredPermissions: [""] },
-        { title: 'season', protected: true, path:ROUTES.SEASON, requiredPermissions: ["season"] },
-        { title: 'section', protected: true, path:ROUTES.SECTION, requiredPermissions: ["section"] },
-      ],
-    },
-    {
-      title: 'Reports',
-    },
-    // {
-    //   title: 'Marketing',
-      
-    //   subsections: ['hooks', 'templates'],
-    // },
-    // {
-    //   title: 'Customers',
-    //   subsections: ['customers', 'inquiries'],
-    // },
-    {
-      title: 'Logs',
-      protected: true,
-      requiredPermissions: [""],
-    },
-    {
-      title: 'Settings',
-      protected: true,
-      requiredPermissions: [],
-      subsections: [
-        {
-          title: 'account',
-          path: ROUTES.ACCOUNT,
-          protected: true,
-          requiredPermissions: [],
-        },
-      ],
-    },
-  ];
+export const SECTIONS = [
+  {
+    title: 'Dashboard',
+    path: ROUTES.DASHBOARD,
+    protected: true,
+    requiredPermissions: [],
+  },
+  {
+    title: 'KPI',
+    path: ROUTES.KPI,
+    protected: true,
+    requiredPermissions: [""],
+  },
+  {
+    title: 'Product',
+    protected: true,
+    requiredPermissions: [""],
+    subsections: [
+      {
+        title: 'product',
+        protected: true,
+        requiredPermissions: [""],
+      },
+      {
+        title: 'product info',
+        protected: true,
+        requiredPermissions: [""],
+      },
+    ],
+  },
+  {
+    title: 'Orders',
+  },
+  {
+    title: 'Transaction',
+    protected: true,
+    requiredPermissions: [""],
+  },
+  {
+    title: 'User',
+    protected: true,
+    requiredPermissions: ["user", "role"], // OR
+    subsections: [
+      {
+        title: 'role',
+        path: ROUTES.ROLE,
+        protected: true,
+        requiredPermissions: ["role"],
+      },
+      {
+        title: 'user',
+        path: ROUTES.USER,
+        protected: true,
+        requiredPermissions: ["user"],
+      }
+    ],
+  },
+  {
+    title: 'Setup',
+    protected: true,
+    requiredPermissions: [""], // OR
+    subsections: [
+      { title: 'attribute', protected: true, path:ROUTES.ATTRIBUTE, requiredPermissions: ["attribute"] },
+      { title: 'brand', protected: true, path:ROUTES.BRAND, requiredPermissions: [""] },
+      { title: 'category', protected: true, path:ROUTES.CATEGORY, requiredPermissions: ["category"] },
+      { title: 'country', protected: true, path:ROUTES.COUNTRY, requiredPermissions: ["country"] },
+      { title: 'currency', protected: true, path:ROUTES.CURRENCY,requiredPermissions: [""] },
+      { title: 'payment method', protected: true, path:ROUTES.PAYMENTM, requiredPermissions: [""] },
+      { title: 'season', protected: true, path:ROUTES.SEASON, requiredPermissions: ["season"] },
+      { title: 'section', protected: true, path:ROUTES.SECTION, requiredPermissions: ["section"] },
+      { title: 'shipping method', protected: true, path:ROUTES.SHIPPINGM, requiredPermissions: [""] },
+      { title: 'supplier', protected: true, path:ROUTES.SUPPLIER, requiredPermissions: [""] },
+      { title: 'tag', protected: true, path:ROUTES.TAG, requiredPermissions: [""] },
+      { title: 'year', protected: true, path:ROUTES.YEAR, requiredPermissions: [""] },
+    ],
+  },
+  {
+    title: 'Reports',
+  },
+  // {
+  //   title: 'Marketing',
+    
+  //   subsections: ['hooks', 'templates'],
+  // },
+  // {
+  //   title: 'Customers',
+  //   subsections: ['customers', 'inquiries'],
+  // },
+  {
+    title: 'Logs',
+    protected: true,
+    requiredPermissions: [""],
+  },
+  {
+    title: 'Settings',
+    protected: true,
+    requiredPermissions: [],
+    subsections: [
+      {
+        title: 'account',
+        path: ROUTES.ACCOUNT,
+        protected: true,
+        requiredPermissions: [],
+      },
+    ],
+  },
+];
 
 export const APIROUTES = {
   //+------------------------------------------------------------------+
-  //| User                                           
+  //| Attribute                                          
   //+------------------------------------------------------------------+
-  SIGNIN : "/User/SignIn",
-  SIGNOUT : "/User/SignOut",
-  CREATEUSER : "/User/CreateUser",
-  UPDATEUSER: "/User/UpdateUser",
-  DELETEUSER: "/User/DeleteUser",
-  CHANGEPASSWORD: "/User/ChangePassword",
-  GETALLUSERS : "/User/GetAllUsersWithRoles",
+  GETALLATTRIBUTES: "/Setup/GetAllAttributesWithOptions",
+  CREATEATTRIBUTE: "/Setup/CreateAttribute",
+  UPDATEATTRIBUTE: "/Setup/UpdateAttribute",
+  DELETEATTRIBUTE: "/Setup/DeleteAttribute",
 
   //+------------------------------------------------------------------+
-  //| Kpi                                           
+  //| Brand                                          
   //+------------------------------------------------------------------+
-  CREATECHART: "/Kpi/CreateChart",
-  DELETECHART : "/Kpi/DeleteChart",
-  GETALLCHARTS: "/Kpi/GetAllCharts",
-  GETCHARTDATABYQUERY : "/Kpi/GetChartDataByQuery",
+  GETALLBRANDS: "/Setup/GetAllBrands",
+  CREATEBRAND: "/Setup/CreateBrand",
+  UPDATEBRAND: "/Setup/UpdateBrand",
+  DELETEBRAND: "/Setup/DeleteBrand",
 
   //+------------------------------------------------------------------+
-  //| Role                                           
+  //| Category                                           
   //+------------------------------------------------------------------+
-  GETALLROLES : "/User/GetAllRolesAndPermissions",
-  CREATEROLE : "/User/CreateRole",
-  UPDATEROLE: "/User/UpdateRole",
-  DELETEROLE: "/User/DeleteRole",
-
-  //+------------------------------------------------------------------+
-  //| Permission                                           
-  //+------------------------------------------------------------------+
-  GETALLPERMISSIONS : "/User/GetAllPermissions",
+  GETALLCATEGORIES: "/Setup/GetAllCategories",
+  CREATECATEGORY : "/Setup/CreateCategory",
+  UPDATECATEGORY: "/Setup/UpdateCategory",
+  DELETECATEGORY: "/Setup/DeleteCategory",
 
   //+------------------------------------------------------------------+
   //| Country                                           
@@ -174,12 +171,31 @@ export const APIROUTES = {
   DELETECOUNTRY: "/Setup/DeleteCountry",
 
   //+------------------------------------------------------------------+
-  //| Category                                           
+  //| Currency                                          
   //+------------------------------------------------------------------+
-  GETALLCATEGORIES: "/Setup/GetAllCategories",
-  CREATECATEGORY : "/Setup/CreateCategory",
-  UPDATECATEGORY: "/Setup/UpdateCategory",
-  DELETECATEGORY: "/Setup/DeleteCategory",
+  GETALLCURRENCIES: "/Setup/GetAllCurrencies",
+  CREATECURRENCY: "/Setup/CreateCurrency",
+  UPDATECURRENCY: "/Setup/UpdateCurrency",
+  DELETECURRENCY: "/Setup/DeleteCurrency",
+
+  //+------------------------------------------------------------------+
+  //| Kpi                                           
+  //+------------------------------------------------------------------+
+  CREATECHART: "/Kpi/CreateChart",
+  DELETECHART : "/Kpi/DeleteChart",
+  GETALLCHARTS: "/Kpi/GetAllCharts",
+  GETCHARTDATABYQUERY : "/Kpi/GetChartDataByQuery",
+
+  //+------------------------------------------------------------------+
+  //| Payment method                                          
+  //+------------------------------------------------------------------+
+  GETALLPAYMENTM: "/Setup/GetAllPaymentM",
+  UPDATEPAYMENTM: "/Setup/UpdatePaymentM",
+
+  //+------------------------------------------------------------------+
+  //| Permission                                           
+  //+------------------------------------------------------------------+
+  GETALLPERMISSIONS : "/User/GetAllPermissions",
 
   //+------------------------------------------------------------------+
   //| Season                                          
@@ -198,44 +214,10 @@ export const APIROUTES = {
   DELETESECTION: "/Setup/DeleteSection",
 
   //+------------------------------------------------------------------+
-  //| Year                                          
+  //| Shipping method                                          
   //+------------------------------------------------------------------+
-  GETALLYEARS: "/Setup/GetAllYears",
-  CREATEYEAR: "/Setup/CreateYear",
-  UPDATEYEAR: "/Setup/UpdateYear",
-  DELETEYEAR: "/Setup/DeleteYear",
-
-  //+------------------------------------------------------------------+
-  //| Tag                                          
-  //+------------------------------------------------------------------+
-  GETALLTAGS: "/Setup/GetAllTags",
-  CREATETAG: "/Setup/CreateTag",
-  UPDATETAG: "/Setup/UpdateTag",
-  DELETETAG: "/Setup/DeleteTag",
-
-  //+------------------------------------------------------------------+
-  //| Attribute                                          
-  //+------------------------------------------------------------------+
-  GETALLATTRIBUTES: "/Setup/GetAllAttributesWithOptions",
-  CREATEATTRIBUTE: "/Setup/CreateAttribute",
-  UPDATEATTRIBUTE: "/Setup/UpdateAttribute",
-  DELETEATTRIBUTE: "/Setup/DeleteAttribute",
-
-  //+------------------------------------------------------------------+
-  //| Brand                                          
-  //+------------------------------------------------------------------+
-  GETALLBRANDS: "/Setup/GetAllBrands",
-  CREATEBRAND: "/Setup/CreateBrand",
-  UPDATEBRAND: "/Setup/UpdateBrand",
-  DELETEBRAND: "/Setup/DeleteBrand",
-
-  //+------------------------------------------------------------------+
-  //| Currency                                          
-  //+------------------------------------------------------------------+
-  GETALLCURRENCIES: "/Setup/GetAllCurrencies",
-  CREATECURRENCY: "/Setup/CreateCurrency",
-  UPDATECURRENCY: "/Setup/UpdateCurrency",
-  DELETECURRENCY: "/Setup/DeleteCurrency",
+  GETALLSHIPPINGM: "/Setup/GetAllShippingM",
+  UPDATESHIPPINGM: "/Setup/UpdateShippingM",
 
   //+------------------------------------------------------------------+
   //| Supplier                                          
@@ -246,22 +228,40 @@ export const APIROUTES = {
   DELETESUPPLIER: "/Setup/DeleteSupplier",
 
   //+------------------------------------------------------------------+
-  //| Shipping method                                          
+  //| Tag                                          
   //+------------------------------------------------------------------+
-  GETALLSHIPPINGM: "/Setup/GetAllShippingM",
-  CREATESHIPPINGM: "/Setup/CreateShippingM",
-  UPDATESHIPPINGM: "/Setup/UpdateShippingM",
-  DELETESHIPPINGM: "/Setup/DeleteShippingM",
+  GETALLTAGS: "/Setup/GetAllTags",
+  CREATETAG: "/Setup/CreateTag",
+  UPDATETAG: "/Setup/UpdateTag",
+  DELETETAG: "/Setup/DeleteTag",
 
   //+------------------------------------------------------------------+
-  //| Payment method                                          
+  //| User                                           
   //+------------------------------------------------------------------+
-  GETALLPAYMENTM: "/Setup/GetAllPaymentM",
-  CREATEPAYMENTM: "/Setup/CreatePaymentM",
-  UPDATEPAYMENTM: "/Setup/UpdatePaymentM",
-  DELETEPAYMENTM: "/Setup/DeletePaymentM",
+  SIGNIN : "/User/SignIn",
+  SIGNOUT : "/User/SignOut",
+  CREATEUSER : "/User/CreateUser",
+  UPDATEUSER: "/User/UpdateUser",
+  DELETEUSER: "/User/DeleteUser",
+  CHANGEPASSWORD: "/User/ChangePassword",
+  GETALLUSERS : "/User/GetAllUsersWithRoles",
+
+  //+------------------------------------------------------------------+
+  //| Role                                           
+  //+------------------------------------------------------------------+
+  GETALLROLES : "/User/GetAllRolesAndPermissions",
+  CREATEROLE : "/User/CreateRole",
+  UPDATEROLE: "/User/UpdateRole",
+  DELETEROLE: "/User/DeleteRole",
+
+  //+------------------------------------------------------------------+
+  //| Year                                          
+  //+------------------------------------------------------------------+
+  GETALLYEARS: "/Setup/GetAllYears",
+  CREATEYEAR: "/Setup/CreateYear",
+  UPDATEYEAR: "/Setup/UpdateYear",
+  DELETEYEAR: "/Setup/DeleteYear",
 }
-
 
 export const DUMMYDATA = {
   VerticalBarChart:{

@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { Box, TextField, Button, Typography, Divider } from "@mui/material";
-import { changePassword } from "@/utils/redux/actions/account";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
-import { signout } from "@/utils/redux/actions/auth";
 import { StatusModel } from "@/models/StatusModel";
+import { changePassword, signout } from "@/utils/redux/actions/user";
+import { UserChangePasswordModel } from "@/models/UserChangePasswordModel";
 
 const AccountPage = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ const AccountPage = () => {
     email: "",
   };
 
-  const [formData, setFormData] = useState<any>(defaultValues);
+  const [formData, setFormData] = useState<UserChangePasswordModel>(defaultValues);
   const { status } = useAppSelector((state: any) => state.reducer);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

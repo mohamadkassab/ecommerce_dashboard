@@ -9,6 +9,7 @@ export interface UserModel {
     phone: string;
     address?: string;
     roles?: RoleWithoutPermissionsModel[];
+    password?: string;
     updatedAt?: Date;
     updatedBy?: Date;
     failedLoginAttempts: number;

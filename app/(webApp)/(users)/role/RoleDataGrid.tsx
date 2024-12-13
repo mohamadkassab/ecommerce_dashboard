@@ -412,7 +412,7 @@ const RoleDataGrid = () => {
             })}
 
             <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
             >
               <Button
                 variant="outlined"
@@ -528,7 +528,7 @@ const RoleDataGrid = () => {
             })}
 
             <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
             >
               <Button
                 variant="outlined"

@@ -337,7 +337,7 @@ const CategoryDataGrid = () => {
             })}
 
             <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
             >
                {/* Cancel Button */}
               <Button
@@ -451,7 +451,7 @@ const CategoryDataGrid = () => {
             })}
 
             <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
             >
               {/* Cancel Button */}
               <Button

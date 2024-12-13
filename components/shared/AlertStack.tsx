@@ -5,9 +5,9 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import { useAppDispatch, useAppSelector } from '@/utils/redux/hooks';
 import LoadingComponent from './LoadingComponent';
-import { setIdle } from '@/utils/redux/actions/auth';
-import CloseIcon from '@mui/icons-material/Close'; // Import the Close icon
+import CloseIcon from '@mui/icons-material/Close'; 
 import { StatusModel } from '@/models/StatusModel';
+import { setIdle } from '@/utils/redux/actions/user';
 
 const AlertStack: React.FC = () => {
     const { status, error } = useAppSelector((state: any) => state.reducer);

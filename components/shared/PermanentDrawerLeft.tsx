@@ -13,9 +13,8 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { DRAWERWIDTH, SECTIONS } from "@/utils/constants";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
-import { signout } from "@/utils/redux/actions/auth";
-import { setUser } from "@/utils/redux/actions/auth";
 import { StatusModel } from "@/models/StatusModel";
+import { setUser, signout } from "@/utils/redux/actions/user";
 
 interface PermanentDrawerProps {
   pathName: string;
@@ -182,7 +181,11 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
                       }, }}
                     >
                       <ListItemButton
-                        onClick={() => handleRouting(String(subsection?.path))}
+                          onClick={() => {
+                            if ('path' in subsection) {
+                              handleRouting(String(subsection.path));
+                            }
+                          }}
                         className="group min-h-[36px] justify-start px-2.5 text-white hover:text-primary-dark"
                         sx={{
                           "&:hover": {

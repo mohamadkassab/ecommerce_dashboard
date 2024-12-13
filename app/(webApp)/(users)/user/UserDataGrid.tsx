@@ -49,9 +49,7 @@ import { RoleWithoutPermissionsModel } from "@/models/RoleWithoutPermissionsMode
 
 
 // Start Dynamic components
-interface rowProps extends UserModel{
-  password: string;
-}
+interface rowProps extends UserModel{}
 
 const defaultValues = {
   userName: "",
@@ -120,8 +118,7 @@ const UserDataGrid = () => {
     { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
     { field: "failedLoginAttempts", headerName: "Failed logins",   type: "number",     align: "center",
       headerAlign: "center", flex: 1, editable: false },
-    { field: "isActive", headerName: "Is Active",     type: "boolean",      align: "center",
-      headerAlign: "center", flex: 1, editable: false },
+    { field: "isActive", headerName: "Is Active", type: "boolean", align: "center", headerAlign: "center", flex: 1, editable: false },
     {
       field: "actions",
       type: "actions",
@@ -382,7 +379,7 @@ const UserDataGrid = () => {
       showOnCreate: true,
       showOnEdit: true,
       component: (
-        <FormControl key={`CreateForm-roles`} fullWidth margin="normal">
+        <FormControl key={`Form-roles`} fullWidth margin="normal">
           <Autocomplete
             multiple
             disableCloseOnSelect
@@ -415,7 +412,7 @@ const UserDataGrid = () => {
       showOnCreate: true,
       component: (
         <TextField
-          key={`CreateForm-password`}
+          key={`Form-password`}
           name="password"
           label="Password"
           type={isPasswordVisible ? "text" : "password"}
@@ -463,7 +460,7 @@ const UserDataGrid = () => {
       showOnEdit: true,
       component:(
         <FormControlLabel
-        key={`CreateForm-isActive`}
+        key={`Form-isActive`}
         label="Is Active"
 
         control={
@@ -596,7 +593,7 @@ const UserDataGrid = () => {
             })}
 
             <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
             >
                {/* Cancel Button */}
               <Button
@@ -714,7 +711,7 @@ const UserDataGrid = () => {
             })}
 
             <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
             >
               {/* Cancel Button */}
               <Button

@@ -445,7 +445,7 @@ const CurrencyDataGrid = () => {
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    mt: 3,
+                    mt: 2,
                   }}
                 >
                   {/* Cancel Button */}
@@ -572,7 +572,7 @@ const CurrencyDataGrid = () => {
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    mt: 3,
+                    mt: 2,
                   }}
                 >
                   {/* Cancel Button */}

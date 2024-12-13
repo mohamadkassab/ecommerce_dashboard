@@ -438,8 +438,8 @@ const BrandDataGrid = () => {
 
           <Divider sx={{ mb: 1 }} />
           <form onSubmit={handleCreate}>
-            <div className="flex gap-6">
-              <div>
+            <div className="flex gap-6 justify-center">
+              <div className="flex flex-col w-full">
                 {columnsForms.map((item, index) => {
                   if (item?.showOnCreate) {
                     if (item?.component !== undefined) {
@@ -474,7 +474,8 @@ const BrandDataGrid = () => {
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    mt: 3,
+                    pt:2,
+                    mt: "auto",
                   }}
                 >
                   {/* Cancel Button */}
@@ -523,22 +524,27 @@ const BrandDataGrid = () => {
                 <Image
                   src={imagePreview || "/images/default-image.png"}
                   alt="Brand Image"
-                  className="w-full h-auto mt-2 rounded-md object-contain"
+                  className="w-full h-auto mt-2 rounded-md object-contain max-w-[200px] max-h-[250px]"
                   width={300}
                   height={300}
                 />
-                <Box
-                  id="logoFile"
-                  component="input"
-                  name="logoFile"
-                  required={!formData?.logoFile}
-                  type="file"
-                  onChange={handleChangeFile}
-                  accept="image/*"
-                  sx={{
-                    display: "block",
-                  }}
-                />
+                  <label 
+                    htmlFor="logoFile" 
+                    className="mt-auto cursor-pointer px-4 py-2 mt-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
+                  >
+                    Choose Image
+                  </label>
+  
+                    <input
+                      id="logoFile"
+                      name="logoFile"
+                      required={!formData?.logoFile}
+                      type="file"
+                      onChange={handleChangeFile}
+                      accept="image/*"
+                      className="hidden" // Hide the native file input
+                    />
+
               </div>
             </div>
           </form>
@@ -585,8 +591,8 @@ const BrandDataGrid = () => {
           </Typography>
           <Divider sx={{ mb: 1 }} />
           <form onSubmit={handleUpdate}>
-            <div className="flex gap-6">
-              <div>
+            <div className="flex gap-6 justify-center">
+              <div className="flex flex-col w-full">
                 {columnsForms.map((item, index) => {
                   if (item?.showOnEdit) {
                     if (item?.component !== undefined) {
@@ -621,7 +627,8 @@ const BrandDataGrid = () => {
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    mt: 3,
+                    pt:2,
+                    mt: "auto",
                   }}
                 >
                   {/* Cancel Button */}
@@ -670,22 +677,26 @@ const BrandDataGrid = () => {
                 <Image
                   src={imagePreview || "/images/default-image.png"}
                   alt="Brand Image"
-                  className="w-full h-auto mt-2 rounded-md object-contain"
+                  className="w-full h-auto mt-2 rounded-md object-contain max-w-[200px] max-h-[250px]"
                   width={300}
                   height={300}
                 />
-                <Box
-                  id="logoFile"
-                  component="input"
-                  name="logoFile"
-                  required={!formData?.logoFile}
-                  type="file"
-                  onChange={handleChangeFile}
-                  accept="image/*"
-                  sx={{
-                    display: "block",
-                  }}
-                />
+                 <label 
+                    htmlFor="logoFile" 
+                    className="mt-auto cursor-pointer px-4 py-2 mt-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
+                  >
+                    Choose Image
+                  </label>
+                  
+                  <input
+                    id="logoFile"
+                    name="logoFile"
+                    required={!formData?.logoFile}
+                    type="file"
+                    onChange={handleChangeFile}
+                    accept="image/*"
+                    className="hidden" // Hide the native file input
+                  />
               </div>
             </div>
           </form>

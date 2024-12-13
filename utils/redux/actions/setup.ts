@@ -1,4 +1,4 @@
-import { createAttributeService, createBrandService, createCategoryService, createCountryService, createCurrencyService, createPaymentMService, createSeasonService, createSectionService, createShippingMService, createSupplierService, createTagService, createYearService, deleteAttributeService, deleteBrandService, deleteCategoryService, deleteCountryService, deleteCurrencyService, deletePaymentMService, deleteSeasonService, deleteSectionService, deleteShippingMService, deleteSupplierService, deleteTagService, deleteYearService, getAllAttributesService, getAllBrandsService, getAllCategoriesService, getAllCountriesService, getAllCurrenciesService, getAllPaymentMService, getAllSeasonsService, getAllSectionsService, getAllShippingMService, getAllSuppliersService, getAllTagsService, getAllYearsService, updateAttributeService, updateBrandService, updateCategoryService, updateCountryService, updateCurrencyService, updatePaymentMService, updateSeasonService, updateSectionService, updateShippingMService, updateSupplierService, updateTagService, updateYearService } from "@/services/setupService";
+import { createAttributeService, createBrandService, createCategoryService, createCountryService, createCurrencyService, createSeasonService, createSectionService, createSupplierService, createTagService, createYearService, deleteAttributeService, deleteBrandService, deleteCategoryService, deleteCountryService, deleteCurrencyService, deleteSeasonService, deleteSectionService, deleteSupplierService, deleteTagService, deleteYearService, getAllAttributesService, getAllBrandsService, getAllCategoriesService, getAllCountriesService, getAllCurrenciesService, getAllPaymentMService, getAllSeasonsService, getAllSectionsService, getAllShippingMService, getAllSuppliersService, getAllTagsService, getAllYearsService, updateAttributeService, updateBrandService, updateCategoryService, updateCountryService, updateCurrencyService, updatePaymentMService, updateSeasonService, updateSectionService, updateShippingMService, updateSupplierService, updateTagService, updateYearService } from "@/services/setupService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 //+------------------------------------------------------------------+
@@ -228,14 +228,6 @@ export const getAllShippingM = createAsyncThunk('getAllShippingM', async () => {
   const response = await getAllShippingMService();
   return response;
 });
-export const createShippingM = createAsyncThunk('createShippingM', async (formData: any ) => {
-  const updatedFormData = new FormData();
-  Object.keys(formData).forEach(key => {
-    updatedFormData.append(key, formData[key]);
-  });
-  const response = await createShippingMService(updatedFormData);
-  return response;
-});
 export const updateShippingM = createAsyncThunk('updateShippingM', async (formData: any) => {
   const updatedFormData = new FormData();
   Object.keys(formData).forEach(key => {
@@ -244,10 +236,7 @@ export const updateShippingM = createAsyncThunk('updateShippingM', async (formDa
   const response = await updateShippingMService(updatedFormData);
   return response;
 });
-export const deleteShippingM = createAsyncThunk('deleteShippingM', async (id: number) => {
-  const response = await deleteShippingMService(id);
-  return response;
-});
+
 
 //+------------------------------------------------------------------+
 //| Payment method                                           
@@ -256,24 +245,12 @@ export const getAllPaymentM = createAsyncThunk('getAllPaymentM', async () => {
   const response = await getAllPaymentMService();
   return response;
 });
-export const createPaymentM = createAsyncThunk('createPaymentM', async (formData: any ) => {
-  const updatedFormData = new FormData();
-  Object.keys(formData).forEach(key => {
-    updatedFormData.append(key, formData[key]);
-  });
-  const response = await createPaymentMService(updatedFormData);
-  return response;
-});
 export const updatePaymentM = createAsyncThunk('updatePaymentM', async (formData: any) => {
   const updatedFormData = new FormData();
   Object.keys(formData).forEach(key => {
     updatedFormData.append(key, formData[key]);
   });
   const response = await updatePaymentMService(updatedFormData);
-  return response;
-});
-export const deletePaymentM = createAsyncThunk('deletePaymentM', async (id: number) => {
-  const response = await deletePaymentMService(id);
   return response;
 });
 

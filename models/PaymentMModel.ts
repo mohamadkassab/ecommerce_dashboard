@@ -1,8 +1,8 @@
 export interface PaymentMModel {
-    id: number;
+    id?: number;
     name: string;
-    iconFile?: File;
-    updatedAt: Date;
+    iconFile?: File | null;
+    updatedAt?: Date;
     updatedBy?: string;
     isActive: boolean;
   }

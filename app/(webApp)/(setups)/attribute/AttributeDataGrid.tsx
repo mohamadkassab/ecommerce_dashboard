@@ -396,7 +396,7 @@ const AttributeDataGrid = () => {
             })}
 
             <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
             >
                {/* Cancel Button */}
               <Button
@@ -513,7 +513,7 @@ const AttributeDataGrid = () => {
             })}
 
             <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
             >
               {/* Cancel Button */}
               <Button
