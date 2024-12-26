@@ -6,7 +6,7 @@ import { StatusModel } from "@/models/StatusModel";
 import { changePassword, signout } from "@/utils/redux/actions/user";
 import { UserChangePasswordModel } from "@/models/UserChangePasswordModel";
 
-const AccountPage = () => {
+const Page = () => {
   const dispatch = useAppDispatch();
   const defaultValues = {
     oldPassword: "",
@@ -122,4 +122,4 @@ const AccountPage = () => {
   );
 };
 
-export default AccountPage;
+export default Page;

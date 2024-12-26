@@ -1,10 +1,7 @@
 "use client"
-
 import UserDataGrid from "./UserDataGrid";
 
-
-export default function UserPage() {
-
+export default function Page() {
   return(
     <UserDataGrid/>
   );

@@ -1,138 +1,14 @@
-import { createAttributeService, createBrandService, createCategoryService, createCountryService, createCurrencyService, createSeasonService, createSectionService, createSupplierService, createTagService, createYearService, deleteAttributeService, deleteBrandService, deleteCategoryService, deleteCountryService, deleteCurrencyService, deleteSeasonService, deleteSectionService, deleteSupplierService, deleteTagService, deleteYearService, getAllAttributesService, getAllBrandsService, getAllCategoriesService, getAllCountriesService, getAllCurrenciesService, getAllPaymentMService, getAllSeasonsService, getAllSectionsService, getAllShippingMService, getAllSuppliersService, getAllTagsService, getAllYearsService, updateAttributeService, updateBrandService, updateCategoryService, updateCountryService, updateCurrencyService, updatePaymentMService, updateSeasonService, updateSectionService, updateShippingMService, updateSupplierService, updateTagService, updateYearService } from "@/services/setupService";
+import { AttributeModel } from "@/models/AttributeModel";
+import { BrandModel } from "@/models/BrandModel";
+import { CategoryModel } from "@/models/CategoryModel";
+import { CountryModel } from "@/models/CountryModel";
+import { SeasonModel } from "@/models/SeasonModel";
+import { SectionModel } from "@/models/SectionModel";
+import { TagModel } from "@/models/TagModel";
+import { createAttributeService, createBrandService, createCategoryService, createCountryService, createCurrencyService, createSeasonService, createSectionService, createShippingMService, createSupplierService, createTagService, deleteAttributeService, deleteBrandService, deleteCategoryService, deleteCurrencyService, deleteSeasonService, deleteSectionService, deleteSupplierService, deleteTagService, getAllAttributesService, getAllBrandsService, getAllCategoriesService, getAllCountriesService, getAllCurrenciesService, getAllPaymentMService, getAllSeasonsService, getAllSectionsService, getAllShippingMService, getAllSuppliersService, getAllTagsService, updateAttributeService, updateBrandService, updateCategoryService, updateCountryService, updateCurrencyService, updatePaymentMService, updateSeasonService, updateSectionService, updateShippingMService, updateSupplierService, updateTagService } from "@/services/setupService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-//+------------------------------------------------------------------+
-//| Category                                           
-//+------------------------------------------------------------------+
-export const getAllCategories = createAsyncThunk('getAllCategories', async () => {
-    const response = await getAllCategoriesService();
-    return response;
-});
-export const createCategory = createAsyncThunk('createCategory', async (formData: any ) => {
-  const response = await createCategoryService(formData);
-  return response;
-});
-export const updateCategory = createAsyncThunk('updateCategory', async (formData: any ) => {
-  const response = await updateCategoryService(formData);
-  return response;
-});
-export const deleteCategory = createAsyncThunk('deleteCategory', async (id: number) => {
-  const response = await deleteCategoryService(id);
-  return response;
-});
 
-//+------------------------------------------------------------------+
-//| Section                                           
-//+------------------------------------------------------------------+
-export const getAllSections = createAsyncThunk('getAllSections', async () => {
-    const response = await getAllSectionsService();
-    return response;
-});
-export const createSection = createAsyncThunk('createSection', async (formData: any ) => {
-  const updatedFormData = {
-    ...formData,
-    categories: formData.categories.map((item: any) => item.id)
-  };
-  const response = await createSectionService(updatedFormData);
-  return response;
-});
-export const updateSection = createAsyncThunk('updateSection', async (formData: any ) => {
-  const updatedFormData = {
-    ...formData,
-    categories: formData.categories.map((item: any) => item.id)
-  };
-  const response = await updateSectionService(updatedFormData);
-  return response;
-});
-export const deleteSection = createAsyncThunk('deleteSection', async (id: number) => {
-  const response = await deleteSectionService(id);
-  return response;
-});
-
-//+------------------------------------------------------------------+
-//| Season                                           
-//+------------------------------------------------------------------+
-export const getAllSeasons = createAsyncThunk('getAllSeasons', async () => {
-    const response = await getAllSeasonsService();
-    return response;
-});
-export const createSeason = createAsyncThunk('createSeason', async (formData: any ) => {
-  const response = await createSeasonService(formData);
-  return response;
-});
-export const updateSeason = createAsyncThunk('updateSeason', async (formData: any ) => {
-  const response = await updateSeasonService(formData);
-  return response;
-});
-export const deleteSeason = createAsyncThunk('deleteSeason', async (id: number) => {
-  const response = await deleteSeasonService(id);
-  return response;
-});
-
-//+------------------------------------------------------------------+
-//| Country                                           
-//+------------------------------------------------------------------+
-export const getAllCountries = createAsyncThunk('getAllCountries', async () => {
-    const response = await getAllCountriesService();
-    return response;
-});
-export const getAllCountryNames = createAsyncThunk('getAllCountryNames', async () => {
-  const response = await getAllCountriesService();
-  return response;
-});
-export const createCountry = createAsyncThunk('createCountry', async (formData: any ) => {
-  const response = await createCountryService(formData);
-  return response;
-});
-export const updateCountry = createAsyncThunk('updateCountry', async (formData: any ) => {
-  const response = await updateCountryService(formData);
-  return response;
-});
-export const deleteCountry = createAsyncThunk('deleteCountry', async (id: number) => {
-  const response = await deleteCountryService(id);
-  return response;
-});
-
-//+------------------------------------------------------------------+
-//| Year                                           
-//+------------------------------------------------------------------+
-export const getAllYears = createAsyncThunk('getAllYears', async () => {
-  const response = await getAllYearsService();
-  return response;
-});
-export const createYear = createAsyncThunk('createYear', async (formData: any ) => {
-const response = await createYearService(formData);
-return response;
-});
-export const updateYear = createAsyncThunk('updateYear', async (formData: any ) => {
-const response = await updateYearService(formData);
-return response;
-});
-export const deleteYear = createAsyncThunk('deleteYear', async (id: number) => {
-const response = await deleteYearService(id);
-return response;
-});
-
-//+------------------------------------------------------------------+
-//| Tag                                           
-//+------------------------------------------------------------------+
-export const getAllTags = createAsyncThunk('getAllTags', async () => {
-  const response = await getAllTagsService();
-  return response;
-});
-export const createTag = createAsyncThunk('createTag', async (formData: any ) => {
-  const response = await createTagService(formData);
-  return response;
-});
-export const updateTag= createAsyncThunk('updateTag', async (formData: any ) => {
-  const response = await updateTagService(formData);
-  return response;
-});
-export const deleteTag= createAsyncThunk('deleteTag', async (id: number) => {
-  const response = await deleteTagService(id);
-  return response;
-});
-  
 //+------------------------------------------------------------------+
 //| Attribute                                           
 //+------------------------------------------------------------------+
@@ -140,11 +16,11 @@ export const getAllAttributes = createAsyncThunk('getAllAttributes', async () =>
   const response = await getAllAttributesService();
   return response;
 });
-export const createAttribute = createAsyncThunk('createAttribute', async (formData: any ) => {
+export const createAttribute = createAsyncThunk('createAttribute', async (formData: AttributeModel ) => {
   const response = await createAttributeService(formData);
   return response;
 });
-export const updateAttribute= createAsyncThunk('updateAttribute', async (formData: any ) => {
+export const updateAttribute= createAsyncThunk('updateAttribute', async (formData: AttributeModel ) => {
   const response = await updateAttributeService(formData);
   return response;
 });
@@ -157,6 +33,10 @@ export const deleteAttribute= createAsyncThunk('deleteAttribute', async (id: num
 //| Brand                                           
 //+------------------------------------------------------------------+
 export const getAllBrands = createAsyncThunk('getAllBrands', async () => {
+  const response = await getAllBrandsService();
+  return response;
+});
+export const getAllBrandNames = createAsyncThunk('getAllBrandNames', async () => {
   const response = await getAllBrandsService();
   return response;
 });
@@ -182,6 +62,50 @@ export const deleteBrand = createAsyncThunk('deleteBrand', async (id: number) =>
 });
 
 //+------------------------------------------------------------------+
+//| Category                                           
+//+------------------------------------------------------------------+
+export const getAllCategories = createAsyncThunk('getAllCategories', async () => {
+  const response = await getAllCategoriesService();
+  return response;
+});
+export const getAllCategoryNames = createAsyncThunk('getAllCategoryNames', async () => {
+  const response = await getAllCategoriesService();
+  return response;
+});
+export const createCategory = createAsyncThunk('createCategory', async (formData: CategoryModel) => {
+  const response = await createCategoryService(formData);
+  return response;
+});
+export const updateCategory = createAsyncThunk('updateCategory', async (formData: CategoryModel) => {
+  const response = await updateCategoryService(formData);
+  return response;
+});
+export const deleteCategory = createAsyncThunk('deleteCategory', async (id: number) => {
+  const response = await deleteCategoryService(id);
+  return response;
+});
+
+//+------------------------------------------------------------------+
+//| Country                                           
+//+------------------------------------------------------------------+
+export const getAllCountries = createAsyncThunk('getAllCountries', async () => {
+  const response = await getAllCountriesService();
+  return response;
+});
+export const getAllCountryNames = createAsyncThunk('getAllCountryNames', async () => {
+  const response = await getAllCountriesService();
+  return response;
+});
+export const createCountry = createAsyncThunk('createCountry', async (formData: CountryModel ) => {
+  const response = await createCountryService(formData);
+  return response;
+});
+export const updateCountry = createAsyncThunk('updateCountry', async (formData: CountryModel ) => {
+  const response = await updateCountryService(formData);
+  return response;
+});
+
+//+------------------------------------------------------------------+
 //| Currency                                           
 //+------------------------------------------------------------------+
 export const getAllCurrencies = createAsyncThunk('getAllCurrencies', async () => {
@@ -202,9 +126,105 @@ export const deleteCurrency = createAsyncThunk('deleteCurrency', async (id: numb
 });
 
 //+------------------------------------------------------------------+
+//| Payment method                                           
+//+------------------------------------------------------------------+
+export const getAllPaymentM = createAsyncThunk('getAllPaymentM', async () => {
+  const response = await getAllPaymentMService();
+  return response;
+});
+export const updatePaymentM = createAsyncThunk('updatePaymentM', async (formData: any) => {
+  const updatedFormData = new FormData();
+  Object.keys(formData).forEach(key => {
+    updatedFormData.append(key, formData[key]);
+  });
+  const response = await updatePaymentMService(updatedFormData);
+  return response;
+});
+
+//+------------------------------------------------------------------+
+//| Season                                           
+//+------------------------------------------------------------------+
+export const getAllSeasons = createAsyncThunk('getAllSeasons', async () => {
+  const response = await getAllSeasonsService();
+  return response;
+});
+export const getAllSeasonNames = createAsyncThunk('getAllSeasonNames', async () => {
+  const response = await getAllSeasonsService();
+  return response;
+});
+export const createSeason = createAsyncThunk('createSeason', async (formData: SeasonModel ) => {
+  const response = await createSeasonService(formData);
+  return response;
+});
+export const updateSeason = createAsyncThunk('updateSeason', async (formData: SeasonModel ) => {
+  const response = await updateSeasonService(formData);
+  return response;
+});
+export const deleteSeason = createAsyncThunk('deleteSeason', async (id: number) => {
+  const response = await deleteSeasonService(id);
+  return response;
+});
+
+//+------------------------------------------------------------------+
+//| Section                                           
+//+------------------------------------------------------------------+
+export const getAllSections = createAsyncThunk('getAllSections', async () => {
+  const response = await getAllSectionsService();
+  return response;
+});
+export const createSection = createAsyncThunk('createSection', async (formData: SectionModel ) => {
+  const updatedFormData = {
+    ...formData,
+    categories: formData?.categories?.map((item: any) => item.id)
+  };
+  const response = await createSectionService(updatedFormData);
+  return response;
+});
+export const updateSection = createAsyncThunk('updateSection', async (formData: SectionModel ) => {
+  const updatedFormData = {
+    ...formData,
+    categories: formData?.categories?.map((item: any) => item.id)
+  };
+  const response = await updateSectionService(updatedFormData);
+  return response;
+});
+export const deleteSection = createAsyncThunk('deleteSection', async (id: number) => {
+  const response = await deleteSectionService(id);
+  return response;
+});
+
+//+------------------------------------------------------------------+
+//| Shipping method                                           
+//+------------------------------------------------------------------+
+export const getAllShippingM = createAsyncThunk('getAllShippingM', async () => {
+  const response = await getAllShippingMService();
+  return response;
+});
+export const createShippingM = createAsyncThunk('createShippingM', async (formData: any) => {
+  const updatedFormData = new FormData();
+  Object.keys(formData).forEach(key => {
+    updatedFormData.append(key, formData[key]);
+  });
+  const response = await createShippingMService(updatedFormData);
+  return response;
+});
+export const updateShippingM = createAsyncThunk('updateShippingM', async (formData: any) => {
+  const updatedFormData = new FormData();
+  Object.keys(formData).forEach(key => {
+    updatedFormData.append(key, formData[key]);
+  });
+  const response = await updateShippingMService(updatedFormData);
+  return response;
+});
+
+//+------------------------------------------------------------------+
 //| Supplier                                           
 //+------------------------------------------------------------------+
 export const getAllSuppliers = createAsyncThunk('getAllSuppliers', async () => {
+  const response = await getAllSuppliersService();
+  return response;
+});
+export const getAllSupplierNames = createAsyncThunk('getAllSupplierNames', async () => {
   const response = await getAllSuppliersService();
   return response;
 });
@@ -222,36 +242,36 @@ export const deleteSupplier = createAsyncThunk('deleteSupplier', async (id: numb
 });
 
 //+------------------------------------------------------------------+
-//| Shipping method                                           
+//| Tag                                           
 //+------------------------------------------------------------------+
-export const getAllShippingM = createAsyncThunk('getAllShippingM', async () => {
-  const response = await getAllShippingMService();
+export const getAllTags = createAsyncThunk('getAllTags', async () => {
+  const response = await getAllTagsService();
   return response;
 });
-export const updateShippingM = createAsyncThunk('updateShippingM', async (formData: any) => {
-  const updatedFormData = new FormData();
-  Object.keys(formData).forEach(key => {
-    updatedFormData.append(key, formData[key]);
-  });
-  const response = await updateShippingMService(updatedFormData);
+export const getAllTagNames = createAsyncThunk('getAllTagNames', async () => {
+  const response = await getAllTagsService();
   return response;
 });
+export const createTag = createAsyncThunk('createTag', async (formData: TagModel ) => {
+  const response = await createTagService(formData);
+  return response;
+});
+export const updateTag= createAsyncThunk('updateTag', async (formData: TagModel ) => {
+  const response = await updateTagService(formData);
+  return response;
+});
+export const deleteTag= createAsyncThunk('deleteTag', async (id: number) => {
+  const response = await deleteTagService(id);
+  return response;
+});
+  
 
 
-//+------------------------------------------------------------------+
-//| Payment method                                           
-//+------------------------------------------------------------------+
-export const getAllPaymentM = createAsyncThunk('getAllPaymentM', async () => {
-  const response = await getAllPaymentMService();
-  return response;
-});
-export const updatePaymentM = createAsyncThunk('updatePaymentM', async (formData: any) => {
-  const updatedFormData = new FormData();
-  Object.keys(formData).forEach(key => {
-    updatedFormData.append(key, formData[key]);
-  });
-  const response = await updatePaymentMService(updatedFormData);
-  return response;
-});
+
+
+
+
+
+
 
 

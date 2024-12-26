@@ -2,7 +2,7 @@
 
 import CategoryDataGrid from "./CategoryDataGrid";
 
-export default function UserPage() {
+export default function Page() {
 
   return(
     <CategoryDataGrid/>

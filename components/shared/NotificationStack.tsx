@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { StatusModel } from '@/models/StatusModel';
 import { setIdle } from '@/utils/redux/actions/user';
 
-const AlertStack: React.FC = () => {
+const NotificationStack: React.FC = () => {
     const { status, error } = useAppSelector((state: any) => state.reducer);
     const [errorMessage, setErrorMessage] = useState(null);
     const [showError, setShowError] = useState(status === StatusModel.FAILED);
@@ -81,11 +81,11 @@ const AlertStack: React.FC = () => {
                     </Alert>
                 )}
             </Stack>
-            { status === StatusModel.LOADING && (
+            { status == StatusModel.LOADING && (
                 <LoadingComponent />
             )}
         </Box>
     );
 };
 
-export default AlertStack;
+export default NotificationStack;

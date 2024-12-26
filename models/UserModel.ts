@@ -12,6 +12,6 @@ export interface UserModel {
     password?: string;
     updatedAt?: Date;
     updatedBy?: Date;
-    failedLoginAttempts: number;
+    failedLoginAttempts?: number;
     isActive: boolean;
   }

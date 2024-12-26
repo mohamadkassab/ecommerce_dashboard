@@ -5,11 +5,11 @@
 
   
   const LoadingElement = () => {
-    const pathname = usePathname();
-    const ml = SECTIONS.find(section => section.path === pathname)?.protected ? DRAWERWIDTH / 2 : 0 ; 
+    // const pathname = usePathname();
+    // const ml = SECTIONS.find(section => section.path === pathname)?.protected ? DRAWERWIDTH / 2 : 0 ; 
     
     return (
-      <div className={`ml-[${ml}px] flex justify-center items-center h-screen w-screen fixed top-0 left-0 bg-white bg-opacity-50 z-50`}>
+      <div className={`ml-[120px] flex justify-center items-center h-screen w-screen fixed top-0 left-0 bg-white bg-opacity-50 z-50`}>
         <div className="flex flex-col items-center justify-center p-4 rounded-lg shadow-lg">
         <div className="flex space-x-4">
           <div className="w-4 h-4 rounded-full animate-color-change-1"></div>

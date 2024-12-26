@@ -3,7 +3,7 @@
 import SectionDataGrid from "./SectionDataGrid";
 
 
-export default function UserPage() {
+export default function Page() {
 
   return(
     <SectionDataGrid/>

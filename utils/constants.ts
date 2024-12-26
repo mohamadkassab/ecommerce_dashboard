@@ -1,45 +1,47 @@
 
 export const DRAWERWIDTH = 240;
-
 export const AUTHTOKEN = "ecommerce_api_authToken";
-
 export const GLOBAL_REQUEST_TIMEOUT = 10000;
+export const maxSize_2MB = 2 * 1024 * 1024
+export const maxSize_5MB = 5 * 1024 * 1024
 
 export const ROUTES = {
+  ACCOUNT: '/account',
   ATTRIBUTE: '/attribute',
   BRAND: '/brand',
   CATEGORY: '/category',
   COUNTRY: '/country',
   CURRENCY: '/currency',
+  DASHBOARD: '/dashboard',
   KPI: '/kpi',
   KPIADD: '/kpi/add',
   PAYMENTM: '/payment-method',
   PERMISSION: '/permission',
+  PRODUCT: '/product',
+  PRODUCTCONTENT: '/product-content',
   ROOT: '/',
   ROLE: '/role',
   SEASON: '/season',
   SECTION: '/section',
   SHIPPINGM: '/shipping-method',
+  SIGNIN: '/signin',
   SUPPLIER: '/supplier',
   TAG: '/tag',
+  TRANSACTION: '/transaction',
   USER: '/user',
-  YEAR: '/year',
-  DASHBOARD: '/dashboard',
-  ACCOUNT: '/account',
-  SIGNIN: '/signin',
 };
 
 export const SECTIONS = [
   {
     title: 'Dashboard',
-    path: ROUTES.DASHBOARD,
     protected: true,
+    path: ROUTES.DASHBOARD,
     requiredPermissions: [],
   },
   {
     title: 'KPI',
-    path: ROUTES.KPI,
     protected: true,
+    path: ROUTES.KPI,
     requiredPermissions: [""],
   },
   {
@@ -50,22 +52,25 @@ export const SECTIONS = [
       {
         title: 'product',
         protected: true,
+        path: ROUTES.PRODUCT,
         requiredPermissions: [""],
       },
       {
-        title: 'product info',
+        title: 'product content',
         protected: true,
+        path: ROUTES.PRODUCTCONTENT,
+        requiredPermissions: [""],
+      },
+      {
+        title: 'transaction',
+        protected: true,
+        path: ROUTES.TRANSACTION,
         requiredPermissions: [""],
       },
     ],
   },
   {
     title: 'Orders',
-  },
-  {
-    title: 'Transaction',
-    protected: true,
-    requiredPermissions: [""],
   },
   {
     title: 'User',
@@ -102,7 +107,6 @@ export const SECTIONS = [
       { title: 'shipping method', protected: true, path:ROUTES.SHIPPINGM, requiredPermissions: [""] },
       { title: 'supplier', protected: true, path:ROUTES.SUPPLIER, requiredPermissions: [""] },
       { title: 'tag', protected: true, path:ROUTES.TAG, requiredPermissions: [""] },
-      { title: 'year', protected: true, path:ROUTES.YEAR, requiredPermissions: [""] },
     ],
   },
   {
@@ -198,6 +202,29 @@ export const APIROUTES = {
   GETALLPERMISSIONS : "/User/GetAllPermissions",
 
   //+------------------------------------------------------------------+
+  //| Product                                           
+  //+------------------------------------------------------------------+
+  GETALLPRODUCTS : "/Product/GetAllProducts",
+  CREATEPRODUCT : "/Product/CreateProduct",
+  UPDATEPRODUCT : "/Product/UpdateProduct",
+
+  //+------------------------------------------------------------------+
+  //| Product content                                        
+  //+------------------------------------------------------------------+
+  GETALLPRODUCTCONTENTS : "/Product/GetAllProductContents",
+  GETALLPRODUCTMEDIA : "/Product/GetProductMedia",
+  CREATEPRODUCTCONTENT : "/Product/CreateProductContent",
+  UPDATEPRODUCTCONTENT : "/Product/UpdateProductContent",
+  
+  //+------------------------------------------------------------------+
+  //| Role                                           
+  //+------------------------------------------------------------------+
+  GETALLROLES : "/User/GetAllRolesAndPermissions",
+  CREATEROLE : "/User/CreateRole",
+  UPDATEROLE: "/User/UpdateRole",
+  DELETEROLE: "/User/DeleteRole",
+
+  //+------------------------------------------------------------------+
   //| Season                                          
   //+------------------------------------------------------------------+
   GETALLSEASONS: "/Setup/GetAllSeasons",
@@ -217,6 +244,7 @@ export const APIROUTES = {
   //| Shipping method                                          
   //+------------------------------------------------------------------+
   GETALLSHIPPINGM: "/Setup/GetAllShippingM",
+  CREATESHIPPINGM: "/Setup/CreateShippingM",
   UPDATESHIPPINGM: "/Setup/UpdateShippingM",
 
   //+------------------------------------------------------------------+
@@ -236,6 +264,12 @@ export const APIROUTES = {
   DELETETAG: "/Setup/DeleteTag",
 
   //+------------------------------------------------------------------+
+  //| Transaction                                          
+  //+------------------------------------------------------------------+
+  GETALLTRANSACTIONS: "/Product/GetAllTransactions",
+  CREATETRANSACTION: "/Product/CreateTransaction",
+
+  //+------------------------------------------------------------------+
   //| User                                           
   //+------------------------------------------------------------------+
   SIGNIN : "/User/SignIn",
@@ -245,22 +279,6 @@ export const APIROUTES = {
   DELETEUSER: "/User/DeleteUser",
   CHANGEPASSWORD: "/User/ChangePassword",
   GETALLUSERS : "/User/GetAllUsersWithRoles",
-
-  //+------------------------------------------------------------------+
-  //| Role                                           
-  //+------------------------------------------------------------------+
-  GETALLROLES : "/User/GetAllRolesAndPermissions",
-  CREATEROLE : "/User/CreateRole",
-  UPDATEROLE: "/User/UpdateRole",
-  DELETEROLE: "/User/DeleteRole",
-
-  //+------------------------------------------------------------------+
-  //| Year                                          
-  //+------------------------------------------------------------------+
-  GETALLYEARS: "/Setup/GetAllYears",
-  CREATEYEAR: "/Setup/CreateYear",
-  UPDATEYEAR: "/Setup/UpdateYear",
-  DELETEYEAR: "/Setup/DeleteYear",
 }
 
 export const DUMMYDATA = {

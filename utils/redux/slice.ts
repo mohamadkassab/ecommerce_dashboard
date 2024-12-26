@@ -7,7 +7,7 @@ import { createChart, deleteChart, getAllCharts } from './actions/kpi';
 import { changePassword, createRole, createUser, deleteRole, deleteUser, getAllPermissions, getAllRoles, getAllUsers, setIdle, setUser, signin, signout, updateRole, updateUser } from './actions/user';
 import jwt from 'jsonwebtoken';
 import { StatusModel } from '@/models/StatusModel';
-import { createAttribute, createBrand, createCategory, createCountry, createCurrency, createSeason, createSection, createSupplier, createTag, createYear, deleteAttribute, deleteBrand, deleteCategory, deleteCountry, deleteCurrency, deleteSeason, deleteSection, deleteSupplier, deleteTag, deleteYear, getAllAttributes, getAllBrands, getAllCategories, getAllCountries, getAllCountryNames, getAllCurrencies, getAllPaymentM, getAllSeasons, getAllSections, getAllShippingM, getAllSuppliers, getAllTags, getAllYears, updateAttribute, updateBrand, updateCategory, updateCountry, updateCurrency, updatePaymentM, updateSeason, updateSection, updateShippingM, updateSupplier, updateTag, updateYear } from './actions/setup';
+import { createAttribute, createBrand, createCategory, createCountry, createCurrency, createSeason, createSection, createSupplier, createTag, deleteAttribute, deleteBrand, deleteCategory, deleteCurrency, deleteSeason, deleteSection, deleteSupplier, deleteTag, getAllAttributes, getAllBrandNames, getAllBrands, getAllCategories, getAllCategoryNames, getAllCountries, getAllCountryNames, getAllCurrencies, getAllPaymentM, getAllSeasonNames, getAllSeasons, getAllSections, getAllShippingM, getAllSupplierNames, getAllSuppliers, getAllTagNames, getAllTags, updateAttribute, updateBrand, updateCategory, updateCountry, updateCurrency, updatePaymentM, updateSeason, updateSection, updateShippingM, updateSupplier, updateTag } from './actions/setup';
 import { TokenModel } from '@/models/TokenModel';
 import { ChartModel } from '@/models/ChartModel';
 import { UserModel } from '@/models/UserModel';
@@ -17,12 +17,15 @@ import { CountryModel } from '@/models/CountryModel';
 import { CategoryModel } from '@/models/CategoryModel';
 import { SeasonModel } from '@/models/SeasonModel';
 import { SectionModel } from '@/models/SectionModel';
-import { YearModel } from '@/models/YearModel';
 import { TagModel } from '@/models/TagModel';
 import { AttributeModel } from '@/models/AttributeModel';
 import { BrandModel } from '@/models/BrandModel';
 import { ShippingMModel } from '@/models/ShippingMModel';
 import { PaymentMModel } from '@/models/PaymentMModel';
+import { createProduct, createProductContent, createTransaction, getAllProductContents, getAllProducts, getAllTransactions, getProductMedia, updateProduct, updateProductContent } from './actions/product';
+import { ProductModel } from '@/models/ProductModel';
+import { ProductContentModel } from '@/models/ProductContentModel';
+import { TransactionModel } from '@/models/Transaction';
 
 
 interface InitialState {
@@ -34,16 +37,24 @@ interface InitialState {
   allCountries?: CountryModel[];
   allCountryNames?: string[];
   allCategories?: CategoryModel[];
+  allCategoryNames?: string[];
   allSeasons?: SeasonModel[];
+  allSeasonNames?: string[];
   allSections?: SectionModel[];
-  allYears?: YearModel[];
   allTags?: TagModel[];
+  allTagNames?: string[];
   allAttributes?: AttributeModel[];
   allBrands?: BrandModel[];
+  allBrandNames?: string[];
   allCurrencies?: CurrencyModel[];
   allSuppliers?: SupplierModel[];
+  allSupplierNames?: string[];
   allShippingM?: ShippingMModel[];
   allPaymentM?: PaymentMModel[];
+  allProducts?: ProductModel[];
+  allProductContents?: ProductContentModel[];
+  allProductMedia?: File[];
+  allTransactions?: TransactionModel[];
   status: StatusModel;
   error: string | null | object;
 }
@@ -88,7 +99,7 @@ const handleAsyncAction = <T>(
     .addCase(action.fulfilled, (state, action) => {
       onSuccess(state, action);
       if (isErrorPayload(action.payload)) {
-        state.error = action.payload.error.message || "Failed";
+        state.error = action.payload.error.response.data.message || "Failed";
         state.status = StatusModel.FAILED;
       }else{
         state.status = StatusModel.SUCCESS;
@@ -113,7 +124,7 @@ const handleAsyncActionWithoutSuccess = <T>(
     .addCase(action.fulfilled, (state, action) => {
       onSuccess(state, action);
       if (isErrorPayload(action.payload)) {
-        state.error = action.payload.error.message || "Failed";
+        state.error = action.payload.error.response.data.message || "Failed";
         state.status = StatusModel.FAILED;
       }else{
         state.status = StatusModel.OK;
@@ -152,6 +163,11 @@ const slice = createSlice({
         state.allBrands = action.payload || [];
       }       
     });
+    handleAsyncActionWithoutSuccess(builder, getAllBrandNames, (state, action) => {
+      if (!action.payload.error) {
+        state.allBrandNames = (action.payload || []).map((item: any) => item?.name);
+      }     
+    });
     handleAsyncAction(builder, createBrand, () => {});
     handleAsyncAction(builder, updateBrand, () => {});
     handleAsyncAction(builder, deleteBrand, () => {});
@@ -163,6 +179,11 @@ const slice = createSlice({
       if (!action.payload.error) {
         state.allCategories = action.payload || [];
       }       
+    });
+    handleAsyncActionWithoutSuccess(builder, getAllCategoryNames, (state, action) => {
+      if (!action.payload.error) {
+        state.allCategoryNames = (action.payload || []).map((item: any) => item?.name);
+      }     
     });
     handleAsyncAction(builder, createCategory, () => {});
     handleAsyncAction(builder, updateCategory, () => {});
@@ -183,7 +204,6 @@ const slice = createSlice({
     });
     handleAsyncAction(builder, createCountry, () => {});
     handleAsyncAction(builder, updateCountry, () => {});
-    handleAsyncAction(builder, deleteCountry, () => {});
 
     //+------------------------------------------------------------------+
     //| Currency                                            
@@ -228,6 +248,33 @@ const slice = createSlice({
     });
 
     //+------------------------------------------------------------------+
+    //| Product                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllProducts, (state, action) => {
+      if (!action.payload.error) {
+        state.allProducts = action.payload || [];
+      }
+    });
+    handleAsyncAction(builder, createProduct, () => {});
+    handleAsyncAction(builder, updateProduct, () => {});
+
+    //+------------------------------------------------------------------+
+    //| Product content                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllProductContents, (state, action) => {
+      if (!action.payload.error) {
+        state.allProductContents = action.payload || [];
+      }
+    });
+    handleAsyncActionWithoutSuccess(builder, getProductMedia, (state, action) => {
+      if (!action.payload.error) {
+        state.allProductMedia = action.payload || [];
+      }
+    });
+    handleAsyncAction(builder, createProductContent, () => {});
+    handleAsyncAction(builder, updateProductContent, () => {});
+
+    //+------------------------------------------------------------------+
     //| Role                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
     //+------------------------------------------------------------------+
     handleAsyncActionWithoutSuccess(builder, getAllRoles, (state, action) => {
@@ -246,6 +293,11 @@ const slice = createSlice({
       if (!action.payload.error) {
         state.allSeasons = action.payload || [];
       }       
+    });
+    handleAsyncActionWithoutSuccess(builder, getAllSeasonNames, (state, action) => {
+      if (!action.payload.error) {
+        state.allSeasonNames = (action.payload || []).map((item: any) => item?.name);
+      }     
     });
     handleAsyncAction(builder, createSeason, () => {});
     handleAsyncAction(builder, updateSeason, () => {});
@@ -281,6 +333,11 @@ const slice = createSlice({
         state.allSuppliers = action.payload || [];
       }       
     });
+    handleAsyncActionWithoutSuccess(builder, getAllSupplierNames, (state, action) => {
+      if (!action.payload.error) {
+        state.allSupplierNames = (action.payload || []).map((item: any) => item?.name);
+      }     
+    });
     handleAsyncAction(builder, createSupplier, () => {});
     handleAsyncAction(builder, updateSupplier, () => {});
     handleAsyncAction(builder, deleteSupplier, () => {});
@@ -293,9 +350,24 @@ const slice = createSlice({
         state.allTags = action.payload || [];
       }       
     });
+    handleAsyncActionWithoutSuccess(builder, getAllTagNames, (state, action) => {
+      if (!action.payload.error) {
+        state.allTagNames = (action.payload || []).map((item: any) => item?.name);
+      }     
+    });
     handleAsyncAction(builder, createTag, () => {});
     handleAsyncAction(builder, updateTag, () => {});
     handleAsyncAction(builder, deleteTag, () => {});
+
+    //+------------------------------------------------------------------+
+    //| Transaction                                            
+    //+------------------------------------------------------------------+
+    handleAsyncActionWithoutSuccess(builder, getAllTransactions, (state, action) => {
+      if (!action.payload.error) {
+        state.allTransactions = action.payload || [];
+      }       
+    });
+    handleAsyncAction(builder, createTransaction, () => {});
 
     //+------------------------------------------------------------------+
     //| User                                            
@@ -354,18 +426,6 @@ const slice = createSlice({
     handleAsyncAction(builder, updateUser, () => {});
     handleAsyncAction(builder, deleteUser, () => {});
     handleAsyncAction(builder, changePassword, () => {}); 
-
-    //+------------------------------------------------------------------+
-    //| Year                                            
-    //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllYears, (state, action) => {
-      if (!action.payload.error) {
-        state.allYears = action.payload || [];
-      }       
-    });
-    handleAsyncAction(builder, createYear, () => {});
-    handleAsyncAction(builder, updateYear, () => {});
-    handleAsyncAction(builder, deleteYear, () => {});
   },
 });
 

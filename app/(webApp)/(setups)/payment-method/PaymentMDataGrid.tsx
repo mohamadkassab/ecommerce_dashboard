@@ -24,6 +24,7 @@ import {
   IconButton,
   FormControlLabel,
   Switch,
+  FormHelperText,
 } from "@mui/material";
 
 import {
@@ -61,12 +62,12 @@ import { ShippingMModel } from "@/models/ShippingMModel";
 import { PaymentMModel } from "@/models/PaymentMModel";
 
 // Start Dynamic components
-interface rowProps extends PaymentMModel{};
+interface rowProps extends PaymentMModel {}
 
 const defaultValues = {
   name: "",
   iconFile: null,
-  isActive: true
+  isActive: true,
 };
 
 const PaymentMDataGrid = () => {
@@ -103,7 +104,15 @@ const PaymentMDataGrid = () => {
     },
 
     { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
-    { field: "isActive", headerName: "Is Active", type: "boolean", align: "center", headerAlign: "center", flex: 1, editable: false },
+    {
+      field: "isActive",
+      headerName: "Is Active",
+      type: "boolean",
+      align: "center",
+      headerAlign: "center",
+      flex: 1,
+      editable: false,
+    },
     {
       field: "actions",
       type: "actions",
@@ -128,14 +137,18 @@ const PaymentMDataGrid = () => {
   // End Dynamic components
 
   const dispatch = useAppDispatch();
-  const {allPaymentM} = useAppSelector((state: any) => state.reducer); // Dynamic component
+  const { allPaymentM } = useAppSelector((state: any) => state.reducer); // Dynamic component
   const [imagePreview, setImagePreview] = React.useState<string | null>(null);
+  const [isFormSubmitted, setIsFormSubmitted] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
   const [refresh, setRefresh] = React.useState(false);
-  const {status} = useAppSelector((state: any) => state.reducer);
+  const { status } = useAppSelector((state: any) => state.reducer);
   const [loading, setLoading] = React.useState(false);
-  const handleOpenEdit = () => setOpenEdit(true);
+  const handleOpenEdit = () => {
+    setIsFormSubmitted(false);
+    setOpenEdit(true);
+  };
   const handleCloseEdit = () => setOpenEdit(false);
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
@@ -178,7 +191,7 @@ const PaymentMDataGrid = () => {
       };
     });
   };
-  
+
   const handleChangeBoolean = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     setFormData((prev: any) => ({
@@ -218,16 +231,6 @@ const PaymentMDataGrid = () => {
 
   const columnsForms = [
     {
-      field: "id",
-      caption: "Id",
-      type: "number",
-      required: false,
-      value: formData?.id,
-      onChange: handleChange,
-      showOnCreate: false,
-      showOnEdit: false,
-    },
-    {
       field: "name",
       caption: "Name",
       type: "text",
@@ -235,30 +238,36 @@ const PaymentMDataGrid = () => {
       value: formData?.name,
       onChange: handleChange,
       inputProps: {
-        minLength: 1,
         maxLength: 255,
       },
       showOnCreate: true,
       showOnEdit: true,
     },
-   {
-         showOnCreate: true,
-         showOnEdit: true,
-         component:(
-           <FormControlLabel
-           key={`Form-isActive`}
-           label="Is Active"
-   
-           control={
-             <Switch
-               name={`isActive`}
-               checked={Boolean(formData?.isActive)} 
-               onChange={(e) => handleChangeBoolean(e)}
-             />
-           }
-         />
-         )
-       },
+    {
+      showOnCreate: true,
+      showOnEdit: true,
+      component: (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <FormControlLabel
+            key={`form-is-active`}
+            label="Is Active"
+            control={
+              <Switch
+                name={`isActive`}
+                checked={Boolean(formData?.isActive)}
+                onChange={(e) => handleChangeBoolean(e)}
+              />
+            }
+          />
+        </Box>
+      ),
+    },
   ];
   // End Dynamic components
 
@@ -380,7 +389,7 @@ const PaymentMDataGrid = () => {
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    pt:2,
+                    pt: 2,
                     mt: "auto",
                   }}
                 >
@@ -408,6 +417,9 @@ const PaymentMDataGrid = () => {
                     type="submit"
                     variant="contained"
                     color="primary"
+                    onClick={() => {
+                      setIsFormSubmitted(true);
+                    }}
                     sx={{
                       width: "48%",
                       py: 1.5,
@@ -434,14 +446,14 @@ const PaymentMDataGrid = () => {
                   width={300}
                   height={300}
                 />
-                
-                <label 
-                  htmlFor="iconFile" 
-                  className="mt-auto cursor-pointer px-4 py-2 mt-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
+
+                <label
+                  htmlFor="iconFile"
+                  className="mt-auto cursor-pointer px-4 py-2 mt-2 bg-primary text-white rounded-md hover:bg-blue-600 transition duration-300"
                 >
                   Choose Image
                 </label>
-                
+
                 <input
                   id="iconFile"
                   name="iconFile"
@@ -451,6 +463,9 @@ const PaymentMDataGrid = () => {
                   accept="image/*"
                   className="hidden" // Hide the native file input
                 />
+                {!formData?.iconFile && isFormSubmitted && (
+                  <FormHelperText error>Image is required</FormHelperText>
+                )}
               </div>
             </div>
           </form>

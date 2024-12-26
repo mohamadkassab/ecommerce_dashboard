@@ -2,7 +2,7 @@
 
 import BrandDataGrid from "./BrandDataGrid";
 
-export default function UserPage() {
+export default function Page() {
 
   return(
     <BrandDataGrid/>

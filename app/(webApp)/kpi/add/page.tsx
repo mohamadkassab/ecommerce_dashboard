@@ -78,7 +78,7 @@ const chartComponents: { [key: string]: JSX.Element } = {
   BasicColorLegend: <BasicColorLegendCreate />,
 };
 
-const KpiAddPage = () => {
+const Page = () => {
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   // const Item = styled(Paper)(({ theme }) => ({
@@ -263,4 +263,4 @@ const KpiAddPage = () => {
   );
 };
 
-export default KpiAddPage;
+export default Page;

@@ -2,7 +2,7 @@
 
 import CurrencyDataGrid from "./CurrencyDataGrid";
 
-export default function UserPage() {
+export default function Page() {
 
   return(
     <CurrencyDataGrid/>

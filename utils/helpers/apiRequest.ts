@@ -11,12 +11,12 @@ import { getToken } from './funtions';
  * @param {Record<string, string>} [headers] - Additional headers (optional).
  * @returns {Promise<any>} - API response or error object.
  */
-export const apiRequest = async (method: Method, url: string, data?: any, headers: Record<string, string> = {}) => {
+export const apiRequest = async (method: Method, url: string, data?: any, params?: string, headers: Record<string, string> = {}) => {
   try {
     const token = getToken();
     const config: AxiosRequestConfig = {
       method,
-      url: `${process.env.NEXT_PUBLIC_API_URL}${url}`,
+      url: params ? `${process.env.NEXT_PUBLIC_API_URL}${url}/${params}` : `${process.env.NEXT_PUBLIC_API_URL}${url}`,
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',

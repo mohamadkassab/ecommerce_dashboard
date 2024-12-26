@@ -2,7 +2,7 @@
 
 import AttributeDataGrid from "./AttributeDataGrid";
 
-export default function UserPage() {
+export default function Page() {
 
   return(
     <AttributeDataGrid/>

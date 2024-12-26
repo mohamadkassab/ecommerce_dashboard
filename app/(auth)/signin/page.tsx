@@ -14,7 +14,7 @@ import signinImage from "@/public/images/siginin_image.svg";
 import PrimaryButton from "@/components/button/PrimaryButton";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
-import { setIdle, signin } from "@/utils/redux/actions/auth";
+
 import {
   useAppSelector,
   useAppDispatch,
@@ -24,16 +24,13 @@ import { useRouter } from 'next/navigation';
 import { ROUTES } from "@/utils/constants";
 import { redirect } from 'next/navigation';
 import { StatusModel } from "@/models/StatusModel";
-
-interface FormData {
-  username: string;
-  password: string;
-}
+import { setIdle, signin } from "@/utils/redux/actions/user";
+import { SignInModel } from "@/models/SignInModel";
 
 const SignInPage = () => {
   const router = useRouter();
   const { status } = useAppSelector((state: any) => state.reducer);
-  const [formData, setFormData] = useState<FormData>({ username: '', password: '' });
+  const [formData, setFormData] = useState<SignInModel>({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const dispatch = useAppDispatch();

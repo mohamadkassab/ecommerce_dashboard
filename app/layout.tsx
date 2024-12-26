@@ -5,7 +5,7 @@ import muiTheme from "../styles/muiTheme";
 import { usePathname } from "next/navigation"; // Use `usePathname` in Next.js 14
 import { SECTIONS } from "@/utils/constants";
 import "../styles/global.css";
-import AlertStack from "@/components/shared/AlertStack";
+import AlertStack from "@/components/shared/NotificationStack";
 import StoreProvider from "./StoreProvider";
 import PermanentDrawerLeft from "@/components/shared/PermanentDrawerLeft";
 import React from "react";

@@ -8,11 +8,6 @@ import {
   TextField,
   Modal,
   Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  DialogContentText,
   Divider,
 } from "@mui/material";
 
@@ -28,11 +23,16 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import { createCountry, deleteCountry, getAllCountries, updateCountry } from "@/utils/redux/actions/setup";
+import { createCountry, getAllCountries, updateCountry } from "@/utils/redux/actions/setup";
 import { CountryModel } from "@/models/CountryModel";
+import DataGridBox from "@/components/wrapper/DataGridBox";
+import ModalWrapper from "@/components/wrapper/ModalWrapper";
+import FieldLabel from "@/components/label/FieldLabel";
+import CustomTextField from "@/components/field/CustomTextField";
+import ActionButtons from "@/components/button/ActionButtons";
 
 // Start Dynamic components
-interface rowProps extends CountryModel{}
+interface rowProps extends CountryModel { }
 
 const defaultValues = {
   name: "",
@@ -62,7 +62,7 @@ const CountryDataGrid = () => {
       flex: 1,
       editable: false,
     },
-  
+
     { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
     {
       field: "actions",
@@ -79,13 +79,6 @@ const CountryDataGrid = () => {
             className="textPrimary"
             onClick={handleUpdateClick(row)}
             color="inherit"
-          />,
-          <GridActionsCellItem
-            key={`4`}
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(row)}
-            color="error"
           />,
         ];
       },
@@ -119,12 +112,10 @@ const CountryDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const {allCountries } = useAppSelector((state: any) => state.reducer); // Dynamic component
+  const { allCountries } = useAppSelector((state: any) => state.reducer); // Dynamic component
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] = React.useState(false);
-  const [itemToDelete, setItemToDelete] = React.useState<rowProps | null>(null);
   const [refresh, setRefresh] = React.useState(false);
   const { status } = useAppSelector((state: any) => state.reducer);
   const [loading, setLoading] = React.useState(false);
@@ -141,30 +132,14 @@ const CountryDataGrid = () => {
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(updateCountry(formData)); // Dynamic component
     handleCloseEdit();
   };
 
-  const handleConfirmDelete = () => {
-    try {
-      dispatch(deleteCountry(Number(itemToDelete?.id))); // Dynamic component
-      setOpenDeleteConfirmation(false);
-    } catch (e) {}
-  };
-
-  const handleUpdateClick = (row: rowProps) => () => { 
+  const handleUpdateClick = (row: rowProps) => () => {
     setFormData(row);
     handleOpenEdit();
-  };
-
-  const handleDeleteClick = (row: any) => () => {
-    setItemToDelete(row);
-    setOpenDeleteConfirmation(true);
-  };
-
-  const handleCloseDeleteConfirmation = () => {
-    setOpenDeleteConfirmation(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -198,16 +173,6 @@ const CountryDataGrid = () => {
 
   const columnsForms = [
     {
-      field: "id",
-      caption: "Id",
-      type: "number",
-      required: false,
-      value: formData?.id,
-      onChange: handleChange,
-      showOnCreate: false,
-      showOnEdit: false,
-    },
-    {
       field: "name",
       caption: "Name",
       type: "text",
@@ -215,7 +180,6 @@ const CountryDataGrid = () => {
       value: formData?.name,
       onChange: handleChange,
       inputProps: {
-        minLength: 1,
         maxLength: 255,
       },
       showOnCreate: true,
@@ -229,7 +193,6 @@ const CountryDataGrid = () => {
       value: formData?.code,
       onChange: handleChange,
       inputProps: {
-        minLength: 1,
         maxLength: 255,
       },
       showOnCreate: true,
@@ -239,24 +202,10 @@ const CountryDataGrid = () => {
   // End Dynamic components
 
   return (
-    <Box
-    sx={{
-      height: "calc(100vh - 100px)",
-      maxWidth: "calc(100vw - 240px)",
-      borderRadius: 2,
-      paddingX: 2,
-    
-      "& .actions": {
-        color: "text.secondary",
-      },
-      "& .textPrimary": {
-        color: "text.primary",
-      },
-    }}
-    >
-    <Typography variant="h4" sx={{ textAlign: 'center', width:"100%" }}>
-      Country
-    </Typography>
+    <DataGridBox>
+      <Typography variant="h4" sx={{ textAlign: 'center', width: "100%" }}>
+        Country
+      </Typography>
       <DataGrid
         rows={allCountries} // Start Dynamic components
         columns={columnsDataGrid}
@@ -272,7 +221,7 @@ const CountryDataGrid = () => {
           },
         }}
         sx={{
-          mt:1,
+          mt: 1,
           "& .MuiDataGrid-columnHeaders": {
             borderBottom: "2px solid",
             borderColor: "primary.main",
@@ -283,280 +232,51 @@ const CountryDataGrid = () => {
         }}
       />
 
-      <Modal
+      <ModalWrapper
         open={openCreate}
-        onClose={handleCloseCreate}
-        sx={{
-          backdropFilter: "blur(4px)",
-          transition: "all 0.3s ease-in-out",
-        }}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            bgcolor: "background.paper",
-            boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.15)",
-            borderRadius: 3,
-            p: 4,
-            maxHeight: "90vh",
-            width: {
-              xs: "90vw",   
-              md: "600px", 
-            },
-            transition: "all 0.3s ease-in-out",
-            overflow: "auto",
-          }}
-        >
-          <Typography
-            variant="h6"
-            component="h2"
-            gutterBottom
-            sx={{
-              fontWeight: "bold",
-              color: "primary.main",
-            }}
-          >
-            New Entry
-          </Typography>
+        handleClose={handleCloseCreate}
+        title="New Entry">
 
-          <Divider sx={{ mb: 1 }} />
+        <form onSubmit={handleCreate}>
+          {columnsForms.map((item, index) => {
+            if (item?.showOnCreate) {
 
-          <form onSubmit={handleCreate}>
-            {columnsForms.map((item, index) => {
-              if (item?.showOnCreate) {
+              return (
+                <CustomTextField key={`create-${item?.field}-${index}`} item={item} />
+              );
+            }
+          })}
 
-                return (
-                  <TextField
-                    key={`CreateForm-${item?.field}`}
-                    name={item?.field}
-                    required={item?.required}
-                    type={item?.type}
-                    label={item?.caption}
-                    value={item?.value}
-                    onChange={item?.onChange}
-                    inputProps={item?.inputProps ? item.inputProps : undefined}
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    sx={{
-                      borderRadius: "8px",
-                      backgroundColor: "background.default",
-                      boxShadow: "inset 0 1px 3px rgba(0, 0, 0, 0.1)",
-                    }}
-                  />
-                );
-              }
-            })}
+          <ActionButtons
+            onCancel={handleCloseCreate}
+            cancelLabel="Go Back"
+            submitLabel="Save"
+          />
+        </form>
+      </ModalWrapper>
 
-            <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
-            >
-               {/* Cancel Button */}
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleCloseCreate}
-                sx={{
-                  width: "48%",
-                  py: 1.5,
-                  borderRadius: "8px",
-                  textTransform: "none",
-                  ":hover": {
-                    backgroundColor: "secondary.light",
-                    color: "secondary.contrastText",
-                  },
-                }}
-              >
-                Cancel
-              </Button>
-
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                sx={{
-                  width: "48%",
-                  py: 1.5,
-                  borderRadius: "8px",
-                  backgroundColor: "primary.main",
-                  textTransform: "none",
-                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                  ":hover": {
-                    backgroundColor: "primary.dark",
-                    boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.15)",
-                  },
-                }}
-              >
-                Submit
-              </Button>
-            </Box>
-          </form>
-        </Box>
-      </Modal>
-
-      <Modal
+      <ModalWrapper
         open={openEdit}
-        onClose={handleCloseEdit}
-        sx={{
-          backdropFilter: "blur(4px)",
-          transition: "all 0.3s ease-in-out",
-        }}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            bgcolor: "background.paper",
-            boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.15)",
-            borderRadius: 3,
-            p: 4,
-            maxHeight: "90vh",
-            width: {
-              xs: "90vw",   
-              md: "600px", 
-            },
-            transition: "all 0.3s ease-in-out",
-            overflow: "auto",
-          }}
-        >
-          <Typography
-            variant="h6"
-            component="h2"
-            gutterBottom
-            sx={{
-              fontWeight: "bold",
-              color: "primary.main",
-            }}
-          >
-            Edit Entry
-          </Typography>
+        handleClose={handleCloseEdit}
+        title="Edit Entry">
 
-          <Divider sx={{ mb: 1 }} />
+        <form onSubmit={handleUpdate}>
+          {columnsForms.map((item, index) => {
+            if (item?.showOnEdit) {
+              return (
+                <CustomTextField key={`edit-${item?.field}-${index}`} item={item} />
+              );
+            }
+          })}
 
-          <form onSubmit={handleUpdate}>
-            {columnsForms.map((item, index) => {
-              if (item?.showOnEdit) {
-                return (
-                  <TextField
-                    key={`EditForm-${item?.field}`}
-                    name={item?.field}
-                    required={item?.required}
-                    type={item?.type}
-                    label={item?.caption}
-                    value={item?.value}
-                    onChange={item?.onChange}
-                    inputProps={item?.inputProps ? item.inputProps : undefined}
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    sx={{
-                      borderRadius: "8px",
-                      backgroundColor: "background.default",
-                      boxShadow: "inset 0 1px 3px rgba(0, 0, 0, 0.1)",
-                    }}
-                  />
-                );
-              }
-            })}
-
-            <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
-            >
-              {/* Cancel Button */}
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleCloseEdit}
-                sx={{
-                  width: "48%",
-                  py: 1.5,
-                  borderRadius: "8px",
-                  textTransform: "none",
-                  ":hover": {
-                    backgroundColor: "secondary.light",
-                    color: "secondary.contrastText",
-                  },
-                }}
-              >
-                Cancel
-              </Button>
-
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                sx={{
-                  width: "48%",
-                  py: 1.5,
-                  borderRadius: "8px",
-                  backgroundColor: "primary.main",
-                  textTransform: "none",
-                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                  ":hover": {
-                    backgroundColor: "primary.dark",
-                    boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.15)",
-                  },
-                }}
-              >
-                Submit
-              </Button>
-            </Box>
-          </form>
-        </Box>
-      </Modal>
-
-      <Dialog
-        open={openDeleteConfirmation}
-        onClose={handleCloseDeleteConfirmation}
-        sx={{ "& .MuiDialog-paper": { padding: "20px", borderRadius: "8px" } }}
-      >
-        <DialogTitle sx={{ fontWeight: "bold", fontSize: "1.5rem" }}>
-          Confirm Deletion
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ fontSize: "1rem", lineHeight: "1.5" }}>
-            Are you sure you want to delete{" "}
-            <Typography
-              component="span"
-              variant="body1"
-              sx={{ fontWeight: "bold", color: "error.main" }}
-            >
-                {/*Dynamic component */}
-              {itemToDelete?.name}
-            </Typography>
-            &nbsp;?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions sx={{ justifyContent: "flex-end", mt: 2 }}>
-          <Button
-            onClick={handleCloseDeleteConfirmation}
-            color="primary"
-            variant="outlined"
-            sx={{ mr: 1 }}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleConfirmDelete}
-            color="error"
-            variant="contained"
-            sx={{
-              backgroundColor: "error.main",
-              "&:hover": { backgroundColor: "error.dark" },
-            }}
-          >
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+          <ActionButtons
+            onCancel={handleCloseEdit}
+            cancelLabel="Go Back"
+            submitLabel="Save"
+          />
+        </form>
+      </ModalWrapper>
+    </DataGridBox>
   );
 };
 

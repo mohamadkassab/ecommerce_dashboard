@@ -1,30 +1,24 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState} from "react";
 import { useRouter } from "next/navigation";
 import { Box, Card, CardContent, IconButton, Typography } from "@mui/material";
 import VerticalBarChart from "@/components/chart/VerticalBarChart";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { deleteChart, getAllCharts } from "@/utils/redux/actions/kpi";
-import { CreateKpiModel, KpiDetailsModel } from "@/models/KpiModels";
+import { KpiDetailsModel } from "@/models/KpiModels";
 import ChartWrapper from "@/components/wrapper/chartWrapper";
 import HorizontalBarChart from "@/components/chart/HorizontalBarChart";
 import BiaxialLineChart from "@/components/chart/BiaxialLineChart";
 import PieActiveArc from "@/components/chart/PieActiveArc";
-import ArcDesignStatic from "@/components/chart_static/ArcDesignStatic";
 import ArcDesign from "@/components/chart/ArcDesign";
 import TopN from "@/components/chart/TopN";
 import BasicColorLegend from "@/components/chart/BasicColorLegend";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import EditDeleteButtons from "@/components/shared/EditDeleteButtons";
-import { setIdle } from "@/utils/redux/actions/auth";
 import { StatusModel } from "@/models/StatusModel";
+import { setIdle } from "@/utils/redux/actions/user";
 
-
-
-
-const KpiPage: React.FC = () => {
+const Page: React.FC = () => {
   const { status } = useAppSelector((state: any) => state.reducer);
   const [isScrolled, setIsScrolled] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -240,4 +234,4 @@ const KpiPage: React.FC = () => {
   );
 };
 
-export default KpiPage;
+export default Page;

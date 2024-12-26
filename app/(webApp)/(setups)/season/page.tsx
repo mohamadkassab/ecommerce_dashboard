@@ -2,7 +2,7 @@
 
 import SeasonDataGrid from "./SeasonDataGrid";
 
-export default function UserPage() {
+export default function Page() {
 
   return(
     <SeasonDataGrid/>

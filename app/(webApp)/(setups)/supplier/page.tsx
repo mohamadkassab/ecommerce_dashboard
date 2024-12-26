@@ -2,7 +2,7 @@
 
 import SupplierDataGrid from "./SupplierDataGrid";
 
-export default function UserPage() {
+export default function Page() {
 
   return(
     <SupplierDataGrid/>

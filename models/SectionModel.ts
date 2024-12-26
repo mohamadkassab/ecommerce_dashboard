@@ -1,9 +1,9 @@
 import { CategoryModel } from "./CategoryModel";
 
 export interface SectionModel {
-    id: number;
+    id?: number;
     name: string;
-    updatedAt: Date;
+    updatedAt?: Date;
     UpdatedBy?: string;
     categories?: CategoryModel[];
   }

@@ -1,16 +1,8 @@
-
 import React, { useState } from "react";
 
-
-const DashboardPage = () => {
- 
-
+export default function Page (){
   return (
-
-     <h1>Dashboard</h1>
-      
-
+     <h1>Dashboard</h1>   
   );
 };
 
-export default DashboardPage;

@@ -2,7 +2,7 @@
 
 import PaymentMDataGrid from "./PaymentMDataGrid";
 
-export default function UserPage() {
+export default function Page() {
 
   return(
     <PaymentMDataGrid/>

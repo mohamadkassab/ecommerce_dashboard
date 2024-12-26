@@ -1,13 +1,9 @@
 import { AttributeModel } from '@/models/AttributeModel';
-import { BrandModel } from '@/models/BrandModel';
 import { CategoryModel } from '@/models/CategoryModel';
 import { CountryModel } from '@/models/CountryModel';
-import { PaymentMModel } from '@/models/PaymentMModel';
 import { SeasonModel } from '@/models/SeasonModel';
 import { SectionModel } from '@/models/SectionModel';
-import { ShippingMModel } from '@/models/ShippingMModel';
 import { TagModel } from '@/models/TagModel';
-import { YearModel } from '@/models/YearModel';
 import { APIROUTES } from '@/utils/constants';
 import {apiRequest, apiRequestWithFile} from '@/utils/helpers/apiRequest';
 
@@ -32,10 +28,10 @@ export const deleteAttributeService = async (id: number) =>
 export const getAllBrandsService = async () =>
     apiRequest('GET', APIROUTES.GETALLBRANDS);
   
-export const createBrandService = async (formData: BrandModel) =>
+export const createBrandService = async (formData: any) =>
     apiRequestWithFile('POST', APIROUTES.CREATEBRAND, formData);
   
-export const updateBrandService = async (formData: BrandModel) =>
+export const updateBrandService = async (formData: any) =>
     apiRequestWithFile('PUT', APIROUTES.UPDATEBRAND, formData);
   
 export const deleteBrandService = async (id: number) =>
@@ -67,9 +63,6 @@ export const createCountryService = async (formData: CountryModel) =>
   
 export const updateCountryService = async (formData: CountryModel) =>
     apiRequest('PUT', APIROUTES.UPDATECOUNTRY, formData);
-  
-export const deleteCountryService = async (id: number) =>
-    apiRequest('DELETE', `${APIROUTES.DELETECOUNTRY}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Currency                                           
@@ -92,7 +85,7 @@ export const deleteCurrencyService = async (id: number) =>
 export const getAllPaymentMService = async () =>
     apiRequest('GET', APIROUTES.GETALLPAYMENTM);
   
-export const updatePaymentMService = async (formData: PaymentMModel) =>
+export const updatePaymentMService = async (formData: any) =>
     apiRequestWithFile('PUT', APIROUTES.UPDATEPAYMENTM, formData);
 
 //+------------------------------------------------------------------+
@@ -131,7 +124,10 @@ export const deleteSectionService = async (id: number) =>
 export const getAllShippingMService = async () =>
     apiRequest('GET', APIROUTES.GETALLSHIPPINGM);
   
-export const updateShippingMService = async (formData: ShippingMModel) =>
+export const createShippingMService = async (formData: any) =>
+    apiRequestWithFile('POST', APIROUTES.CREATESHIPPINGM, formData);
+
+export const updateShippingMService = async (formData: any) =>
     apiRequestWithFile('PUT', APIROUTES.UPDATESHIPPINGM, formData);
 
 //+------------------------------------------------------------------+
@@ -163,18 +159,3 @@ export const updateTagService = async (formData: TagModel) =>
   
 export const deleteTagService = async (id: number) =>
     apiRequest('DELETE', `${APIROUTES.DELETETAG}/${id}`);
-
-//+------------------------------------------------------------------+
-//| Year                                           
-//+------------------------------------------------------------------+
-export const getAllYearsService = async () =>
-    apiRequest('GET', APIROUTES.GETALLYEARS);
-  
-export const createYearService = async (formData: YearModel) =>
-    apiRequest('POST', APIROUTES.CREATEYEAR, formData);
-  
-export const updateYearService = async (formData: YearModel) =>
-    apiRequest('PUT', APIROUTES.UPDATEYEAR, formData);
-  
-export const deleteYearService = async (id: number) =>
-    apiRequest('DELETE', `${APIROUTES.DELETEYEAR}/${id}`);

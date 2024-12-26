@@ -2,7 +2,7 @@
 
 import ShippingMDataGrid from "./ShippingMDataGrid";
 
-export default function UserPage() {
+export default function Page() {
 
   return(
     <ShippingMDataGrid/>
