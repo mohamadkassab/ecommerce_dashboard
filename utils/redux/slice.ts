@@ -4,10 +4,10 @@ import { ActionReducerMapBuilder, AsyncThunk, PayloadAction } from '@reduxjs/too
 import { AUTHTOKEN } from '../constants';
 import Cookies from 'js-cookie';
 import { createChart, deleteChart, getAllCharts } from './actions/kpi';
-import { changePassword, createRole, createUser, deleteRole, deleteUser, getAllPermissions, getAllRoles, getAllUsers, setIdle, setUser, signin, signout, updateRole, updateUser } from './actions/user';
+import { changePassword, createRole, createUser, deleteRole, getAllPermissions, getAllRoles, getAllUsers, setIdle, setUser, signin, signout, updateRole, updateUser } from './actions/user';
 import jwt from 'jsonwebtoken';
 import { StatusModel } from '@/models/StatusModel';
-import { createAttribute, createBrand, createCategory, createCountry, createCurrency, createSeason, createSection, createSupplier, createTag, deleteAttribute, deleteBrand, deleteCategory, deleteCurrency, deleteSeason, deleteSection, deleteSupplier, deleteTag, getAllAttributes, getAllBrandNames, getAllBrands, getAllCategories, getAllCategoryNames, getAllCountries, getAllCountryNames, getAllCurrencies, getAllPaymentM, getAllSeasonNames, getAllSeasons, getAllSections, getAllShippingM, getAllSupplierNames, getAllSuppliers, getAllTagNames, getAllTags, updateAttribute, updateBrand, updateCategory, updateCountry, updateCurrency, updatePaymentM, updateSeason, updateSection, updateShippingM, updateSupplier, updateTag } from './actions/setup';
+import { createAttribute, createBrand, createCategory, createCountry, createCurrency, createSeason, createSection, createSupplier, createTag, deleteAttribute, deleteCategory, deleteCurrency, deleteSection, deleteTag, getAllAttributes, getAllBrandNames, getAllBrands, getAllCategories, getAllCategoryNames, getAllCountries, getAllCountryNames, getAllCurrencies, getAllSeasonNames, getAllSeasons, getAllSections, getAllShippingM, getAllSupplierNames, getAllSuppliers, getAllTagNames, getAllTags, updateAttribute, updateBrand, updateCategory, updateCountry, updateCurrency, updateSeason, updateSection, updateShippingM, updateSupplier, updateTag } from './actions/setup';
 import { TokenModel } from '@/models/TokenModel';
 import { ChartModel } from '@/models/ChartModel';
 import { UserModel } from '@/models/UserModel';
@@ -50,7 +50,6 @@ interface InitialState {
   allSuppliers?: SupplierModel[];
   allSupplierNames?: string[];
   allShippingM?: ShippingMModel[];
-  allPaymentM?: PaymentMModel[];
   allProducts?: ProductModel[];
   allProductContents?: ProductContentModel[];
   allProductMedia?: File[];
@@ -170,7 +169,6 @@ const slice = createSlice({
     });
     handleAsyncAction(builder, createBrand, () => {});
     handleAsyncAction(builder, updateBrand, () => {});
-    handleAsyncAction(builder, deleteBrand, () => {});
 
     //+------------------------------------------------------------------+
     //| Category                                            
@@ -227,16 +225,6 @@ const slice = createSlice({
     });
     handleAsyncAction(builder, createChart, () => {});
     handleAsyncAction(builder, deleteChart, () => {});
-
-    //+------------------------------------------------------------------+
-    //| Payment method                                            
-    //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllPaymentM, (state, action) => {
-      if (!action.payload.error) {
-        state.allPaymentM = action.payload || [];
-      }       
-    });
-    handleAsyncAction(builder, updatePaymentM, () => {}); 
 
     //+------------------------------------------------------------------+
     //| Permission                                           
@@ -301,7 +289,6 @@ const slice = createSlice({
     });
     handleAsyncAction(builder, createSeason, () => {});
     handleAsyncAction(builder, updateSeason, () => {});
-    handleAsyncAction(builder, deleteSeason, () => {});
 
     //+------------------------------------------------------------------+
     //| Section                                            
@@ -340,7 +327,6 @@ const slice = createSlice({
     });
     handleAsyncAction(builder, createSupplier, () => {});
     handleAsyncAction(builder, updateSupplier, () => {});
-    handleAsyncAction(builder, deleteSupplier, () => {});
 
     //+------------------------------------------------------------------+
     //| Tag                                            
@@ -424,7 +410,6 @@ const slice = createSlice({
     });
     handleAsyncAction(builder, createUser, () => {});
     handleAsyncAction(builder, updateUser, () => {});
-    handleAsyncAction(builder, deleteUser, () => {});
     handleAsyncAction(builder, changePassword, () => {}); 
   },
 });

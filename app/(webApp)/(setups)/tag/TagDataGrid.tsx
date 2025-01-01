@@ -1,21 +1,9 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import {
-  TextField,
-  Modal,
-  Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  DialogContentText,
-  Divider,
-} from "@mui/material";
-
+import { Typography } from "@mui/material";
 import {
   GridToolbarExport,
   GridToolbarQuickFilter,
@@ -59,19 +47,35 @@ const TagDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "name", headerName: "Name", flex: 1, editable: false },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "updatedAt",
       headerName: "Updated At",
       type: "date",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
       valueGetter: (params) => {
         return new Date(params);
       },
-      flex: 1,
       editable: false,
     },
 
-    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
+    {
+      field: "updatedBy",
+      headerName: "Updated By",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "actions",
       type: "actions",
@@ -261,7 +265,12 @@ const TagDataGrid = () => {
         <form onSubmit={handleCreate}>
           {columnsForms.map((item, index) => {
             if (item?.showOnCreate) {
-              return <CustomTextField key={`create-${item?.field}-${index}`} item={item}/>;
+              return (
+                <CustomTextField
+                  key={`create-${item?.field}-${index}`}
+                  item={item}
+                />
+              );
             }
           })}
 
@@ -281,7 +290,12 @@ const TagDataGrid = () => {
         <form onSubmit={handleUpdate}>
           {columnsForms.map((item, index) => {
             if (item?.showOnEdit) {
-              return <CustomTextField key={`edit-${item?.field}-${index}`} item={item}/>;
+              return (
+                <CustomTextField
+                  key={`edit-${item?.field}-${index}`}
+                  item={item}
+                />
+              );
             }
           })}
 

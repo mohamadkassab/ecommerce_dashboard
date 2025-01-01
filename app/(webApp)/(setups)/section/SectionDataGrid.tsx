@@ -24,7 +24,13 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import { createSection, deleteSection, getAllCategories, getAllSections, updateSection } from "@/utils/redux/actions/setup";
+import {
+  createSection,
+  deleteSection,
+  getAllCategories,
+  getAllSections,
+  updateSection,
+} from "@/utils/redux/actions/setup";
 import { CategoryModel } from "@/models/CategoryModel";
 import { SectionModel } from "@/models/SectionModel";
 import FieldLabel from "@/components/label/FieldLabel";
@@ -35,7 +41,7 @@ import ActionButtons from "@/components/button/ActionButtons";
 import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog";
 
 // Start Dynamic components
-interface rowProps extends SectionModel { }
+interface rowProps extends SectionModel {}
 
 const defaultValues = {
   name: "",
@@ -53,23 +59,27 @@ const SectionDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "name", headerName: "Name", flex: 1, editable: false },
+    { field: "name", headerName: "Name", flex: 1, align: "center", headerAlign: "center", editable: false },
     {
       field: "categories",
       headerName: "Categories",
       flex: 1,
+      align: "center", 
+      headerAlign: "center",
       renderCell: (params) => {
         const itemsDisplayed =
           params?.value?.map((item: CategoryModel) => item.name).join(", ") ||
           "Empty";
         return <span>{itemsDisplayed}</span>;
       },
-      editable: false
+      editable: false,
     },
     {
       field: "updatedAt",
       headerName: "Updated At",
       type: "date",
+      align: "center", 
+      headerAlign: "center",
       valueGetter: (params) => {
         return new Date(params);
       },
@@ -77,7 +87,7 @@ const SectionDataGrid = () => {
       editable: false,
     },
 
-    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
+    { field: "updatedBy", headerName: "Updated By", flex: 1, align: "center", headerAlign: "center", editable: false },
     {
       field: "actions",
       type: "actions",
@@ -133,11 +143,14 @@ const SectionDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const { allSections, allCategories } = useAppSelector((state: any) => state.reducer); // Dynamic component
+  const { allSections, allCategories } = useAppSelector(
+    (state: any) => state.reducer
+  ); // Dynamic component
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] = React.useState(false);
+  const [openDeleteConfirmation, setOpenDeleteConfirmation] =
+    React.useState(false);
   const [itemToDelete, setItemToDelete] = React.useState<rowProps | null>(null);
   const [refresh, setRefresh] = React.useState(false);
   const { status } = useAppSelector((state: any) => state.reducer);
@@ -149,13 +162,13 @@ const SectionDataGrid = () => {
   const handleCloseEdit = () => setOpenEdit(false);
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(createSection(formData)); // Dynamic component
     handleCloseCreate();
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(updateSection(formData)); // Dynamic component
     handleCloseEdit();
   };
@@ -164,7 +177,7 @@ const SectionDataGrid = () => {
     try {
       dispatch(deleteSection(Number(itemToDelete?.id))); // Dynamic component
       setOpenDeleteConfirmation(false);
-    } catch (e) { }
+    } catch (e) {}
   };
 
   const handleUpdateClick = (row: rowProps) => () => {
@@ -239,7 +252,11 @@ const SectionDataGrid = () => {
       showOnEdit: true,
       component: (
         <FormControl key={`form-categories`} fullWidth>
-          <FieldLabel caption="Select Categories" htmlFor="categories"></FieldLabel>
+          <FieldLabel
+            caption="Select Categories"
+            htmlFor="categories"
+            isRequired={false}
+          ></FieldLabel>
           <Autocomplete
             multiple
             disableCloseOnSelect
@@ -271,7 +288,7 @@ const SectionDataGrid = () => {
 
   return (
     <DataGridBox>
-      <Typography variant="h4" sx={{ textAlign: 'center', width: "100%" }}>
+      <Typography variant="h4" sx={{ textAlign: "center", width: "100%" }}>
         Section
       </Typography>
       <DataGrid
@@ -312,8 +329,10 @@ const SectionDataGrid = () => {
                 return item.component;
               }
               return (
-                <CustomTextField key={`create-${item?.field}-${index}`} item={item}/>
-
+                <CustomTextField
+                  key={`create-${item?.field}-${index}`}
+                  item={item}
+                />
               );
             }
           })}
@@ -324,7 +343,6 @@ const SectionDataGrid = () => {
             submitLabel="Save"
           />
         </form>
-
       </ModalWrapper>
 
       <ModalWrapper
@@ -339,8 +357,10 @@ const SectionDataGrid = () => {
                 return item.component;
               }
               return (
-                <CustomTextField key={`edit-${item?.field}-${index}`} item={item} />
-
+                <CustomTextField
+                  key={`edit-${item?.field}-${index}`}
+                  item={item}
+                />
               );
             }
           })}

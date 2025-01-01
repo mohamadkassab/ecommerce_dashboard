@@ -1,13 +1,13 @@
-interface TransactionAttributeModel{
-    attribute: string;
-    attributeOption: string;
-}
+import { AttributeModel } from "./AttributeModel";
+import { TransactionAttributeModel } from "./TransactionAttributeModet";
+import { TransactionTypeEnum } from "./TransactionTypeEnum";
+
 export interface TransactionModel {
     productId?: number;
-    quantity: number;
-    transactionType: string;
-    note: string;
-    transactionAttributes: TransactionAttributeModel[];
+    quantity?: number;
+    transactionType?: TransactionTypeEnum;
+    note?: string;
+    transactionAttributes?: TransactionAttributeModel[];
     updatedAt?: Date;
     updatedBy?: string;
   }

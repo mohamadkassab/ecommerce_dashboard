@@ -12,10 +12,10 @@ export const ROUTES = {
   CATEGORY: '/category',
   COUNTRY: '/country',
   CURRENCY: '/currency',
+  CUSTOMER: '/customer',
   DASHBOARD: '/dashboard',
   KPI: '/kpi',
   KPIADD: '/kpi/add',
-  PAYMENTM: '/payment-method',
   PERMISSION: '/permission',
   PRODUCT: '/product',
   PRODUCTCONTENT: '/product-content',
@@ -69,9 +69,9 @@ export const SECTIONS = [
       },
     ],
   },
-  {
-    title: 'Orders',
-  },
+  // {
+  //   title: 'Orders',
+  // },
   {
     title: 'User',
     protected: true,
@@ -101,7 +101,6 @@ export const SECTIONS = [
       { title: 'category', protected: true, path:ROUTES.CATEGORY, requiredPermissions: ["category"] },
       { title: 'country', protected: true, path:ROUTES.COUNTRY, requiredPermissions: ["country"] },
       { title: 'currency', protected: true, path:ROUTES.CURRENCY,requiredPermissions: [""] },
-      { title: 'payment method', protected: true, path:ROUTES.PAYMENTM, requiredPermissions: [""] },
       { title: 'season', protected: true, path:ROUTES.SEASON, requiredPermissions: ["season"] },
       { title: 'section', protected: true, path:ROUTES.SECTION, requiredPermissions: ["section"] },
       { title: 'shipping method', protected: true, path:ROUTES.SHIPPINGM, requiredPermissions: [""] },
@@ -109,23 +108,32 @@ export const SECTIONS = [
       { title: 'tag', protected: true, path:ROUTES.TAG, requiredPermissions: [""] },
     ],
   },
-  {
-    title: 'Reports',
-  },
+  // {
+  //   title: 'Reports',
+  // },
   // {
   //   title: 'Marketing',
     
   //   subsections: ['hooks', 'templates'],
   // },
-  // {
-  //   title: 'Customers',
-  //   subsections: ['customers', 'inquiries'],
-  // },
   {
-    title: 'Logs',
+    title: 'Customer',
     protected: true,
-    requiredPermissions: [""],
+    requiredPermissions: [],
+    subsections: [
+      {
+        title: 'customer',
+        path: ROUTES.CUSTOMER,
+        protected: true,
+        requiredPermissions: [],
+      },
+    ],
   },
+  // {
+  //   title: 'Logs',
+  //   protected: true,
+  //   requiredPermissions: [""],
+  // },
   {
     title: 'Settings',
     protected: true,
@@ -156,7 +164,6 @@ export const APIROUTES = {
   GETALLBRANDS: "/Setup/GetAllBrands",
   CREATEBRAND: "/Setup/CreateBrand",
   UPDATEBRAND: "/Setup/UpdateBrand",
-  DELETEBRAND: "/Setup/DeleteBrand",
 
   //+------------------------------------------------------------------+
   //| Category                                           
@@ -189,12 +196,6 @@ export const APIROUTES = {
   DELETECHART : "/Kpi/DeleteChart",
   GETALLCHARTS: "/Kpi/GetAllCharts",
   GETCHARTDATABYQUERY : "/Kpi/GetChartDataByQuery",
-
-  //+------------------------------------------------------------------+
-  //| Payment method                                          
-  //+------------------------------------------------------------------+
-  GETALLPAYMENTM: "/Setup/GetAllPaymentM",
-  UPDATEPAYMENTM: "/Setup/UpdatePaymentM",
 
   //+------------------------------------------------------------------+
   //| Permission                                           
@@ -230,7 +231,6 @@ export const APIROUTES = {
   GETALLSEASONS: "/Setup/GetAllSeasons",
   CREATESEASON: "/Setup/CreateSeason",
   UPDATESEASON: "/Setup/UpdateSeason",
-  DELETESEASON: "/Setup/DeleteSeason",
 
   //+------------------------------------------------------------------+
   //| Section                                          
@@ -253,7 +253,6 @@ export const APIROUTES = {
   GETALLSUPPLIERS: "/Setup/GetAllSuppliers",
   CREATESUPPLIER: "/Setup/CreateSupplier",
   UPDATESUPPLIER: "/Setup/UpdateSupplier",
-  DELETESUPPLIER: "/Setup/DeleteSupplier",
 
   //+------------------------------------------------------------------+
   //| Tag                                          
@@ -276,7 +275,6 @@ export const APIROUTES = {
   SIGNOUT : "/User/SignOut",
   CREATEUSER : "/User/CreateUser",
   UPDATEUSER: "/User/UpdateUser",
-  DELETEUSER: "/User/DeleteUser",
   CHANGEPASSWORD: "/User/ChangePassword",
   GETALLUSERS : "/User/GetAllUsersWithRoles",
 }

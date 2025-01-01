@@ -3,22 +3,14 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import {
   TextField,
-  Modal,
   Checkbox,
   ListItemText,
   Autocomplete,
   Typography,
   FormControl,
   InputAdornment,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  DialogContentText,
-  Divider,
   FormControlLabel,
   Switch,
 } from "@mui/material";
@@ -38,7 +30,6 @@ import {
   getAllUsers,
   getAllRoles,
   createUser,
-  deleteUser,
   updateUser,
 } from "@/utils/redux/actions/user";
 import IconButton from "@mui/material/IconButton";
@@ -51,7 +42,6 @@ import DataGridBox from "@/components/wrapper/DataGridBox";
 import ModalWrapper from "@/components/wrapper/ModalWrapper";
 import ActionButtons from "@/components/button/ActionButtons";
 import CustomTextField from "@/components/field/CustomTextField";
-import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog";
 
 // Start Dynamic components
 interface rowProps extends UserModel {}
@@ -79,27 +69,64 @@ const UserDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "username", headerName: "Username", flex: 1, editable: false },
-    { field: "firstName", headerName: "First Name", flex: 1, editable: false },
-    { field: "lastName", headerName: "Last Name", flex: 1, editable: false },
+    {
+      field: "username",
+      headerName: "Username",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "firstName",
+      headerName: "First Name",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "lastName",
+      headerName: "Last Name",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "dob",
       headerName: "DOB",
       type: "date",
       flex: 0.5,
-      align: "left",
-      headerAlign: "left",
+      align: "center",
+      headerAlign: "center",
       valueGetter: (params) => {
         return new Date(params);
       },
       editable: false,
     },
-    { field: "phone", headerName: "Phone", flex: 1, editable: false },
-    { field: "address", headerName: "Address", flex: 1, editable: false },
+    {
+      field: "phone",
+      headerName: "Phone",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "address",
+      headerName: "Address",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "roles",
       headerName: "Roles",
       flex: 1,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => {
         const rolesDisplay =
           params?.value
@@ -113,6 +140,8 @@ const UserDataGrid = () => {
       field: "updatedAt",
       headerName: "Updated At",
       type: "date",
+      align: "center",
+      headerAlign: "center",
       valueGetter: (params) => {
         return new Date(params);
       },
@@ -120,7 +149,14 @@ const UserDataGrid = () => {
       editable: false,
     },
 
-    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
+    {
+      field: "updatedBy",
+      headerName: "Updated By",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "failedLoginAttempts",
       headerName: "Failed logins",
@@ -154,13 +190,6 @@ const UserDataGrid = () => {
             className="textPrimary"
             onClick={handleUpdateClick(row)}
             color="inherit"
-          />,
-          <GridActionsCellItem
-            key={`4`}
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(row)}
-            color="error"
           />,
         ];
       },
@@ -201,9 +230,6 @@ const UserDataGrid = () => {
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] =
-    React.useState(false);
-  const [itemToDelete, setItemToDelete] = React.useState<rowProps | null>(null);
   const [refresh, setRefresh] = React.useState(false);
   const { status } = useAppSelector((state: any) => state.reducer);
   const [loading, setLoading] = React.useState(false);
@@ -229,26 +255,10 @@ const UserDataGrid = () => {
     handleCloseEdit();
   };
 
-  const handleConfirmDelete = () => {
-    try {
-      dispatch(deleteUser(Number(itemToDelete?.id))); // Dynamic component
-      setOpenDeleteConfirmation(false);
-    } catch (e) {}
-  };
-
   const handleUpdateClick = (row: rowProps) => () => {
     setFormData(row);
     setIsEditMode(true);
     handleOpenEdit();
-  };
-
-  const handleDeleteClick = (row: any) => () => {
-    setItemToDelete(row);
-    setOpenDeleteConfirmation(true);
-  };
-
-  const handleCloseDeleteConfirmation = () => {
-    setOpenDeleteConfirmation(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -388,8 +398,11 @@ const UserDataGrid = () => {
       showOnEdit: true,
       component: (
         <FormControl key={`form-roles`} fullWidth>
-          <FieldLabel caption="Select Roles" htmlFor="roles"></FieldLabel>
-
+          <FieldLabel
+            caption="Select Roles"
+            htmlFor="roles"
+            isRequired={false}
+          ></FieldLabel>
           <Autocomplete
             multiple
             disableCloseOnSelect
@@ -424,7 +437,11 @@ const UserDataGrid = () => {
       showOnCreate: true,
       component: (
         <div key={`form-password`}>
-          <FieldLabel caption="Password" htmlFor="password" />
+          <FieldLabel
+            caption="Password"
+            htmlFor="password"
+            isRequired={isEditMode ? false : true}
+          />
           <TextField
             name="password"
             type={isPasswordVisible ? "text" : "password"}
@@ -537,7 +554,12 @@ const UserDataGrid = () => {
               if (item?.component !== undefined) {
                 return item.component;
               }
-              return <CustomTextField key={`create-${item?.field}-${index}`} item={item}/>;
+              return (
+                <CustomTextField
+                  key={`create-${item?.field}-${index}`}
+                  item={item}
+                />
+              );
             }
           })}
 
@@ -560,7 +582,12 @@ const UserDataGrid = () => {
               if (item?.component !== undefined) {
                 return item.component;
               }
-              return <CustomTextField key={`edit-${item?.field}-${index}`} item={item}/>;
+              return (
+                <CustomTextField
+                  key={`edit-${item?.field}-${index}`}
+                  item={item}
+                />
+              );
             }
           })}
 
@@ -571,16 +598,6 @@ const UserDataGrid = () => {
           />
         </form>
       </ModalWrapper>
-
-      <DeleteConfirmationDialog
-        open={openDeleteConfirmation}
-        onClose={handleCloseDeleteConfirmation}
-        onConfirm={handleConfirmDelete}
-        dialogTitle="Delete Item"
-        confirmationMessage="Are you sure you want to delete this item"
-        cancelButtonText="Cancel"
-        confirmButtonText="Delete"
-      />
     </DataGridBox>
   );
 };

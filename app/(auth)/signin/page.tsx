@@ -59,66 +59,71 @@ const SignInPage = () => {
   
   return (
     <Container
-      component="main"
-      maxWidth="lg"
-      className="flex flex-col items-center justify-start min-h-screen"
-    >
-      <Box className="my-[4rem]">
-        <Image src={logo} alt="Logo" width={200} height={200} />
-      </Box>
-
-      <Box className="bg-white p-16 rounded flex flex-row  gap-[10vw]">
-        <Box className="max-w-[26vw]">
-          <Typography variant="h3" align="center" gutterBottom>
-            Sign In
-          </Typography>
-          <form onSubmit={onSignIn}>
-            <TextField
-              name="username"
-              required
-              type="email"
-              label="Email Address"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.username} 
-              onChange={handleChange} 
-            />
-            <TextField
-              required
-              name="password"
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.password} 
-              onChange={handleChange} 
-              inputProps={{
-                minLength:  6,
-                maxLength: 255,
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleClickShowPassword} edge="end">
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <Box >
+    component="main"
+    maxWidth="lg"
+    className="flex flex-col items-center justify-start min-h-screen px-4 sm:px-8"
+  >
+    <Box className="my-16 text-center">
+      <Image src={logo} alt="Logo" width={200} height={200} />
+    </Box>
+  
+    <Box className="bg-white p-8 sm:p-16 rounded-lg flex flex-col sm:flex-row gap-8 sm:gap-16">
+      {/* Left Column: Form */}
+      <Box className="w-full sm:w-[30vw]">
+        <Typography variant="h3" align="center" gutterBottom>
+          Sign In
+        </Typography>
+        <form onSubmit={onSignIn}>
+          <TextField
+            name="username"
+            required
+            type="email"
+            label="Email Address"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={formData.username}
+            onChange={handleChange}
+            className="mb-4"
+          />
+          <TextField
+            required
+            name="password"
+            label="Password"
+            type={showPassword ? "text" : "password"}
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={formData.password}
+            onChange={handleChange}
+            inputProps={{
+              minLength: 6,
+              maxLength: 255,
+            }}
+            className="mb-6"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Box className="text-center">
             <PrimaryButton type="submit">Sign In</PrimaryButton>
-            </Box>
-          
-          </form>
-        </Box>
-        <Box >
-          <Image src={signinImage} alt="Logo" width={500} height={500} />
-        </Box>
+          </Box>
+        </form>
       </Box>
-    </Container>
+  
+      {/* Right Column: Image */}
+      <Box className="w-full sm:w-[50vw] flex justify-center">
+        <Image src={signinImage} alt="Sign In Image" width={500} height={500} />
+      </Box>
+    </Box>
+  </Container>
+  
   );
 };
 

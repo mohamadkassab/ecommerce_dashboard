@@ -5,7 +5,7 @@ import { CountryModel } from "@/models/CountryModel";
 import { SeasonModel } from "@/models/SeasonModel";
 import { SectionModel } from "@/models/SectionModel";
 import { TagModel } from "@/models/TagModel";
-import { createAttributeService, createBrandService, createCategoryService, createCountryService, createCurrencyService, createSeasonService, createSectionService, createShippingMService, createSupplierService, createTagService, deleteAttributeService, deleteBrandService, deleteCategoryService, deleteCurrencyService, deleteSeasonService, deleteSectionService, deleteSupplierService, deleteTagService, getAllAttributesService, getAllBrandsService, getAllCategoriesService, getAllCountriesService, getAllCurrenciesService, getAllPaymentMService, getAllSeasonsService, getAllSectionsService, getAllShippingMService, getAllSuppliersService, getAllTagsService, updateAttributeService, updateBrandService, updateCategoryService, updateCountryService, updateCurrencyService, updatePaymentMService, updateSeasonService, updateSectionService, updateShippingMService, updateSupplierService, updateTagService } from "@/services/setupService";
+import { createAttributeService, createBrandService, createCategoryService, createCountryService, createCurrencyService, createSeasonService, createSectionService, createShippingMService, createSupplierService, createTagService, deleteAttributeService, deleteCategoryService, deleteCurrencyService, deleteSectionService, deleteTagService, getAllAttributesService, getAllBrandsService, getAllCategoriesService, getAllCountriesService, getAllCurrenciesService, getAllSeasonsService, getAllSectionsService, getAllShippingMService, getAllSuppliersService, getAllTagsService, updateAttributeService, updateBrandService, updateCategoryService, updateCountryService, updateCurrencyService, updateSeasonService, updateSectionService, updateShippingMService, updateSupplierService, updateTagService } from "@/services/setupService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 
@@ -54,10 +54,6 @@ export const updateBrand = createAsyncThunk('updateBrand', async (formData: any)
     updatedFormData.append(key, formData[key]);
   });
   const response = await updateBrandService(updatedFormData);
-  return response;
-});
-export const deleteBrand = createAsyncThunk('deleteBrand', async (id: number) => {
-  const response = await deleteBrandService(id);
   return response;
 });
 
@@ -126,22 +122,6 @@ export const deleteCurrency = createAsyncThunk('deleteCurrency', async (id: numb
 });
 
 //+------------------------------------------------------------------+
-//| Payment method                                           
-//+------------------------------------------------------------------+
-export const getAllPaymentM = createAsyncThunk('getAllPaymentM', async () => {
-  const response = await getAllPaymentMService();
-  return response;
-});
-export const updatePaymentM = createAsyncThunk('updatePaymentM', async (formData: any) => {
-  const updatedFormData = new FormData();
-  Object.keys(formData).forEach(key => {
-    updatedFormData.append(key, formData[key]);
-  });
-  const response = await updatePaymentMService(updatedFormData);
-  return response;
-});
-
-//+------------------------------------------------------------------+
 //| Season                                           
 //+------------------------------------------------------------------+
 export const getAllSeasons = createAsyncThunk('getAllSeasons', async () => {
@@ -158,10 +138,6 @@ export const createSeason = createAsyncThunk('createSeason', async (formData: Se
 });
 export const updateSeason = createAsyncThunk('updateSeason', async (formData: SeasonModel ) => {
   const response = await updateSeasonService(formData);
-  return response;
-});
-export const deleteSeason = createAsyncThunk('deleteSeason', async (id: number) => {
-  const response = await deleteSeasonService(id);
   return response;
 });
 
@@ -234,10 +210,6 @@ export const createSupplier = createAsyncThunk('createSupplier', async (formData
 });
 export const updateSupplier = createAsyncThunk('updateSupplier', async (formData: any) => {
   const response = await updateSupplierService(formData);
-  return response;
-});
-export const deleteSupplier = createAsyncThunk('deleteSupplier', async (id: number) => {
-  const response = await deleteSupplierService(id);
   return response;
 });
 

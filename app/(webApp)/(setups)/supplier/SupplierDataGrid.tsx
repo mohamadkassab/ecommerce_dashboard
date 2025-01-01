@@ -1,19 +1,10 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import {
   TextField,
-  Modal,
   Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  DialogContentText,
-  Divider,
   FormControl,
   Autocomplete,
   Checkbox,
@@ -34,7 +25,6 @@ import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import {
   createSupplier,
-  deleteSupplier,
   getAllCountryNames,
   getAllSuppliers,
   updateSupplier,
@@ -44,7 +34,6 @@ import DataGridBox from "@/components/wrapper/DataGridBox";
 import ModalWrapper from "@/components/wrapper/ModalWrapper";
 import ActionButtons from "@/components/button/ActionButtons";
 import CustomTextField from "@/components/field/CustomTextField";
-import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog";
 
 // Start Dynamic components
 interface rowProps extends SupplierModel {}
@@ -70,24 +59,82 @@ const SupplierDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "name", headerName: "Name", flex: 1, editable: false },
-    { field: "phone", headerName: "Phone", flex: 1, editable: false },
-    { field: "address", headerName: "Address", flex: 1, editable: false },
-    { field: "city", headerName: "City", flex: 1, editable: false },
-    { field: "email", headerName: "Email", flex: 1, editable: false },
-    { field: "website", headerName: "Website", flex: 1, editable: false },
-    { field: "country", headerName: "Country", flex: 1, editable: false },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "phone",
+      headerName: "Phone",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "address",
+      headerName: "Address",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "city",
+      headerName: "City",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "website",
+      headerName: "Website",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "country",
+      headerName: "Country",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "updatedAt",
       headerName: "Updated At",
       type: "date",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
       valueGetter: (params) => {
         return new Date(params);
       },
-      flex: 1,
       editable: false,
     },
-    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
+    {
+      field: "updatedBy",
+      headerName: "Updated By",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "actions",
       type: "actions",
@@ -103,13 +150,6 @@ const SupplierDataGrid = () => {
             className="textPrimary"
             onClick={handleUpdateClick(row)}
             color="inherit"
-          />,
-          <GridActionsCellItem
-            key={`4`}
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(row)}
-            color="error"
           />,
         ];
       },
@@ -149,9 +189,6 @@ const SupplierDataGrid = () => {
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] =
-    React.useState(false);
-  const [itemToDelete, setItemToDelete] = React.useState<rowProps | null>(null);
   const [refresh, setRefresh] = React.useState(false);
   const { status } = useAppSelector((state: any) => state.reducer);
   const [loading, setLoading] = React.useState(false);
@@ -175,25 +212,9 @@ const SupplierDataGrid = () => {
     handleCloseEdit();
   };
 
-  const handleConfirmDelete = () => {
-    try {
-      dispatch(deleteSupplier(Number(itemToDelete?.id))); // Dynamic component
-      setOpenDeleteConfirmation(false);
-    } catch (e) {}
-  };
-
   const handleUpdateClick = (row: rowProps) => () => {
     setFormData(row);
     handleOpenEdit();
-  };
-
-  const handleDeleteClick = (row: any) => () => {
-    setItemToDelete(row);
-    setOpenDeleteConfirmation(true);
-  };
-
-  const handleCloseDeleteConfirmation = () => {
-    setOpenDeleteConfirmation(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -251,6 +272,7 @@ const SupplierDataGrid = () => {
       field: "phone",
       caption: "Phone",
       type: "tel",
+      required: false,
       value: formData?.phone,
       onChange: handleChange,
       inputProps: {
@@ -269,6 +291,7 @@ const SupplierDataGrid = () => {
       field: "address",
       caption: "Address",
       type: "text",
+      required: false,
       value: formData?.address,
       onChange: handleChange,
       inputProps: {
@@ -281,6 +304,7 @@ const SupplierDataGrid = () => {
       field: "city",
       caption: "City",
       type: "text",
+      required: false,
       value: formData?.city,
       onChange: handleChange,
       inputProps: {
@@ -293,6 +317,7 @@ const SupplierDataGrid = () => {
       field: "email",
       caption: "Email",
       type: "text",
+      required: false,
       value: formData?.email,
       onChange: handleChange,
       inputProps: {
@@ -305,6 +330,7 @@ const SupplierDataGrid = () => {
       field: "website",
       caption: "Website",
       type: "text",
+      required: false,
       value: formData?.website,
       onChange: handleChange,
       inputProps: {
@@ -318,8 +344,11 @@ const SupplierDataGrid = () => {
       showOnEdit: true,
       component: (
         <FormControl key={`form-country`} fullWidth>
-          <FieldLabel caption="Select Country" htmlFor="country"></FieldLabel>
-
+          <FieldLabel
+            caption="Select Country"
+            htmlFor="country"
+            isRequired={true}
+          ></FieldLabel>
           <Autocomplete
             options={allCountryNames || []}
             getOptionLabel={(option) => option}
@@ -337,11 +366,7 @@ const SupplierDataGrid = () => {
               );
             }}
             renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                required
-              />
+              <TextField {...params} variant="outlined" required />
             )}
             freeSolo={false}
           />
@@ -394,7 +419,12 @@ const SupplierDataGrid = () => {
                 if (item?.component !== undefined) {
                   return item.component;
                 }
-                return <CustomTextField key={`create-${item?.field}-${index}`} item={item}/>;
+                return (
+                  <CustomTextField
+                    key={`create-${item?.field}-${index}`}
+                    item={item}
+                  />
+                );
               }
             })}
 
@@ -419,7 +449,12 @@ const SupplierDataGrid = () => {
                 if (item?.component !== undefined) {
                   return item.component;
                 }
-                return <CustomTextField key={`edit-${item?.field}-${index}`} item={item}/>;
+                return (
+                  <CustomTextField
+                    key={`edit-${item?.field}-${index}`}
+                    item={item}
+                  />
+                );
               }
             })}
 
@@ -431,17 +466,6 @@ const SupplierDataGrid = () => {
           </div>
         </form>
       </ModalWrapper>
-
-      <DeleteConfirmationDialog
-        open={openDeleteConfirmation}
-        onClose={handleCloseDeleteConfirmation}
-        onConfirm={handleConfirmDelete}
-        itemToDelete={itemToDelete}
-        dialogTitle="Delete Item"
-        confirmationMessage="Are you sure you want to delete this item"
-        cancelButtonText="Cancel"
-        confirmButtonText="Delete"
-      />
     </DataGridBox>
   );
 };

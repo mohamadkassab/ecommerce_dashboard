@@ -1,14 +1,26 @@
 "use client";
-import React, { useState } from "react";
-import { Box, TextField, Button, Typography, Divider } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Box, Button, Typography, Divider, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import { changePassword, signout } from "@/utils/redux/actions/user";
 import { UserChangePasswordModel } from "@/models/UserChangePasswordModel";
+import ModalWrapper from "@/components/wrapper/ModalWrapper";
+import CustomTextField from "@/components/field/CustomTextField";
+import ActionButtons from "@/components/button/ActionButtons";
+import DataGridBox from "@/components/wrapper/DataGridBox";
 
 const Page = () => {
   const dispatch = useAppDispatch();
-  const defaultValues = {
+  const { status } = useAppSelector((state: any) => state.reducer);
+  React.useEffect(() => {
+    if (status === StatusModel.SUCCESS) {
+      dispatch(signout());
+    }
+  }, [status]);
+
+  // Change Password
+  const changePasswordDefaultValues = {
     oldPassword: "",
     newPassword: "",
     confirmNewPassword: "",
@@ -16,109 +28,110 @@ const Page = () => {
     lastName: "",
     email: "",
   };
-
-  const [formData, setFormData] = useState<UserChangePasswordModel>(defaultValues);
-  const { status } = useAppSelector((state: any) => state.reducer);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [changePasswordFormData, setChangePasswordFormData] =
+    useState<UserChangePasswordModel>(changePasswordDefaultValues);
+  const [openChangePasssword, setOpenChangePassword] = useState(false);
+  const handleChangeChangePassword = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData((prev: any) => ({
+    setChangePasswordFormData((prev: any) => ({
       ...prev,
       [name]: value,
     }));
   };
-  
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChangePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(changePassword(formData));
+    dispatch(changePassword(changePasswordFormData));
   };
-
-  React.useEffect(() => {
-    if (status === StatusModel.SUCCESS) {
-      dispatch(signout());
-    }
-  }, [status]);
+  const handleCloseChangePassword = () => {
+    setOpenChangePassword(false);
+  };
+  const changePasswordColumnsForms = [
+    {
+      field: "oldPassword",
+      caption: "Old Password",
+      type: "password",
+      required: true,
+      value: changePasswordFormData?.oldPassword,
+      onChange: handleChangeChangePassword,
+      inputProps: {
+        minLength: 6,
+        maxLength: 255,
+      },
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+    {
+      field: "newPassword",
+      caption: "New Password",
+      type: "password",
+      required: true,
+      value: changePasswordFormData?.newPassword,
+      onChange: handleChangeChangePassword,
+      inputProps: {
+        minLength: 6,
+        maxLength: 255,
+      },
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+    {
+      field: "confirmNewPassword",
+      caption: "Confirm New Password",
+      type: "password",
+      required: true,
+      value: changePasswordFormData?.confirmNewPassword,
+      onChange: handleChangeChangePassword,
+      inputProps: {
+        minLength: 6,
+        maxLength: 255,
+      },
+      showOnCreate: true,
+      showOnEdit: true,
+    },
+  ];
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Box
-        sx={{
-          height: "96.6vh",
-          borderRadius: 2,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "start",
-          mt: 1,
-          "& .actions": {
-            color: "text.secondary",
-          },
-          "& .textPrimary": {
-            color: "text.primary",
-          },
-        }}
-      >
-        <Typography variant="h4" sx={{ textAlign: "center", width: "100%" }}>
-          Account Settings
-        </Typography>
+    <DataGridBox>
+      <Typography variant="h4" sx={{ textAlign: "center", width: "100%" }}>
+        Account Settings
+      </Typography>
 
-        {/* Forgot Password Section */}
-        <Typography
-          variant="h6"
-          sx={{ mt: 1, textAlign: "start", width: "100%" }}
-        >
-          Forgot Password
-        </Typography>
-        <TextField
-          label="Old Password"
-          variant="outlined"
-          margin="normal"
-          type="password"
-          name="oldPassword"
-          required
-          inputProps={{ minLength: 6 }}
-          value={formData.oldPassword}
-          onChange={handleChange}
-          fullWidth
-        />
-        <TextField
-          label="New Password"
-          variant="outlined"
-          margin="normal"
-          type="password"
-          name="newPassword"
-          required
-          inputProps={{ minLength: 6, maxLength: 255 }}
-          value={formData.newPassword}
-          onChange={handleChange}
-          fullWidth
-        />
-        <TextField
-          label="Confirm New Password"
-          variant="outlined"
-          margin="normal"
-          type="password"
-          name="confirmNewPassword"
-          required
-          inputProps={{ minLength: 6, maxLength: 255 }}
-          value={formData.confirmNewPassword}
-          onChange={handleChange}
-          fullWidth
-        />
+      {/* Change Password */}
+      <Box sx={{ width: "100%", mt: 3 }}>
         <Button
-          variant="contained"
-          sx={{ mt: 2 }}
-          type="submit"
-          disabled={
-            formData.newPassword === "" ||
-            formData.newPassword !== formData.confirmNewPassword
-          }
+          variant="outlined"
+          fullWidth
+          onClick={() => setOpenChangePassword(true)}
         >
           Change Password
         </Button>
-
-        <Divider sx={{ my: 4, width: "100%" }} />
       </Box>
-    </form>
+      <ModalWrapper
+        open={openChangePasssword}
+        handleClose={handleCloseChangePassword}
+        title="Change Password"
+      >
+        <form onSubmit={handleChangePasswordSubmit}>
+          {changePasswordColumnsForms?.map((item, index) => {
+            if (item?.showOnCreate) {
+              return (
+                <CustomTextField
+                  key={`create-${item?.field}-${index}`}
+                  item={item}
+                />
+              );
+            }
+          })}
+          <ActionButtons
+            onCancel={handleCloseChangePassword}
+            cancelLabel="Go Back"
+            submitLabel="Save"
+          />
+        </form>
+      </ModalWrapper>
+    </DataGridBox>
   );
 };
 

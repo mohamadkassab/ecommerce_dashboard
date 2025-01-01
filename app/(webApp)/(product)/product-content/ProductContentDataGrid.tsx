@@ -35,9 +35,13 @@ import CustomTextField from "@/components/field/CustomTextField";
 import { FileTypeEnum } from "@/models/FileTypeEnum";
 import { maxSize_5MB } from "@/utils/constants";
 import { ProductContentModel } from "@/models/ProductContentModel";
-import { createProductContent, getAllProductContents, getProductMedia, updateProduct, updateProductContent } from "@/utils/redux/actions/product";
+import {
+  createProductContent,
+  getAllProductContents,
+  getProductMedia,
+  updateProductContent,
+} from "@/utils/redux/actions/product";
 import DataGridBox from "@/components/wrapper/DataGridBox";
-import { ExecException } from "child_process";
 
 // Start Dynamic components
 interface rowProps extends ProductContentModel {}
@@ -47,7 +51,7 @@ const defaultValues = {
   longDescription: "",
   categories: [],
   tags: [],
-  media: []
+  media: [],
 };
 
 const ProductContentDataGrid = () => {
@@ -61,39 +65,83 @@ const ProductContentDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "shortDescription", headerName: "Short Desc", flex: 1, align: "center", headerAlign: "center", editable: false },
-    { field: "longDescription", headerName: "Long Desc", flex: 1, align: "center", headerAlign: "center", editable: false },
-    { field: "weight", headerName: "Weight", type:"number", flex: 1, align: "center", headerAlign: "center", editable: false },
-    { field: "shippingWeight", headerName: "Shipping Weight", type:"number", flex: 1, align: "center", headerAlign: "center", editable: false },
-    { field: "minOrder", headerName: "Min Order", type:"number", flex: 1, align: "center", headerAlign: "center", editable: false },
-    { field: "maxOrder", headerName: "Max Order", type:"number", flex: 1, align: "center", headerAlign: "center", editable: false },
+    {
+      field: "shortDescription",
+      headerName: "Short Desc",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "longDescription",
+      headerName: "Long Desc",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "weight",
+      headerName: "Weight",
+      type: "number",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "shippingWeight",
+      headerName: "Shipping Weight",
+      type: "number",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "minOrder",
+      headerName: "Min Order",
+      type: "number",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "maxOrder",
+      headerName: "Max Order",
+      type: "number",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "categories",
       headerName: "Categories",
-      align: "center", 
+      align: "center",
       headerAlign: "center",
       flex: 1,
       renderCell: (params) => {
         const itemsDisplayed =
-          params?.value?.map((item: string) => item).join(", ") ||
-          "Empty";
+          params?.value?.map((item: string) => item).join(", ") || "Empty";
         return <span>{itemsDisplayed}</span>;
       },
-      editable: false
+      editable: false,
     },
     {
       field: "tags",
       headerName: "Tags",
       flex: 1,
       align: "center",
-       headerAlign: "center",
+      headerAlign: "center",
       renderCell: (params) => {
         const itemsDisplayed =
-          params?.value?.map((item: string) => item).join(", ") ||
-          "Empty";
+          params?.value?.map((item: string) => item).join(", ") || "Empty";
         return <span>{itemsDisplayed}</span>;
       },
-      editable: false
+      editable: false,
     },
     {
       field: "updatedAt",
@@ -108,7 +156,14 @@ const ProductContentDataGrid = () => {
       editable: false,
     },
 
-    { field: "updatedBy", headerName: "Updated By", flex: 1, align: "center", headerAlign: "center", editable: false },
+    {
+      field: "updatedBy",
+      headerName: "Updated By",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "actions",
       type: "actions",
@@ -157,7 +212,8 @@ const ProductContentDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const { allProductContents, allTagNames, allCategoryNames, allProductMedia } = useAppSelector((state: any) => state.reducer); // Dynamic component
+  const { allProductContents, allTagNames, allCategoryNames, allProductMedia } =
+    useAppSelector((state: any) => state.reducer); // Dynamic component
   const [filesLen, setFilesLen] = React.useState(0);
   const [areMediaChanged, setAreMediaChanged] = React.useState(false);
   const [currentFileIndex, setCurrentFileIndex] = React.useState(0);
@@ -178,7 +234,7 @@ const ProductContentDataGrid = () => {
   };
 
   const handleCloseCreate = () => {
-    setOpenCreate(false)
+    setOpenCreate(false);
   };
   const handleOpenEdit = () => {
     setIsFormSubmitted(false);
@@ -195,15 +251,15 @@ const ProductContentDataGrid = () => {
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const updatedFormData = !areMediaChanged
-    ? { ...formData, media: null }
-    : formData;
+      ? { ...formData, media: null }
+      : formData;
     dispatch(updateProductContent(updatedFormData)); // Dynamic component
     handleCloseEdit();
   };
 
   const handleUpdateClick = (row: rowProps) => () => {
     setImagePreview(null);
-    dispatch(getProductMedia(Number(row?.productId))); 
+    dispatch(getProductMedia(Number(row?.productId)));
     setFormData(row);
     handleOpenEdit();
   };
@@ -225,38 +281,38 @@ const ProductContentDataGrid = () => {
   };
   const next = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if(currentFileIndex + 1 < filesLen){
+    if (currentFileIndex + 1 < filesLen) {
       setCurrentFileIndex(currentFileIndex + 1);
       const filesInFormData = formData.media[currentFileIndex + 1];
-      if(filesInFormData){
+      if (filesInFormData) {
         let previewUrl;
-        try{
+        try {
           previewUrl = URL.createObjectURL(filesInFormData);
           setImagePreview(previewUrl);
-        }catch(e){
+        } catch (e) {
           setImagePreview(`data:image/jpeg;base64,${filesInFormData}`);
         }
-      } 
+      }
     }
-  }
+  };
   const previous = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if(currentFileIndex - 1 >= 0){
+    if (currentFileIndex - 1 >= 0) {
       setCurrentFileIndex(currentFileIndex - 1);
       const filesInFormData = formData.media[currentFileIndex - 1];
-      if(filesInFormData){
+      if (filesInFormData) {
         let previewUrl;
-        try{
+        try {
           previewUrl = URL.createObjectURL(filesInFormData);
           setImagePreview(previewUrl);
-        }catch(e){
+        } catch (e) {
           setImagePreview(`data:image/jpeg;base64,${filesInFormData}`);
         }
-      } 
+      }
     }
-  }
+  };
   const handleChangeFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files= e.target.files;
+    const files = e.target.files;
     if (!files) {
       return;
     }
@@ -283,8 +339,8 @@ const ProductContentDataGrid = () => {
   };
 
   // Dynamic Component
-  React.useEffect(() =>{
-    if(allProductMedia){
+  React.useEffect(() => {
+    if (allProductMedia) {
       setFormData((prev: any) => ({
         ...prev,
         media: allProductMedia,
@@ -293,7 +349,7 @@ const ProductContentDataGrid = () => {
       setFilesLen(allProductMedia?.length);
       setImagePreview(`data:image/jpeg;base64,${allProductMedia[0]}`);
     }
-  }, [allProductMedia])
+  }, [allProductMedia]);
 
   React.useEffect(() => {
     return () => {
@@ -334,10 +390,10 @@ const ProductContentDataGrid = () => {
       required: true,
       value: formData?.productId,
       onChange: handleChange,
-      inputProps:{
-        inputMode: 'numeric', 
-        pattern: '[0-9]*',   
-        maxLength: 9,         
+      inputProps: {
+        inputMode: "numeric",
+        pattern: "[0-9]*",
+        maxLength: 9,
       },
       showOnCreate: true,
       showOnEdit: false,
@@ -375,9 +431,9 @@ const ProductContentDataGrid = () => {
       required: true,
       value: formData?.weight,
       onChange: handleChange,
-      inputProps:{
-        inputMode: 'decimal',  
-        maxLength: 6,         
+      inputProps: {
+        inputMode: "decimal",
+        maxLength: 6,
       },
       showOnCreate: true,
       showOnEdit: true,
@@ -389,9 +445,9 @@ const ProductContentDataGrid = () => {
       required: true,
       value: formData?.shippingWeight,
       onChange: handleChange,
-      inputProps:{
-        inputMode: 'decimal',  
-        maxLength: 6,         
+      inputProps: {
+        inputMode: "decimal",
+        maxLength: 6,
       },
       showOnCreate: true,
       showOnEdit: true,
@@ -403,10 +459,10 @@ const ProductContentDataGrid = () => {
       required: true,
       value: formData?.minOrder,
       onChange: handleChange,
-      inputProps:{
-        inputMode: 'numeric', 
-        pattern: '[0-9]*',   
-        maxLength: 4,         
+      inputProps: {
+        inputMode: "numeric",
+        pattern: "[0-9]*",
+        maxLength: 4,
       },
       showOnCreate: true,
       showOnEdit: true,
@@ -418,10 +474,10 @@ const ProductContentDataGrid = () => {
       required: true,
       value: formData?.maxOrder,
       onChange: handleChange,
-      inputProps:{
-        inputMode: 'numeric', 
-        pattern: '[0-9]*',   
-        maxLength: 4,         
+      inputProps: {
+        inputMode: "numeric",
+        pattern: "[0-9]*",
+        maxLength: 4,
       },
       showOnCreate: true,
       showOnEdit: true,
@@ -431,7 +487,11 @@ const ProductContentDataGrid = () => {
       showOnEdit: true,
       component: (
         <FormControl key={`form-categories`} fullWidth>
-          <FieldLabel caption="Select Categories" htmlFor="categories"></FieldLabel>
+          <FieldLabel
+            caption="Select Categories"
+            htmlFor="categories"
+            isRequired={true}
+          ></FieldLabel>
           <Autocomplete
             multiple
             disableCloseOnSelect
@@ -451,10 +511,10 @@ const ProductContentDataGrid = () => {
               );
             }}
             renderInput={(params) => (
-              <TextField 
-              {...params} 
-              variant="outlined" 
-              required={!formData?.categories?.length} 
+              <TextField
+                {...params}
+                variant="outlined"
+                required={!formData?.categories?.length}
               />
             )}
             freeSolo={false}
@@ -467,7 +527,11 @@ const ProductContentDataGrid = () => {
       showOnEdit: true,
       component: (
         <FormControl key={`form-tags`} fullWidth>
-          <FieldLabel caption="Select Tags" htmlFor="tag"></FieldLabel>
+          <FieldLabel
+            caption="Select Tags"
+            htmlFor="tag"
+            isRequired={true}
+          ></FieldLabel>
           <Autocomplete
             multiple
             disableCloseOnSelect
@@ -487,10 +551,10 @@ const ProductContentDataGrid = () => {
               );
             }}
             renderInput={(params) => (
-              <TextField 
-              {...params} 
-              variant="outlined" 
-              required={!formData?.tags?.length} 
+              <TextField
+                {...params}
+                variant="outlined"
+                required={!formData?.tags?.length}
               />
             )}
             freeSolo={false}
@@ -547,7 +611,12 @@ const ProductContentDataGrid = () => {
                   if (item?.component !== undefined) {
                     return item.component;
                   }
-                  return <CustomTextField key={`create-${item?.field}-${index}`} item={item}/>;
+                  return (
+                    <CustomTextField
+                      key={`create-${item?.field}-${index}`}
+                      item={item}
+                    />
+                  );
                 }
               })}
 
@@ -565,14 +634,15 @@ const ProductContentDataGrid = () => {
               required={formData?.media?.length < 1}
               isFormSubmitted={isFormSubmitted}
               fileType={FileTypeEnum.ImageVideo}
-              errorMessage={`Media is required & less then ${(maxSize_5MB / 1000000).toFixed(0)} MB`}
+              errorMessage={`Media is required & less then ${(
+                maxSize_5MB / 1000000
+              ).toFixed(0)} MB`}
               label="Choose Media"
               isMultiple={true}
               next={next}
               previous={previous}
               fileLen={filesLen}
               currentFileIndex={currentFileIndex}
-
             />
           </div>
         </form>
@@ -592,7 +662,12 @@ const ProductContentDataGrid = () => {
                   if (item?.component !== undefined) {
                     return item.component;
                   }
-                  return <CustomTextField key={`edit-${item?.field}-${index}`} item={item}/>;
+                  return (
+                    <CustomTextField
+                      key={`edit-${item?.field}-${index}`}
+                      item={item}
+                    />
+                  );
                 }
               })}
 
@@ -610,7 +685,9 @@ const ProductContentDataGrid = () => {
               required={formData?.media?.length < 1}
               isFormSubmitted={isFormSubmitted}
               fileType={FileTypeEnum.ImageVideo}
-              errorMessage={`Media is required & less then ${(maxSize_5MB / 1000000).toFixed(0)} MB`}
+              errorMessage={`Media is required & less then ${(
+                maxSize_5MB / 1000000
+              ).toFixed(0)} MB`}
               label="Choose Media"
               isMultiple={true}
               next={next}

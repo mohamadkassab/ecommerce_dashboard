@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import {
   TextField,
   Typography,
@@ -28,24 +27,15 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import {
-  createCurrency,
-  deleteCurrency,
   getAllBrandNames,
-  getAllBrands,
-  getAllCountryNames,
-  getAllCurrencies,
   getAllSeasonNames,
-  getAllSeasons,
   getAllSupplierNames,
-  getAllSuppliers,
-  updateCurrency,
 } from "@/utils/redux/actions/setup";
 import FieldLabel from "@/components/label/FieldLabel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
 import ModalWrapper from "@/components/wrapper/ModalWrapper";
 import CustomTextField from "@/components/field/CustomTextField";
 import ActionButtons from "@/components/button/ActionButtons";
-import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog";
 import { ProductModel } from "@/models/ProductModel";
 import {
   createProduct,
@@ -336,8 +326,8 @@ const ProductDataGrid = () => {
     {
       field: "name",
       caption: "Name",
-      required: true,
       type: "text",
+      required: true,
       value: formData?.name,
       onChange: handleChange,
       inputProps: {
@@ -349,36 +339,39 @@ const ProductDataGrid = () => {
     {
       field: "cost",
       caption: "Cost",
-      inputProps:{
-        inputMode: 'decimal',  
-        maxLength: 20,         
-      },
+      required: true,
       value: formData?.cost,
       onChange: handleChange,
+      inputProps: {
+        inputMode: "decimal",
+        maxLength: 20,
+      },
       showOnCreate: true,
       showOnEdit: true,
     },
     {
       field: "price",
       caption: "Price",
-      inputProps:{
-        inputMode: 'decimal',  
-        maxLength: 20,         
-      },
+      required: true,
       value: formData?.price,
       onChange: handleChange,
+      inputProps: {
+        inputMode: "decimal",
+        maxLength: 20,
+      },
       showOnCreate: true,
       showOnEdit: true,
     },
     {
       field: "discount",
       caption: "Discount",
-      inputProps:{
-        inputMode: 'decimal',  
-        maxLength: 5,         
-      },
+      required: true,
       value: formData?.discount,
       onChange: handleChange,
+      inputProps: {
+        inputMode: "decimal",
+        maxLength: 5,
+      },
       showOnCreate: true,
       showOnEdit: true,
     },
@@ -386,10 +379,10 @@ const ProductDataGrid = () => {
       field: "year",
       caption: "Year",
       required: true,
-      inputProps:{
-        inputMode: 'numeric', 
-        pattern: '[0-9]*',   
-        maxLength: 9,         
+      inputProps: {
+        inputMode: "numeric",
+        pattern: "[0-9]*",
+        maxLength: 9,
       },
       value: formData?.year,
       onChange: handleChange,
@@ -401,7 +394,11 @@ const ProductDataGrid = () => {
       showOnEdit: true,
       component: (
         <FormControl key={`form-supplier`} fullWidth>
-          <FieldLabel caption="Select Supplier" htmlFor="supplier"></FieldLabel>
+          <FieldLabel
+            caption="Select Supplier"
+            htmlFor="supplier"
+            isRequired={true}
+          ></FieldLabel>
           <Autocomplete
             options={allSupplierNames || []}
             getOptionLabel={(option) => option}
@@ -431,7 +428,11 @@ const ProductDataGrid = () => {
       showOnEdit: true,
       component: (
         <FormControl key={`form-brand`} fullWidth>
-          <FieldLabel caption="Select Brand" htmlFor="brand"></FieldLabel>
+          <FieldLabel
+            caption="Select Brand"
+            htmlFor="brand"
+            isRequired={true}
+          ></FieldLabel>
           <Autocomplete
             options={allBrandNames || []}
             getOptionLabel={(option) => option}
@@ -461,7 +462,11 @@ const ProductDataGrid = () => {
       showOnEdit: true,
       component: (
         <FormControl key={`form-season`} fullWidth>
-          <FieldLabel caption="Select Season" htmlFor="season"></FieldLabel>
+          <FieldLabel
+            caption="Select Season"
+            htmlFor="season"
+            isRequired={true}
+          ></FieldLabel>
           <Autocomplete
             options={allSeasonNames || []}
             getOptionLabel={(option) => option}
@@ -490,6 +495,7 @@ const ProductDataGrid = () => {
       field: "note",
       caption: "Note",
       type: "text",
+      required: false,
       value: formData?.note,
       onChange: handleChange,
       showOnCreate: true,
@@ -565,7 +571,12 @@ const ProductDataGrid = () => {
               if (item?.component !== undefined) {
                 return item.component;
               }
-              return <CustomTextField key={`create-${item?.field}-${index}`} item={item}/>;
+              return (
+                <CustomTextField
+                  key={`create-${item?.field}-${index}`}
+                  item={item}
+                />
+              );
             }
           })}
 
@@ -588,7 +599,12 @@ const ProductDataGrid = () => {
               if (item?.component !== undefined) {
                 return item.component;
               }
-              return <CustomTextField key={`edit-${item?.field}-${index}`} item={item}/>;
+              return (
+                <CustomTextField
+                  key={`edit-${item?.field}-${index}`}
+                  item={item}
+                />
+              );
             }
           })}
 

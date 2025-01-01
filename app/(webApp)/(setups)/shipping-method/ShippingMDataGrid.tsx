@@ -3,18 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import CloseIcon from "@mui/icons-material/Close";
-import Image from "next/image";
-import {
-  TextField,
-  Modal,
-  Typography,
-  Divider,
-  FormControlLabel,
-  Switch,
-  FormHelperText,
-} from "@mui/material";
+import { Typography, FormControlLabel, Switch } from "@mui/material";
 
 import {
   GridToolbarExport,
@@ -63,11 +52,20 @@ const ShippingMDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "name", headerName: "Name", flex: 1, editable: false },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "iconFile",
       headerName: "Icon",
       flex: 1,
+      align: "center",
+      headerAlign: "center",
       editable: false,
       renderCell: (params) => {
         const image = params.value;
@@ -87,6 +85,8 @@ const ShippingMDataGrid = () => {
       field: "updatedAt",
       headerName: "Updated At",
       type: "date",
+      align: "center",
+      headerAlign: "center",
       valueGetter: (params) => {
         return new Date(params);
       },
@@ -94,7 +94,14 @@ const ShippingMDataGrid = () => {
       editable: false,
     },
 
-    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
+    {
+      field: "updatedBy",
+      headerName: "Updated By",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "isActive",
       headerName: "Is Active",
@@ -373,7 +380,12 @@ const ShippingMDataGrid = () => {
                   if (item?.component !== undefined) {
                     return item.component;
                   }
-                  return <CustomTextField key={`create-${item?.field}-${index}`} item={item}/>;
+                  return (
+                    <CustomTextField
+                      key={`create-${item?.field}-${index}`}
+                      item={item}
+                    />
+                  );
                 }
               })}
 
@@ -413,7 +425,12 @@ const ShippingMDataGrid = () => {
                   if (item?.component !== undefined) {
                     return item.component;
                   }
-                  return <CustomTextField key={`edit-${item?.field}-${index}`} item={item}/>;
+                  return (
+                    <CustomTextField
+                      key={`edit-${item?.field}-${index}`}
+                      item={item}
+                    />
+                  );
                 }
               })}
 

@@ -59,8 +59,5 @@ export const createUserService = async (formData: UserModel) =>
 export const updateUserService = async (formData: UserModel) =>
   apiRequest('PUT', APIROUTES.UPDATEUSER, formData);
 
-export const deleteUserService = async (id: number) =>
-  apiRequest('DELETE', `${APIROUTES.DELETEUSER}/${id}`);
-
 export const changePasswordService = async (formData: UserChangePasswordModel) =>
   apiRequest('POST', APIROUTES.CHANGEPASSWORD, formData);

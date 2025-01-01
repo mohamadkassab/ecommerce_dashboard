@@ -33,9 +33,6 @@ export const createBrandService = async (formData: any) =>
   
 export const updateBrandService = async (formData: any) =>
     apiRequestWithFile('PUT', APIROUTES.UPDATEBRAND, formData);
-  
-export const deleteBrandService = async (id: number) =>
-    apiRequest('DELETE', `${APIROUTES.DELETEBRAND}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Category                                           
@@ -80,15 +77,6 @@ export const deleteCurrencyService = async (id: number) =>
     apiRequest('DELETE', `${APIROUTES.DELETECURRENCY}/${id}`);
 
 //+------------------------------------------------------------------+
-//| Payment method                                           
-//+------------------------------------------------------------------+
-export const getAllPaymentMService = async () =>
-    apiRequest('GET', APIROUTES.GETALLPAYMENTM);
-  
-export const updatePaymentMService = async (formData: any) =>
-    apiRequestWithFile('PUT', APIROUTES.UPDATEPAYMENTM, formData);
-
-//+------------------------------------------------------------------+
 //| Season                                           
 //+------------------------------------------------------------------+
 export const getAllSeasonsService = async () =>
@@ -99,9 +87,6 @@ export const createSeasonService = async (formData: SeasonModel) =>
 
 export const updateSeasonService = async (formData: SeasonModel) =>
     apiRequest('PUT', APIROUTES.UPDATESEASON, formData);
-
-export const deleteSeasonService = async (id: number) =>
-    apiRequest('DELETE', `${APIROUTES.DELETESEASON}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Section                                           
@@ -141,9 +126,6 @@ export const createSupplierService = async (formData: SupplierModel) =>
   
 export const updateSupplierService = async (formData: SupplierModel) =>
     apiRequest('PUT', APIROUTES.UPDATESUPPLIER, formData);
-  
-export const deleteSupplierService = async (id: number) =>
-    apiRequest('DELETE', `${APIROUTES.DELETESUPPLIER}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Tag                                           

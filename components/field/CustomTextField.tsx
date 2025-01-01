@@ -10,7 +10,7 @@ interface CustomTextFieldProps {
 const CustomTextField: React.FC<CustomTextFieldProps> = ({ item }) => {
   return (
     <div>
-      <FieldLabel caption={item?.caption} htmlFor={item?.field} />
+      <FieldLabel caption={item?.caption} htmlFor={item?.field} isRequired={item?.required}/>
       <TextField
         id={item?.field}
         name={item?.field}

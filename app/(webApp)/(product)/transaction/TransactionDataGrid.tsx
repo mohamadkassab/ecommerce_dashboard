@@ -1,9 +1,6 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import {
   TextField,
   Typography,
@@ -11,8 +8,6 @@ import {
   Autocomplete,
   Checkbox,
   ListItemText,
-  FormControlLabel,
-  Switch,
 } from "@mui/material";
 
 import {
@@ -21,37 +16,31 @@ import {
   DataGrid,
   GridColDef,
   GridToolbarContainer,
-  GridActionsCellItem,
   GridSlots,
 } from "@mui/x-data-grid";
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import {
-  createCurrency,
-  deleteCurrency,
-  getAllCountryNames,
-  getAllCurrencies,
-  updateCurrency,
-} from "@/utils/redux/actions/setup";
+import { getAllAttributes } from "@/utils/redux/actions/setup";
 import FieldLabel from "@/components/label/FieldLabel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
 import ModalWrapper from "@/components/wrapper/ModalWrapper";
 import CustomTextField from "@/components/field/CustomTextField";
 import ActionButtons from "@/components/button/ActionButtons";
-import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog";
+import {
+  createTransaction,
+  getAllTransactions,
+} from "@/utils/redux/actions/product";
+import { TransactionModel } from "@/models/Transaction";
+import { AttributeModel } from "@/models/AttributeModel";
+import { TransactionTypeEnum } from "@/models/TransactionTypeEnum";
 
 // Start Dynamic components
-interface rowProps extends CurrencyModel {}
+interface rowProps extends TransactionModel {}
 
-const defaultValues = {
-  name: "",
-  symbol: "",
-  country: null,
-  isActive: true,
-};
+const defaultValues = {};
 
-const CurrencyDataGrid = () => {
+const TransactionDataGrid = () => {
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",
@@ -62,19 +51,52 @@ const CurrencyDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "name", headerName: "Name", flex: 1, align: "center", headerAlign: "center", editable: false },
-    { field: "symbol", headerName: "Symbol", flex: 1, align: "center", headerAlign: "center", editable: false },
     {
-      field: "exchangeRateUsd",
-      headerName: "Exchange rate usd",
+      field: "productId",
+      headerName: "Product Id",
       flex: 1,
       align: "center",
       headerAlign: "center",
       editable: false,
     },
     {
-      field: "country",
-      headerName: "Country",
+      field: "quantity",
+      headerName: "Quantity",
+      type: "number",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "transactionType",
+      headerName: "Transaction Type",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "transactionAttributes",
+      headerName: "Transaction Attributes",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      valueGetter: (params: any) => {
+        return (
+          params
+            ?.map(
+              (item: { name: string; option: string }) =>
+                `${item.name}: ${item.option}`
+            )
+            .join(" | ") || ""
+        );
+      },
+      editable: false,
+    },
+    {
+      field: "note",
+      headerName: "Note",
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -85,49 +107,19 @@ const CurrencyDataGrid = () => {
       headerName: "Updated At",
       type: "date",
       flex: 1,
-      align: "center", 
+      align: "center",
       headerAlign: "center",
       valueGetter: (params) => {
         return new Date(params);
       },
       editable: false,
     },
-
-    { field: "updatedBy", headerName: "Updated By", flex: 1, align: "center", headerAlign: "center", editable: false },
     {
-      field: "isActive",
-      headerName: "Is Active",
-      type: "boolean",
+      field: "updatedBy",
+      headerName: "Updated By",
+      flex: 1,
       align: "center",
       headerAlign: "center",
-      flex: 1,
-      editable: false,
-    },
-    {
-      field: "actions",
-      type: "actions",
-      headerName: "Actions",
-      flex: 0.6,
-      cellClassName: "actions",
-      getActions: ({ row }) => {
-        return [
-          <GridActionsCellItem
-            key={`3`}
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleUpdateClick(row)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            key={`4`}
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(row)}
-            color="error"
-          />,
-        ];
-      },
       editable: false,
     },
   ];
@@ -158,15 +150,11 @@ const CurrencyDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const { allCurrencies, allCountryNames } = useAppSelector(
+  const { allTransactions, allAttributes } = useAppSelector(
     (state: any) => state.reducer
   ); // Dynamic component
   const [openCreate, setOpenCreate] = React.useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] =
-    React.useState(false);
-  const [itemToDelete, setItemToDelete] = React.useState<rowProps | null>(null);
   const [refresh, setRefresh] = React.useState(false);
   const { status } = useAppSelector((state: any) => state.reducer);
   const [loading, setLoading] = React.useState(false);
@@ -175,40 +163,10 @@ const CurrencyDataGrid = () => {
     setOpenCreate(true);
   };
   const handleCloseCreate = () => setOpenCreate(false);
-  const handleOpenEdit = () => setOpenEdit(true);
-  const handleCloseEdit = () => setOpenEdit(false);
-
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createCurrency(formData)); // Dynamic component
+    dispatch(createTransaction(formData)); // Dynamic component
     handleCloseCreate();
-  };
-
-  const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    dispatch(updateCurrency(formData)); // Dynamic component
-    handleCloseEdit();
-  };
-
-  const handleConfirmDelete = () => {
-    try {
-      dispatch(deleteCurrency(Number(itemToDelete?.id))); // Dynamic component
-      setOpenDeleteConfirmation(false);
-    } catch (e) {}
-  };
-
-  const handleUpdateClick = (row: rowProps) => () => {
-    setFormData(row);
-    handleOpenEdit();
-  };
-
-  const handleDeleteClick = (row: any) => () => {
-    setItemToDelete(row);
-    setOpenDeleteConfirmation(true);
-  };
-
-  const handleCloseDeleteConfirmation = () => {
-    setOpenDeleteConfirmation(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -219,18 +177,10 @@ const CurrencyDataGrid = () => {
     }));
   };
 
-  const handleChangeBoolean = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
+  const handleChangeByName = (key: string, value: any) => {
     setFormData((prev: any) => ({
       ...prev,
-      [name]: checked,
-    }));
-  };
-
-  const handleChangeCountry = (newValue: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      country: newValue,
+      [key]: value,
     }));
   };
 
@@ -252,67 +202,55 @@ const CurrencyDataGrid = () => {
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllCurrencies()); // Dynamic component
-    dispatch(getAllCountryNames()); // Dynamic component
+    dispatch(getAllTransactions()); // Dynamic component
+    dispatch(getAllAttributes()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [
     {
-      field: "name",
-      caption: "Name",
-      type: "text",
+      field: "productId",
+      caption: "Product Id",
       required: true,
-      value: formData?.name,
+      value: formData?.productId,
       onChange: handleChange,
       inputProps: {
-        maxLength: 255,
+        inputMode: "numeric",
+        pattern: "[0-9]*",
+        maxLength: 9,
       },
       showOnCreate: true,
       showOnEdit: true,
     },
     {
-      field: "symbol",
-      caption: "Symbol",
-      type: "text",
+      field: "quantity",
+      caption: "Quantity",
       required: true,
-      value: formData?.symbol,
+      value: formData?.quantity,
       onChange: handleChange,
       inputProps: {
-        maxLength: 255,
+        inputMode: "numeric",
+        pattern: "[0-9]*",
+        maxLength: 9,
       },
       showOnCreate: true,
       showOnEdit: true,
     },
-    {
-      field: "exchangeRateUsd",
-      caption: "Exchange rate usd",
-      required: true,
-      inputProps: {
-        inputMode: "decimal",
-        maxLength: 20,
-      },
-      value: formData?.exchangeRateUsd,
-      onChange: handleChange,
-      showOnCreate: true,
-      showOnEdit: true,
-    },
-
     {
       showOnCreate: true,
       showOnEdit: true,
       component: (
-        <FormControl key={`form-country`} fullWidth>
+        <FormControl key={`form-transaction-type`} fullWidth>
           <FieldLabel
-            caption="Country"
-            htmlFor="country"
+            caption="Transaction Type"
+            htmlFor="transactionType"
             isRequired={true}
           ></FieldLabel>
           <Autocomplete
-            options={allCountryNames || []}
+            options={Object.values(TransactionTypeEnum)}
             getOptionLabel={(option) => option}
-            value={formData?.country}
+            value={formData?.transactionType}
             onChange={(event, newValue) => {
-              handleChangeCountry(newValue);
+              handleChangeByName("transactionType", newValue);
             }}
             isOptionEqualToValue={(option, value) => option === value}
             renderOption={(props, option, { selected }) => {
@@ -331,30 +269,68 @@ const CurrencyDataGrid = () => {
         </FormControl>
       ),
     },
+
     {
       showOnCreate: true,
       showOnEdit: true,
       component: (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-        >
-          <FormControlLabel
-            key={`form-is-active`}
-            label="Is Active"
-            control={
-              <Switch
-                name={`isActive`}
-                checked={Boolean(formData?.isActive)}
-                onChange={(e) => handleChangeBoolean(e)}
-              />
+        <FormControl key={`form-transaction-attributes`} fullWidth>
+          <FieldLabel
+            caption="Transaction Attributes"
+            htmlFor="transactionAttributes"
+            isRequired={false}
+          ></FieldLabel>
+          <Autocomplete
+            multiple
+            disableCloseOnSelect
+            options={
+              allAttributes?.flatMap((attr: AttributeModel) =>
+                attr.options.map((option: string) => ({
+                  name: attr.name,
+                  option,
+                }))
+              ) || []
             }
+            getOptionLabel={(option) => `${option.name}: ${option.option}`}
+            value={formData?.transactionAttributes || []}
+            onChange={(event, newValue) => {
+              const uniqueAttributes = new Map();
+              newValue.forEach((attr) => {
+                uniqueAttributes.set(attr.name, attr); // Replace existing entry for the same name
+              });
+              handleChangeByName(
+                "transactionAttributes",
+                Array.from(uniqueAttributes.values()) // Convert back to array
+              );
+            }}
+            isOptionEqualToValue={(option, value) =>
+              option.name === value.name && option.option === value.option
+            }
+            renderOption={(props, option, { selected }) => (
+              <li {...props}>
+                <Checkbox checked={selected} />
+                <ListItemText primary={`${option.name}: ${option.option}`} />
+              </li>
+            )}
+            renderInput={(params) => (
+              <TextField {...params} variant="outlined" />
+            )}
+            freeSolo={false}
           />
-        </Box>
+        </FormControl>
       ),
+    },
+    {
+      field: "note",
+      caption: "Note",
+      required: false,
+      value: formData?.note,
+      onChange: handleChange,
+      inputProps: {
+        maxLength: 255,
+      },
+      showOnCreate: true,
+      showOnEdit: true,
     },
   ];
   // End Dynamic components
@@ -362,10 +338,10 @@ const CurrencyDataGrid = () => {
   return (
     <DataGridBox>
       <Typography variant="h4" sx={{ textAlign: "center", width: "100%" }}>
-        Currency
+        Transaction
       </Typography>
       <DataGrid
-        rows={allCurrencies} // Start Dynamic components
+        rows={allTransactions} // Start Dynamic components
         columns={columnsDataGrid}
         disableRowSelectionOnClick
         loading={loading}
@@ -417,47 +393,8 @@ const CurrencyDataGrid = () => {
           />
         </form>
       </ModalWrapper>
-
-      <ModalWrapper
-        open={openEdit}
-        handleClose={handleCloseEdit}
-        title="Edit Entry"
-      >
-        <form onSubmit={handleUpdate}>
-          {columnsForms.map((item, index) => {
-            if (item?.showOnEdit) {
-              if (item?.component !== undefined) {
-                return item.component;
-              }
-              return (
-                <CustomTextField
-                  key={`edit-${item?.field}-${index}`}
-                  item={item}
-                />
-              );
-            }
-          })}
-
-          <ActionButtons
-            onCancel={handleCloseEdit}
-            cancelLabel="Go Back"
-            submitLabel="Save"
-          />
-        </form>
-      </ModalWrapper>
-
-      <DeleteConfirmationDialog
-        open={openDeleteConfirmation}
-        onClose={handleCloseDeleteConfirmation}
-        onConfirm={handleConfirmDelete}
-        itemToDelete={itemToDelete}
-        dialogTitle="Delete Item"
-        confirmationMessage="Are you sure you want to delete this item"
-        cancelButtonText="Cancel"
-        confirmButtonText="Delete"
-      />
     </DataGridBox>
   );
 };
 
-export default CurrencyDataGrid;
+export default TransactionDataGrid;

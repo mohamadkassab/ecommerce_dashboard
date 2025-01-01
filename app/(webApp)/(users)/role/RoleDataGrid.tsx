@@ -1,23 +1,15 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import {
   TextField,
-  Modal,
   Checkbox,
   ListItemText,
   Autocomplete,
   Typography,
   FormControl,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  DialogContentText,
-  Divider,
 } from "@mui/material";
 
 import {
@@ -67,11 +59,20 @@ const RoleDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "name", headerName: "Name", flex: 1, editable: false },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "permissions",
       headerName: "Permissions",
       flex: 1,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => {
         const itemsDisplayed =
           params?.value
@@ -85,13 +86,22 @@ const RoleDataGrid = () => {
       field: "updatedAt",
       headerName: "Updated At",
       type: "date",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
       valueGetter: (params) => {
         return new Date(params);
       },
-      flex: 1,
       editable: false,
     },
-    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
+    {
+      field: "updatedBy",
+      headerName: "Updated By",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "actions",
       type: "actions",
@@ -259,6 +269,7 @@ const RoleDataGrid = () => {
           <FieldLabel
             caption="Select Permissions"
             htmlFor="permissions"
+            isRequired={false}
           ></FieldLabel>
 
           <Autocomplete
@@ -337,7 +348,12 @@ const RoleDataGrid = () => {
               if (item?.component !== undefined) {
                 return item.component;
               }
-              return <CustomTextField key={`create-${item?.field}-${index}`} item={item}/>;
+              return (
+                <CustomTextField
+                  key={`create-${item?.field}-${index}`}
+                  item={item}
+                />
+              );
             }
           })}
 
@@ -360,7 +376,12 @@ const RoleDataGrid = () => {
               if (item?.component !== undefined) {
                 return item.component;
               }
-              return <CustomTextField key={`edit-${item?.field}-${index}`} item={item}/>;
+              return (
+                <CustomTextField
+                  key={`edit-${item?.field}-${index}`}
+                  item={item}
+                />
+              );
             }
           })}
 

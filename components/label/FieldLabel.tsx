@@ -4,9 +4,10 @@ import Typography from "@mui/material/Typography";
 interface FieldLabelProps {
   caption: string;
   htmlFor?: string;
+  isRequired?: boolean
 }
 
-const FieldLabel: React.FC<FieldLabelProps> = ({ caption, htmlFor}) => {
+const FieldLabel: React.FC<FieldLabelProps> = ({ caption, htmlFor, isRequired}) => {
   return (
     <Typography
       variant="body1"
@@ -19,7 +20,7 @@ const FieldLabel: React.FC<FieldLabelProps> = ({ caption, htmlFor}) => {
         color: "text.secondary",
       }}
     >
-      {caption}
+      {caption}{isRequired ? "" : " (Optional)"}
     </Typography>
   );
 };

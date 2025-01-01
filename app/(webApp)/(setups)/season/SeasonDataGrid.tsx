@@ -1,20 +1,8 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import {
-  TextField,
-  Modal,
-  Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  DialogContentText,
-  Divider,
-} from "@mui/material";
+import { Typography } from "@mui/material";
 
 import {
   GridToolbarExport,
@@ -28,23 +16,25 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import { createSeason, deleteSeason, getAllSeasons, updateSeason } from "@/utils/redux/actions/setup";
+import {
+  createSeason,
+  getAllSeasons,
+  updateSeason,
+} from "@/utils/redux/actions/setup";
 import { SeasonModel } from "@/models/SeasonModel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
 import ModalWrapper from "@/components/wrapper/ModalWrapper";
 import CustomTextField from "@/components/field/CustomTextField";
 import ActionButtons from "@/components/button/ActionButtons";
-import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog";
 
 // Start Dynamic components
-interface rowProps extends SeasonModel { }
+interface rowProps extends SeasonModel {}
 
 const defaultValues = {
   name: "",
 };
 
 const SeasonDataGrid = () => {
-
   const columnsDataGrid: GridColDef[] = [
     {
       field: "id",
@@ -55,19 +45,35 @@ const SeasonDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "name", headerName: "Name", flex: 1, editable: false },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "updatedAt",
       headerName: "Updated At",
       type: "date",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
       valueGetter: (params) => {
         return new Date(params);
       },
-      flex: 1,
       editable: false,
     },
 
-    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
+    {
+      field: "updatedBy",
+      headerName: "Updated By",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "actions",
       type: "actions",
@@ -83,13 +89,6 @@ const SeasonDataGrid = () => {
             className="textPrimary"
             onClick={handleUpdateClick(row)}
             color="inherit"
-          />,
-          <GridActionsCellItem
-            key={`4`}
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(row)}
-            color="error"
           />,
         ];
       },
@@ -127,8 +126,6 @@ const SeasonDataGrid = () => {
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] = React.useState(false);
-  const [itemToDelete, setItemToDelete] = React.useState<rowProps | null>(null);
   const [refresh, setRefresh] = React.useState(false);
   const { status } = useAppSelector((state: any) => state.reducer);
   const [loading, setLoading] = React.useState(false);
@@ -139,36 +136,20 @@ const SeasonDataGrid = () => {
   const handleCloseEdit = () => setOpenEdit(false);
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(createSeason(formData)); // Dynamic component
     handleCloseCreate();
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(updateSeason(formData)); // Dynamic component
     handleCloseEdit();
-  };
-
-  const handleConfirmDelete = () => {
-    try {
-      dispatch(deleteSeason(Number(itemToDelete?.id))); // Dynamic component
-      setOpenDeleteConfirmation(false);
-    } catch (e) { }
   };
 
   const handleUpdateClick = (row: rowProps) => () => {
     setFormData(row);
     handleOpenEdit();
-  };
-
-  const handleDeleteClick = (row: any) => () => {
-    setItemToDelete(row);
-    setOpenDeleteConfirmation(true);
-  };
-
-  const handleCloseDeleteConfirmation = () => {
-    setOpenDeleteConfirmation(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -219,7 +200,7 @@ const SeasonDataGrid = () => {
 
   return (
     <DataGridBox>
-      <Typography variant="h4" sx={{ textAlign: 'center', width: "100%" }}>
+      <Typography variant="h4" sx={{ textAlign: "center", width: "100%" }}>
         Season
       </Typography>
       <DataGrid
@@ -253,12 +234,14 @@ const SeasonDataGrid = () => {
         handleClose={handleCloseCreate}
         title="New Entry"
       >
-
         <form onSubmit={handleCreate}>
           {columnsForms.map((item, index) => {
             if (item?.showOnCreate) {
               return (
-                <CustomTextField key={`create-${item?.field}-${index}`} item={item} />
+                <CustomTextField
+                  key={`create-${item?.field}-${index}`}
+                  item={item}
+                />
               );
             }
           })}
@@ -280,7 +263,10 @@ const SeasonDataGrid = () => {
           {columnsForms.map((item, index) => {
             if (item?.showOnEdit) {
               return (
-                <CustomTextField key={`edit-${item?.field}-${index}`} item={item} />
+                <CustomTextField
+                  key={`edit-${item?.field}-${index}`}
+                  item={item}
+                />
               );
             }
           })}
@@ -292,17 +278,6 @@ const SeasonDataGrid = () => {
           />
         </form>
       </ModalWrapper>
-
-      <DeleteConfirmationDialog
-        open={openDeleteConfirmation}
-        onClose={handleCloseDeleteConfirmation}
-        onConfirm={handleConfirmDelete}
-        itemToDelete={itemToDelete}
-        dialogTitle="Delete Item"
-        confirmationMessage="Are you sure you want to delete this item"
-        cancelButtonText="Cancel"
-        confirmButtonText="Delete"
-      />
     </DataGridBox>
   );
 };

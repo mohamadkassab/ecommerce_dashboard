@@ -1,5 +1,5 @@
 export enum FileTypeEnum{
-    Image,
-    Video,
-    ImageVideo
+    Image = "Image",
+    Video = "Video",
+    ImageVideo = "ImageVideo"
 }

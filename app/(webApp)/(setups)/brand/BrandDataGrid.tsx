@@ -2,7 +2,6 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import {
   TextField,
   Typography,
@@ -26,7 +25,6 @@ import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import {
   createBrand,
-  deleteBrand,
   getAllBrands,
   getAllCountryNames,
   updateBrand,
@@ -36,7 +34,6 @@ import FieldLabel from "@/components/label/FieldLabel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
 import ActionButtons from "@/components/button/ActionButtons";
 import ImageUploader from "@/components/image/ImageUploader";
-import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog";
 import ModalWrapper from "@/components/wrapper/ModalWrapper";
 import CustomTextField from "@/components/field/CustomTextField";
 import { FileTypeEnum } from "@/models/FileTypeEnum";
@@ -63,36 +60,43 @@ const BrandDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "name", headerName: "Name", flex: 1, editable: false },
-    { field: "website", headerName: "Website", flex: 1, editable: false },
+    { field: "name", headerName: "Name", flex: 1, align: "center", headerAlign: "center", editable: false },
+    { field: "website", headerName: "Website", flex: 1, align: "center", headerAlign: "center", editable: false },
     {
       field: "logoFile",
       headerName: "Logo",
       flex: 1,
-      editable: false,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => {
         const logoImage = params.value;
         return logoImage ? <span>Logo</span> : <span>No Logo</span>;
       },
+      editable: false,
     },
     {
       field: "country",
       headerName: "Country",
       flex: 1,
+      align: "center",
+      headerAlign: "center",
       editable: false,
     },
     {
       field: "updatedAt",
       headerName: "Updated At",
       type: "date",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
       valueGetter: (params) => {
         return new Date(params);
       },
-      flex: 1,
+
       editable: false,
     },
 
-    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
+    { field: "updatedBy", headerName: "Updated By", flex: 1, align: "center", headerAlign: "center",  editable: false },
     {
       field: "actions",
       type: "actions",
@@ -108,13 +112,6 @@ const BrandDataGrid = () => {
             className="textPrimary"
             onClick={handleUpdateClick(row)}
             color="inherit"
-          />,
-          <GridActionsCellItem
-            key={`4`}
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(row)}
-            color="error"
           />,
         ];
       },
@@ -156,9 +153,6 @@ const BrandDataGrid = () => {
   const [isFormSubmitted, setIsFormSubmitted] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] =
-    React.useState(false);
-  const [itemToDelete, setItemToDelete] = React.useState<rowProps | null>(null);
   const [refresh, setRefresh] = React.useState(false);
   const { status } = useAppSelector((state: any) => state.reducer);
   const [loading, setLoading] = React.useState(false);
@@ -187,28 +181,12 @@ const BrandDataGrid = () => {
     handleCloseEdit();
   };
 
-  const handleConfirmDelete = () => {
-    try {
-      dispatch(deleteBrand(Number(itemToDelete?.id))); // Dynamic component
-      setOpenDeleteConfirmation(false);
-    } catch (e) {}
-  };
-
   const handleUpdateClick = (row: rowProps) => () => {
     setFormData(row);
     if (row?.logoFile) {
       setImagePreview(`data:image/jpeg;base64,${row?.logoFile}`);
     }
     handleOpenEdit();
-  };
-
-  const handleDeleteClick = (row: any) => () => {
-    setItemToDelete(row);
-    setOpenDeleteConfirmation(true);
-  };
-
-  const handleCloseDeleteConfirmation = () => {
-    setOpenDeleteConfirmation(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -236,7 +214,7 @@ const BrandDataGrid = () => {
     }
     if (file && file.size > maxSize_2MB) {
       return;
-    } 
+    }
     const previewUrl = URL.createObjectURL(file);
     setImagePreview(previewUrl);
 
@@ -296,6 +274,7 @@ const BrandDataGrid = () => {
       field: "website",
       caption: "Website",
       type: "text",
+      required: false,
       value: formData?.website,
       onChange: handleChange,
       inputProps: {
@@ -309,7 +288,11 @@ const BrandDataGrid = () => {
       showOnEdit: true,
       component: (
         <FormControl key={`form-country`} fullWidth>
-          <FieldLabel caption="Select Country" htmlFor="country"></FieldLabel>
+          <FieldLabel
+            caption="Select Country"
+            htmlFor="country"
+            isRequired={true}
+          ></FieldLabel>
           <Autocomplete
             options={allCountryNames || []}
             getOptionLabel={(option) => option}
@@ -382,7 +365,12 @@ const BrandDataGrid = () => {
                   if (item?.component !== undefined) {
                     return item.component;
                   }
-                  return <CustomTextField key={`create-${item?.field}-${index}`} item={item}/>;
+                  return (
+                    <CustomTextField
+                      key={`create-${item?.field}-${index}`}
+                      item={item}
+                    />
+                  );
                 }
               })}
 
@@ -400,7 +388,9 @@ const BrandDataGrid = () => {
               required={!formData?.logoFile}
               isFormSubmitted={isFormSubmitted}
               fileType={FileTypeEnum.Image}
-              errorMessage={`Image is required & less then ${(maxSize_2MB / 1000000).toFixed(0)} MB`}
+              errorMessage={`Image is required & less then ${(
+                maxSize_2MB / 1000000
+              ).toFixed(0)} MB`}
               label="Choose Image"
             />
           </div>
@@ -421,7 +411,12 @@ const BrandDataGrid = () => {
                   if (item?.component !== undefined) {
                     return item.component;
                   }
-                  return <CustomTextField key={`edit-${item?.field}-${index}`} item={item}/>;
+                  return (
+                    <CustomTextField
+                      key={`edit-${item?.field}-${index}`}
+                      item={item}
+                    />
+                  );
                 }
               })}
 
@@ -443,17 +438,6 @@ const BrandDataGrid = () => {
           </div>
         </form>
       </ModalWrapper>
-
-      <DeleteConfirmationDialog
-        open={openDeleteConfirmation}
-        onClose={handleCloseDeleteConfirmation}
-        onConfirm={handleConfirmDelete}
-        itemToDelete={itemToDelete}
-        dialogTitle="Delete Item"
-        confirmationMessage="Are you sure you want to delete this item"
-        cancelButtonText="Cancel"
-        confirmButtonText="Delete"
-      />
     </DataGridBox>
   );
 };

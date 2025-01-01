@@ -60,9 +60,9 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
     }
   }, [status]);
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     dispatch(setUser());
-  })
+  });
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -99,139 +99,174 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
           {/* Main List Items */}
           <Box sx={{ flexGrow: 1 }}>
             {SECTIONS.map((section, sectionIndex) => {
-              if(section.requiredPermissions && section.requiredPermissions.length > 0){
-                if(!section.requiredPermissions.some(permission => user?.permission?.includes(permission)) && user?.username !== "root@e.com"){
-                  return
+              if (
+                section.requiredPermissions &&
+                section.requiredPermissions.length > 0
+              ) {
+                if (
+                  !section.requiredPermissions.some((permission) =>
+                    user?.permission?.includes(permission)
+                  ) &&
+                  user?.username !== "root@e.com"
+                ) {
+                  return;
                 }
               }
               return (
-              <div key={section.title}>
-                <ListItem
-                  disablePadding
-                  sx={{ display: "block", color: "white", "&:hover": {
-                    backgroundColor: "#cceaff", borderRadius: 2
-                  }, }}
-                >
-                  <ListItemButton
-                    onClick={() => {
-                      section.subsections
-                        ? handleToggle(section.title)
-                        : handleRouting(String(section.path));
-                    }}
+                <div key={section.title}>
+                  <ListItem
+                    disablePadding
                     sx={{
-                      minHeight: 48,
-                      justifyContent: "initial",
-
-                      color: "white", // Default text color
+                      display: "block",
+                      color: "white",
                       "&:hover": {
-                        color: "primary.dark", // Change text color on hover
-                      },
-                      position: "relative", 
-                      "&::before": {
-                        content: '""',
-                        position: "absolute",
-                        left: 20,
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        height: "70%", 
-                        width: "3px",
-                        backgroundColor: "#cceaff", 
-                        borderRadius: "2px", 
-                      },
-                      "&:hover::before": {
-                        backgroundColor: "white", 
+                        backgroundColor: "#cceaff",
+                        borderRadius: 2,
                       },
                     }}
                   >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: 3,
-                        justifyContent: "center",
+                    <ListItemButton
+                      onClick={() => {
+                        section.subsections
+                          ? handleToggle(section.title)
+                          : handleRouting(String(section.path));
                       }}
-                    />
-                    <p className="font-semibold text-base">{section.title}</p>
-                    {section.subsections &&
-                      (openSections[section.title] ? (
-                        <ExpandLess />
-                      ) : (
-                        <ExpandMore />
-                      ))}
-                  </ListItemButton>
-                </ListItem>
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: "initial",
 
-                {/* Collapsible Subsections */}
-                <Collapse
-                  in={openSections[section.title]}
-                  timeout="auto"
-                  unmountOnExit
-                >
-                  {section?.subsections?.map((subsection, subIndex) => {
-                       if(subsection.requiredPermissions && subsection.requiredPermissions.length > 0){
-                        if(!subsection.requiredPermissions.some(permission => user?.permission?.includes(permission)) && user?.username !== "root@e.com"){
-                          return
+                        color: "white", // Default text color
+                        "&:hover": {
+                          color: "primary.dark", // Change text color on hover
+                        },
+                        position: "relative",
+                        "&::before": {
+                          content: '""',
+                          position: "absolute",
+                          left: 20,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          height: "70%",
+                          width: "3px",
+                          backgroundColor: "#cceaff",
+                          borderRadius: "2px",
+                        },
+                        "&:hover::before": {
+                          backgroundColor: "white",
+                        },
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: 3,
+                          justifyContent: "center",
+                        }}
+                      />
+                      <p className="font-semibold text-base">{section.title}</p>
+                      {section.subsections &&
+                        (openSections[section.title] ? (
+                          <ExpandLess />
+                        ) : (
+                          <ExpandMore />
+                        ))}
+                    </ListItemButton>
+                  </ListItem>
+
+                  {/* Collapsible Subsections */}
+                  <Collapse
+                    in={openSections[section.title]}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    {section?.subsections?.map((subsection, subIndex) => {
+                      if (
+                        subsection.requiredPermissions &&
+                        subsection.requiredPermissions.length > 0
+                      ) {
+                        if (
+                          !subsection.requiredPermissions.some((permission) =>
+                            user?.permission?.includes(permission)
+                          ) &&
+                          user?.username !== "root@e.com"
+                        ) {
+                          return;
                         }
                       }
-                    return(
-                    <ListItem
-                      key={subsection.title}
-                      disablePadding
-                      sx={{ display: "block", pl: 3, color: "white",  "&:hover": {
-                        backgroundColor: "#cceaff", borderRadius: 2
-                      }, }}
-                    >
-                      <ListItemButton
-                          onClick={() => {
-                            if ('path' in subsection) {
-                              handleRouting(String(subsection.path));
-                            }
-                          }}
-                        className="group min-h-[36px] justify-start px-2.5 text-white hover:text-primary-dark"
-                        sx={{
-                          "&:hover": {
-                            color: "primary.dark",
-                          },
-                          position: "relative", 
-                          "&::before": {
-                            content: '""',
-                            position: "absolute",
-                            left: 10,
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            height: "70%", 
-                            width: "3px",
-                            backgroundColor: "#FF9900", 
-                            borderRadius: "2px", 
-                          },
-                          "&:hover::before": {
-                            backgroundColor: "white", 
-                          },
-                          
-                        }}
-                      >
-                        <ListItemIcon
+                      return (
+                        <ListItem
+                          key={subsection.title}
+                          disablePadding
                           sx={{
-                            minWidth: 0,
-                            mr: 2,
-                            justifyContent: "center",
+                            display: "block",
+                            pl: 3,
+                            color: "white",
+                            "&:hover": {
+                              backgroundColor: "#cceaff",
+                              borderRadius: 2,
+                            },
                           }}
-                        />
-                        <p className="font-semibold text-base">{subsection.title}</p>
-                       
-                    
-                      </ListItemButton>
-                    </ListItem>
-                  )})}
-                </Collapse>
-              </div>
-              )
+                        >
+                          <ListItemButton
+                            onClick={() => {
+                              if ("path" in subsection) {
+                                handleRouting(String(subsection.path));
+                              }
+                            }}
+                            className="group min-h-[36px] justify-start px-2.5 text-white hover:text-primary-dark"
+                            sx={{
+                              "&:hover": {
+                                color: "primary.dark",
+                              },
+                              position: "relative",
+                              "&::before": {
+                                content: '""',
+                                position: "absolute",
+                                left: 10,
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                height: "70%",
+                                width: "3px",
+                                backgroundColor: "#FF9900",
+                                borderRadius: "2px",
+                              },
+                              "&:hover::before": {
+                                backgroundColor: "white",
+                              },
+                            }}
+                          >
+                            <ListItemIcon
+                              sx={{
+                                minWidth: 0,
+                                mr: 2,
+                                justifyContent: "center",
+                              }}
+                            />
+                            <p className="font-semibold text-base">
+                              {subsection.title}
+                            </p>
+                          </ListItemButton>
+                        </ListItem>
+                      );
+                    })}
+                  </Collapse>
+                </div>
+              );
             })}
           </Box>
 
           {/* Sign Out Item at the Bottom */}
-          <ListItem disablePadding sx={{ display: "block", color: "white",   "&:hover": {
-                  backgroundColor: "error.main", borderRadius: 2
-                }, }}>
+          <ListItem
+            disablePadding
+            sx={{
+              display: "block",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "error.main",
+                borderRadius: 2,
+              },
+            }}
+          >
             <ListItemButton
               onClick={() => signoutUser()}
               sx={{
@@ -239,20 +274,20 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
                 justifyContent: "initial",
                 px: 2.5,
                 color: "white",
-                position: "relative", 
+                position: "relative",
                 "&::before": {
                   content: '""',
                   position: "absolute",
                   left: 20,
                   top: "50%",
                   transform: "translateY(-50%)",
-                  height: "70%", 
+                  height: "70%",
                   width: "3px",
-                  backgroundColor: "error.main", 
-                  borderRadius: "2px", 
+                  backgroundColor: "error.main",
+                  borderRadius: "2px",
                 },
                 "&:hover::before": {
-                  backgroundColor: "white", 
+                  backgroundColor: "white",
                 },
               }}
             >
@@ -268,11 +303,8 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
           </ListItem>
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, pt: 2,  }}>
-        <Box sx={{ }}>
-        {children}
-        </Box>
-      
+      <Box component="main" sx={{ flexGrow: 1, pt: 2 }}>
+        <Box sx={{}}>{children}</Box>
       </Box>
     </Box>
   );

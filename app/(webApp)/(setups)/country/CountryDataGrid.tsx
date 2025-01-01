@@ -1,15 +1,8 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import {
-  TextField,
-  Modal,
-  Typography,
-  Divider,
-} from "@mui/material";
+import { Typography } from "@mui/material";
 
 import {
   GridToolbarExport,
@@ -23,16 +16,19 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import { createCountry, getAllCountries, updateCountry } from "@/utils/redux/actions/setup";
+import {
+  createCountry,
+  getAllCountries,
+  updateCountry,
+} from "@/utils/redux/actions/setup";
 import { CountryModel } from "@/models/CountryModel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
 import ModalWrapper from "@/components/wrapper/ModalWrapper";
-import FieldLabel from "@/components/label/FieldLabel";
 import CustomTextField from "@/components/field/CustomTextField";
 import ActionButtons from "@/components/button/ActionButtons";
 
 // Start Dynamic components
-interface rowProps extends CountryModel { }
+interface rowProps extends CountryModel {}
 
 const defaultValues = {
   name: "",
@@ -50,20 +46,43 @@ const CountryDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "name", headerName: "Name", flex: 1, editable: false },
-    { field: "code", headerName: "Code", flex: 1, editable: false },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "code",
+      headerName: "Code",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "updatedAt",
       headerName: "Updated At",
       type: "date",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
       valueGetter: (params) => {
         return new Date(params);
       },
-      flex: 1,
       editable: false,
     },
 
-    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
+    {
+      field: "updatedBy",
+      headerName: "Updated By",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
     {
       field: "actions",
       type: "actions",
@@ -126,7 +145,7 @@ const CountryDataGrid = () => {
   const handleCloseEdit = () => setOpenEdit(false);
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(createCountry(formData)); // Dynamic component
     handleCloseCreate();
   };
@@ -203,7 +222,7 @@ const CountryDataGrid = () => {
 
   return (
     <DataGridBox>
-      <Typography variant="h4" sx={{ textAlign: 'center', width: "100%" }}>
+      <Typography variant="h4" sx={{ textAlign: "center", width: "100%" }}>
         Country
       </Typography>
       <DataGrid
@@ -235,14 +254,16 @@ const CountryDataGrid = () => {
       <ModalWrapper
         open={openCreate}
         handleClose={handleCloseCreate}
-        title="New Entry">
-
+        title="New Entry"
+      >
         <form onSubmit={handleCreate}>
           {columnsForms.map((item, index) => {
             if (item?.showOnCreate) {
-
               return (
-                <CustomTextField key={`create-${item?.field}-${index}`} item={item} />
+                <CustomTextField
+                  key={`create-${item?.field}-${index}`}
+                  item={item}
+                />
               );
             }
           })}
@@ -258,13 +279,16 @@ const CountryDataGrid = () => {
       <ModalWrapper
         open={openEdit}
         handleClose={handleCloseEdit}
-        title="Edit Entry">
-
+        title="Edit Entry"
+      >
         <form onSubmit={handleUpdate}>
           {columnsForms.map((item, index) => {
             if (item?.showOnEdit) {
               return (
-                <CustomTextField key={`edit-${item?.field}-${index}`} item={item} />
+                <CustomTextField
+                  key={`edit-${item?.field}-${index}`}
+                  item={item}
+                />
               );
             }
           })}

@@ -57,11 +57,13 @@ const AttributeDataGrid = () => {
       headerAlign: "left",
       editable: false,
     },
-    { field: "name", headerName: "Name", flex: 1, editable: false },
+    { field: "name", headerName: "Name", flex: 1, align: "center", headerAlign: "center", editable: false },
     {
       field: "options",
       headerName: "Options",
       flex: 1,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => {
         const itemsDisplayed =
           params?.value?.map((item: string) => item).join(", ") ||
@@ -74,14 +76,16 @@ const AttributeDataGrid = () => {
       field: "updatedAt",
       headerName: "Updated At",
       type: "date",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
       valueGetter: (params) => {
         return new Date(params);
       },
-      flex: 1,
       editable: false,
     },
 
-    { field: "updatedBy", headerName: "Updated By", flex: 1, editable: false },
+    { field: "updatedBy", headerName: "Updated By", flex: 1, align: "center", headerAlign: "center", editable: false },
     {
       field: "actions",
       type: "actions",
@@ -244,7 +248,11 @@ const AttributeDataGrid = () => {
       showOnEdit: true,
       component: (
         <FormControl key={`form-options`} fullWidth>
-          <FieldLabel caption="Options" htmlFor="options"></FieldLabel>
+          <FieldLabel
+            caption="Options"
+            htmlFor="options"
+            isRequired={false}
+          ></FieldLabel>
           <Autocomplete
             multiple
             disableCloseOnSelect
@@ -314,7 +322,12 @@ const AttributeDataGrid = () => {
               if (item?.component !== undefined) {
                 return item.component;
               }
-              return <CustomTextField key={`create-${item?.field}-${index}`} item={item}/>;
+              return (
+                <CustomTextField
+                  key={`create-${item?.field}-${index}`}
+                  item={item}
+                />
+              );
             }
           })}
           <ActionButtons
@@ -336,7 +349,12 @@ const AttributeDataGrid = () => {
               if (item?.component !== undefined) {
                 return item.component;
               }
-              return <CustomTextField key={`edit-${item?.field}-${index}`} item={item}/>;
+              return (
+                <CustomTextField
+                  key={`edit-${item?.field}-${index}`}
+                  item={item}
+                />
+              );
             }
           })}
 
