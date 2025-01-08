@@ -153,130 +153,130 @@ export const APIROUTES = {
   //+------------------------------------------------------------------+
   //| Attribute                                          
   //+------------------------------------------------------------------+
-  GETALLATTRIBUTES: "/Setup/GetAllAttributesWithOptions",
-  CREATEATTRIBUTE: "/Setup/CreateAttribute",
-  UPDATEATTRIBUTE: "/Setup/UpdateAttribute",
-  DELETEATTRIBUTE: "/Setup/DeleteAttribute",
+  GETALLATTRIBUTES: "/Dashboard/Setup/GetAllAttributesWithOptions",
+  CREATEATTRIBUTE: "/Dashboard/Setup/CreateAttribute",
+  UPDATEATTRIBUTE: "/Dashboard/Setup/UpdateAttribute",
+  DELETEATTRIBUTE: "/Dashboard/Setup/DeleteAttribute",
 
   //+------------------------------------------------------------------+
   //| Brand                                          
   //+------------------------------------------------------------------+
-  GETALLBRANDS: "/Setup/GetAllBrands",
-  CREATEBRAND: "/Setup/CreateBrand",
-  UPDATEBRAND: "/Setup/UpdateBrand",
+  GETALLBRANDS: "/Dashboard/Setup/GetAllBrands",
+  CREATEBRAND: "/Dashboard/Setup/CreateBrand",
+  UPDATEBRAND: "/Dashboard/Setup/UpdateBrand",
 
   //+------------------------------------------------------------------+
   //| Category                                           
   //+------------------------------------------------------------------+
-  GETALLCATEGORIES: "/Setup/GetAllCategories",
-  CREATECATEGORY : "/Setup/CreateCategory",
-  UPDATECATEGORY: "/Setup/UpdateCategory",
-  DELETECATEGORY: "/Setup/DeleteCategory",
+  GETALLCATEGORIES: "/Dashboard/Setup/GetAllCategories",
+  CREATECATEGORY : "/Dashboard/Setup/CreateCategory",
+  UPDATECATEGORY: "/Dashboard/Setup/UpdateCategory",
+  DELETECATEGORY: "/Dashboard/Setup/DeleteCategory",
 
   //+------------------------------------------------------------------+
   //| Country                                           
   //+------------------------------------------------------------------+
-  GETALLCOUNTRIES: "/Setup/GetAllCountries",
-  CREATECOUNTRY : "/Setup/CreateCountry",
-  UPDATECOUNTRY: "/Setup/UpdateCountry",
-  DELETECOUNTRY: "/Setup/DeleteCountry",
+  GETALLCOUNTRIES: "/Dashboard/Setup/GetAllCountries",
+  CREATECOUNTRY : "/Dashboard/Setup/CreateCountry",
+  UPDATECOUNTRY: "/Dashboard/Setup/UpdateCountry",
+  DELETECOUNTRY: "/Dashboard/Setup/DeleteCountry",
 
   //+------------------------------------------------------------------+
   //| Currency                                          
   //+------------------------------------------------------------------+
-  GETALLCURRENCIES: "/Setup/GetAllCurrencies",
-  CREATECURRENCY: "/Setup/CreateCurrency",
-  UPDATECURRENCY: "/Setup/UpdateCurrency",
-  DELETECURRENCY: "/Setup/DeleteCurrency",
+  GETALLCURRENCIES: "/Dashboard/Setup/GetAllCurrencies",
+  CREATECURRENCY: "/Dashboard/Setup/CreateCurrency",
+  UPDATECURRENCY: "/Dashboard/Setup/UpdateCurrency",
+  DELETECURRENCY: "/Dashboard/Setup/DeleteCurrency",
 
   //+------------------------------------------------------------------+
   //| Kpi                                           
   //+------------------------------------------------------------------+
-  CREATECHART: "/Kpi/CreateChart",
-  DELETECHART : "/Kpi/DeleteChart",
-  GETALLCHARTS: "/Kpi/GetAllCharts",
-  GETCHARTDATABYQUERY : "/Kpi/GetChartDataByQuery",
+  CREATECHART : "/Dashboard/Kpi/CreateChart",
+  DELETECHART : "/Dashboard/Kpi/DeleteChart",
+  GETALLCHARTS : "/Dashboard/Kpi/GetAllCharts",
+  GETCHARTDATABYQUERY : "/Dashboard/Kpi/GetChartDataByQuery",
 
   //+------------------------------------------------------------------+
   //| Permission                                           
   //+------------------------------------------------------------------+
-  GETALLPERMISSIONS : "/User/GetAllPermissions",
+  GETALLPERMISSIONS : "/Dashboard/User/GetAllPermissions",
 
   //+------------------------------------------------------------------+
   //| Product                                           
   //+------------------------------------------------------------------+
-  GETALLPRODUCTS : "/Product/GetAllProducts",
-  CREATEPRODUCT : "/Product/CreateProduct",
-  UPDATEPRODUCT : "/Product/UpdateProduct",
+  GETALLPRODUCTS : "/Dashboard/Product/GetAllProducts",
+  CREATEPRODUCT : "/Dashboard/Product/CreateProduct",
+  UPDATEPRODUCT : "/Dashboard/Product/UpdateProduct",
 
   //+------------------------------------------------------------------+
   //| Product content                                        
   //+------------------------------------------------------------------+
-  GETALLPRODUCTCONTENTS : "/Product/GetAllProductContents",
-  GETALLPRODUCTMEDIA : "/Product/GetProductMedia",
-  CREATEPRODUCTCONTENT : "/Product/CreateProductContent",
-  UPDATEPRODUCTCONTENT : "/Product/UpdateProductContent",
+  GETALLPRODUCTCONTENTS : "/Dashboard/Product/GetAllProductContents",
+  GETALLPRODUCTMEDIA : "/Dashboard/Product/GetProductMedia",
+  CREATEPRODUCTCONTENT : "/Dashboard/Product/CreateProductContent",
+  UPDATEPRODUCTCONTENT : "/Dashboard/Product/UpdateProductContent",
   
   //+------------------------------------------------------------------+
   //| Role                                           
   //+------------------------------------------------------------------+
-  GETALLROLES : "/User/GetAllRolesAndPermissions",
-  CREATEROLE : "/User/CreateRole",
-  UPDATEROLE: "/User/UpdateRole",
-  DELETEROLE: "/User/DeleteRole",
+  GETALLROLES : "/Dashboard/User/GetAllRolesAndPermissions",
+  CREATEROLE : "/Dashboard/User/CreateRole",
+  UPDATEROLE: "/Dashboard/User/UpdateRole",
+  DELETEROLE: "/Dashboard/User/DeleteRole",
 
   //+------------------------------------------------------------------+
   //| Season                                          
   //+------------------------------------------------------------------+
-  GETALLSEASONS: "/Setup/GetAllSeasons",
-  CREATESEASON: "/Setup/CreateSeason",
-  UPDATESEASON: "/Setup/UpdateSeason",
+  GETALLSEASONS: "/Dashboard/Setup/GetAllSeasons",
+  CREATESEASON: "/Dashboard/Setup/CreateSeason",
+  UPDATESEASON: "/Dashboard/Setup/UpdateSeason",
 
   //+------------------------------------------------------------------+
   //| Section                                          
   //+------------------------------------------------------------------+
-  GETALLSECTIONS: "/Setup/GetAllSections",
-  CREATESECTION: "/Setup/CreateSection",
-  UPDATESECTION: "/Setup/UpdateSection",
-  DELETESECTION: "/Setup/DeleteSection",
+  GETALLSECTIONS: "/Dashboard/Setup/GetAllSections",
+  CREATESECTION: "/Dashboard/Setup/CreateSection",
+  UPDATESECTION: "/Dashboard/Setup/UpdateSection",
+  DELETESECTION: "/Dashboard/Setup/DeleteSection",
 
   //+------------------------------------------------------------------+
   //| Shipping method                                          
   //+------------------------------------------------------------------+
-  GETALLSHIPPINGM: "/Setup/GetAllShippingM",
-  CREATESHIPPINGM: "/Setup/CreateShippingM",
-  UPDATESHIPPINGM: "/Setup/UpdateShippingM",
+  GETALLSHIPPINGM: "/Dashboard/Setup/GetAllShippingM",
+  CREATESHIPPINGM: "/Dashboard/Setup/CreateShippingM",
+  UPDATESHIPPINGM: "/Dashboard/Setup/UpdateShippingM",
 
   //+------------------------------------------------------------------+
   //| Supplier                                          
   //+------------------------------------------------------------------+
-  GETALLSUPPLIERS: "/Setup/GetAllSuppliers",
-  CREATESUPPLIER: "/Setup/CreateSupplier",
-  UPDATESUPPLIER: "/Setup/UpdateSupplier",
+  GETALLSUPPLIERS: "/Dashboard/Setup/GetAllSuppliers",
+  CREATESUPPLIER: "/Dashboard/Setup/CreateSupplier",
+  UPDATESUPPLIER: "/Dashboard/Setup/UpdateSupplier",
 
   //+------------------------------------------------------------------+
   //| Tag                                          
   //+------------------------------------------------------------------+
-  GETALLTAGS: "/Setup/GetAllTags",
-  CREATETAG: "/Setup/CreateTag",
-  UPDATETAG: "/Setup/UpdateTag",
-  DELETETAG: "/Setup/DeleteTag",
+  GETALLTAGS: "/Dashboard/Setup/GetAllTags",
+  CREATETAG: "/Dashboard/Setup/CreateTag",
+  UPDATETAG: "/Dashboard/Setup/UpdateTag",
+  DELETETAG: "/Dashboard/Setup/DeleteTag",
 
   //+------------------------------------------------------------------+
   //| Transaction                                          
   //+------------------------------------------------------------------+
-  GETALLTRANSACTIONS: "/Product/GetAllTransactions",
-  CREATETRANSACTION: "/Product/CreateTransaction",
+  GETALLTRANSACTIONS: "/Dashboard/Product/GetAllTransactions",
+  CREATETRANSACTION: "/Dashboard/Product/CreateTransaction",
 
   //+------------------------------------------------------------------+
   //| User                                           
   //+------------------------------------------------------------------+
-  SIGNIN : "/User/SignIn",
-  SIGNOUT : "/User/SignOut",
-  CREATEUSER : "/User/CreateUser",
-  UPDATEUSER: "/User/UpdateUser",
-  CHANGEPASSWORD: "/User/ChangePassword",
-  GETALLUSERS : "/User/GetAllUsersWithRoles",
+  SIGNIN : "/Dashboard/User/SignIn",
+  SIGNOUT : "/Dashboard/User/SignOut",
+  CREATEUSER : "/Dashboard/User/CreateUser",
+  UPDATEUSER: "/Dashboard/User/UpdateUser",
+  CHANGEPASSWORD: "/Dashboard/User/ChangePassword",
+  GETALLUSERS : "/Dashboard/User/GetAllUsersWithRoles",
 }
 
 export const DUMMYDATA = {

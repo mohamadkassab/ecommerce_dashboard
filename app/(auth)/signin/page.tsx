@@ -63,13 +63,14 @@ const SignInPage = () => {
     maxWidth="lg"
     className="flex flex-col items-center justify-start min-h-screen px-4 sm:px-8"
   >
-    <Box className="my-16 text-center">
+    <Box className="my-4 text-center">
       <Image src={logo} alt="Logo" width={200} height={200} />
     </Box>
   
-    <Box className="bg-white p-8 sm:p-16 rounded-lg flex flex-col sm:flex-row gap-8 sm:gap-16">
+    <Box className="bg-white   rounded-lg flex flex-col sm:flex-row ">
       {/* Left Column: Form */}
       <Box className="w-full sm:w-[30vw]">
+        <div className="flex flex-col justify-center items-center h-full">
         <Typography variant="h3" align="center" gutterBottom>
           Sign In
         </Typography>
@@ -115,6 +116,7 @@ const SignInPage = () => {
             <PrimaryButton type="submit">Sign In</PrimaryButton>
           </Box>
         </form>
+        </div>
       </Box>
   
       {/* Right Column: Image */}
