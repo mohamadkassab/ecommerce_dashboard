@@ -14,7 +14,7 @@ import { DRAWERWIDTH, SECTIONS } from "@/utils/constants";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import { setUser, signout } from "@/utils/redux/actions/user";
+import { SetUser, Signout } from "@/utils/redux/actions/user";
 
 interface PermanentDrawerProps {
   pathName: string;
@@ -51,7 +51,7 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
   };
 
   const signoutUser = () => {
-    dispatch(signout());
+    dispatch(Signout());
   };
 
   React.useEffect(() => {
@@ -61,7 +61,7 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
   }, [status]);
 
   React.useEffect(() => {
-    dispatch(setUser());
+    dispatch(SetUser());
   });
 
   return (
@@ -213,7 +213,7 @@ const PermanentDrawerLeft: React.FC<PermanentDrawerProps> = ({
                                 handleRouting(String(subsection.path));
                               }
                             }}
-                            className="group min-h-[36px] justify-start px-2.5 text-white hover:text-primary-dark"
+                            className="group min-h-[36px] justify-start px-2.5"
                             sx={{
                               "&:hover": {
                                 color: "primary.dark",

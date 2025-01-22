@@ -3,11 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { ActionReducerMapBuilder, AsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { AUTHTOKEN } from '../constants';
 import Cookies from 'js-cookie';
-import { createChart, deleteChart, getAllCharts } from './actions/kpi';
-import { changePassword, createRole, createUser, deleteRole, getAllPermissions, getAllRoles, getAllUsers, setIdle, setUser, signin, signout, updateRole, updateUser } from './actions/user';
+import { CreateChart, DeleteChart, GetAllCharts } from './actions/kpi';
+import { ChangePassword, CreateRole, CreateUser, DeleteRole, GetAllPermissions, GetAllRoles, GetAllUsers, SetIdle, SetUser, Signin, Signout, UpdateRole, UpdateUser } from './actions/user';
 import jwt from 'jsonwebtoken';
 import { StatusModel } from '@/models/StatusModel';
-import { createAttribute, createBrand, createCategory, createCountry, createCurrency, createSeason, createSection, createSupplier, createTag, deleteAttribute, deleteCategory, deleteCurrency, deleteSection, deleteTag, getAllAttributes, getAllBrandNames, getAllBrands, getAllCategories, getAllCategoryNames, getAllCountries, getAllCountryNames, getAllCurrencies, getAllSeasonNames, getAllSeasons, getAllSections, getAllShippingM, getAllSupplierNames, getAllSuppliers, getAllTagNames, getAllTags, updateAttribute, updateBrand, updateCategory, updateCountry, updateCurrency, updateSeason, updateSection, updateShippingM, updateSupplier, updateTag } from './actions/setup';
+import { CreateAttribute, CreateBrand, CreateCategory, CreateCountry, CreateCurrency, CreateSeason, CreateSupplier, DeleteAttribute, DeleteCategory, DeleteCurrency, GetAllAttributes, GetAllAttributesWithOptions, GetAllBrandNames, GetAllBrands, GetAllCategories, GetAllCategoryNames, GetAllCountries, GetAllCountryNames, GetAllCurrencies, GetAllSeasonNames, GetAllSeasons, GetAllShippingM, GetAllSupplierNames, GetAllSuppliers, UpdateAttribute, UpdateBrand, UpdateCategory, UpdateCountry, UpdateCurrency, UpdateSeason, UpdateShippingM, UpdateSupplier } from './actions/setup';
 import { TokenModel } from '@/models/TokenModel';
 import { ChartModel } from '@/models/ChartModel';
 import { UserModel } from '@/models/UserModel';
@@ -16,13 +16,10 @@ import { PermissionModel } from '@/models/PermissionModel';
 import { CountryModel } from '@/models/CountryModel';
 import { CategoryModel } from '@/models/CategoryModel';
 import { SeasonModel } from '@/models/SeasonModel';
-import { SectionModel } from '@/models/SectionModel';
-import { TagModel } from '@/models/TagModel';
-import { AttributeModel } from '@/models/AttributeModel';
+import { AttributeWithOptionsModel } from '@/models/AttributeWithOptionsModel';
 import { BrandModel } from '@/models/BrandModel';
 import { ShippingMModel } from '@/models/ShippingMModel';
-import { PaymentMModel } from '@/models/PaymentMModel';
-import { createProduct, createProductContent, createTransaction, getAllProductContents, getAllProducts, getAllTransactions, getProductMedia, updateProduct, updateProductContent } from './actions/product';
+import { CreateProduct, CreateProductContent, CreateTransaction, GetAllProductContents, GetAllProducts, GetAllTransactions, GetProductMedia, UpdateProduct, UpdateProductContent } from './actions/product';
 import { ProductModel } from '@/models/ProductModel';
 import { ProductContentModel } from '@/models/ProductContentModel';
 import { TransactionModel } from '@/models/Transaction';
@@ -40,10 +37,9 @@ interface InitialState {
   allCategoryNames?: string[];
   allSeasons?: SeasonModel[];
   allSeasonNames?: string[];
-  allSections?: SectionModel[];
-  allTags?: TagModel[];
   allTagNames?: string[];
-  allAttributes?: AttributeModel[];
+  allAttributesWithOptions?: AttributeWithOptionsModel[];
+  allAttributes?: string[];
   allBrands?: BrandModel[];
   allBrandNames?: string[];
   allCurrencies?: CurrencyModel[];
@@ -98,7 +94,7 @@ const handleAsyncAction = <T>(
     .addCase(action.fulfilled, (state, action) => {
       onSuccess(state, action);
       if (isErrorPayload(action.payload)) {
-        state.error = action.payload.error.response.data.message || "Failed";
+        state.error = action.payload?.error.response.data.message || "Failed";
         state.status = StatusModel.FAILED;
       }else{
         state.status = StatusModel.SUCCESS;
@@ -123,7 +119,7 @@ const handleAsyncActionWithoutSuccess = <T>(
     .addCase(action.fulfilled, (state, action) => {
       onSuccess(state, action);
       if (isErrorPayload(action.payload)) {
-        state.error = action.payload.error.response.data.message || "Failed";
+        state.error = action.payload?.error.response.data.message || "Failed";
         state.status = StatusModel.FAILED;
       }else{
         state.status = StatusModel.OK;
@@ -145,92 +141,97 @@ const slice = createSlice({
     //+------------------------------------------------------------------+
     //| Attribute                                            
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllAttributes, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllAttributesWithOptions, (state, action) => {
+      if (!action.payload?.error) {
+        state.allAttributesWithOptions = action.payload || [];
+      }       
+    });
+    handleAsyncActionWithoutSuccess(builder, GetAllAttributes, (state, action) => {
+      if (!action.payload?.error) {
         state.allAttributes = action.payload || [];
       }       
     });
-    handleAsyncAction(builder, createAttribute, () => {});
-    handleAsyncAction(builder, updateAttribute, () => {});
-    handleAsyncAction(builder, deleteAttribute, () => {});
+    handleAsyncAction(builder, CreateAttribute, () => {});
+    handleAsyncAction(builder, UpdateAttribute, () => {});
+    handleAsyncAction(builder, DeleteAttribute, () => {});
 
     //+------------------------------------------------------------------+
     //| Brand                                            
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllBrands, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllBrands, (state, action) => {
+      if (!action.payload?.error) {
         state.allBrands = action.payload || [];
       }       
     });
-    handleAsyncActionWithoutSuccess(builder, getAllBrandNames, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllBrandNames, (state, action) => {
+      if (!action.payload?.error) {
         state.allBrandNames = (action.payload || []).map((item: any) => item?.name);
       }     
     });
-    handleAsyncAction(builder, createBrand, () => {});
-    handleAsyncAction(builder, updateBrand, () => {});
+    handleAsyncAction(builder, CreateBrand, () => {});
+    handleAsyncAction(builder, UpdateBrand, () => {});
 
     //+------------------------------------------------------------------+
     //| Category                                            
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllCategories, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllCategories, (state, action) => {
+      if (!action.payload?.error) {
         state.allCategories = action.payload || [];
       }       
     });
-    handleAsyncActionWithoutSuccess(builder, getAllCategoryNames, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllCategoryNames, (state, action) => {
+      if (!action.payload?.error) {
         state.allCategoryNames = (action.payload || []).map((item: any) => item?.name);
       }     
     });
-    handleAsyncAction(builder, createCategory, () => {});
-    handleAsyncAction(builder, updateCategory, () => {});
-    handleAsyncAction(builder, deleteCategory, () => {});
+    handleAsyncAction(builder, CreateCategory, () => {});
+    handleAsyncAction(builder, UpdateCategory, () => {});
+    handleAsyncAction(builder, DeleteCategory, () => {});
 
     //+------------------------------------------------------------------+
     //| Country                                            
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllCountries, (state, action) => {  
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllCountries, (state, action) => {  
+      if (!action.payload?.error) {
         state.allCountries = action.payload || [];
       }     
     });
-    handleAsyncActionWithoutSuccess(builder, getAllCountryNames, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllCountryNames, (state, action) => {
+      if (!action.payload?.error) {
         state.allCountryNames = (action.payload || []).map((item: any) => item?.name);
       }     
     });
-    handleAsyncAction(builder, createCountry, () => {});
-    handleAsyncAction(builder, updateCountry, () => {});
+    handleAsyncAction(builder, CreateCountry, () => {});
+    handleAsyncAction(builder, UpdateCountry, () => {});
 
     //+------------------------------------------------------------------+
     //| Currency                                            
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllCurrencies, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllCurrencies, (state, action) => {
+      if (!action.payload?.error) {
         state.allCurrencies = action.payload || [];
       }       
     });
-    handleAsyncAction(builder, createCurrency, () => {});
-    handleAsyncAction(builder, updateCurrency, () => {});
-    handleAsyncAction(builder, deleteCurrency, () => {});
+    handleAsyncAction(builder, CreateCurrency, () => {});
+    handleAsyncAction(builder, UpdateCurrency, () => {});
+    handleAsyncAction(builder, DeleteCurrency, () => {});
 
     //+------------------------------------------------------------------+
     //| Kpi                                            
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllCharts, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllCharts, (state, action) => {
+      if (!action.payload?.error) {
         state.allCharts = action.payload || [];
       }
     });
-    handleAsyncAction(builder, createChart, () => {});
-    handleAsyncAction(builder, deleteChart, () => {});
+    handleAsyncAction(builder, CreateChart, () => {});
+    handleAsyncAction(builder, DeleteChart, () => {});
 
     //+------------------------------------------------------------------+
     //| Permission                                           
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllPermissions, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllPermissions, (state, action) => {
+      if (!action.payload?.error) {
         state.allPermissions = action.payload || [];
       }
     });
@@ -238,130 +239,101 @@ const slice = createSlice({
     //+------------------------------------------------------------------+
     //| Product                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllProducts, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllProducts, (state, action) => {
+      if (!action.payload?.error) {
         state.allProducts = action.payload || [];
       }
     });
-    handleAsyncAction(builder, createProduct, () => {});
-    handleAsyncAction(builder, updateProduct, () => {});
+    handleAsyncAction(builder, CreateProduct, () => {});
+    handleAsyncAction(builder, UpdateProduct, () => {});
 
     //+------------------------------------------------------------------+
     //| Product content                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllProductContents, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllProductContents, (state, action) => {
+      if (!action.payload?.error) {
         state.allProductContents = action.payload || [];
       }
     });
-    handleAsyncActionWithoutSuccess(builder, getProductMedia, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetProductMedia, (state, action) => {
+      if (!action.payload?.error) {
         state.allProductMedia = action.payload || [];
       }
     });
-    handleAsyncAction(builder, createProductContent, () => {});
-    handleAsyncAction(builder, updateProductContent, () => {});
+    handleAsyncAction(builder, CreateProductContent, () => {});
+    handleAsyncAction(builder, UpdateProductContent, () => {});
 
     //+------------------------------------------------------------------+
     //| Role                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllRoles, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllRoles, (state, action) => {
+      if (!action.payload?.error) {
         state.allRoles = action.payload || [];
       }
     });
-    handleAsyncAction(builder, createRole, () => {});
-    handleAsyncAction(builder, updateRole, () => {});
-    handleAsyncAction(builder, deleteRole, () => {});
+    handleAsyncAction(builder, CreateRole, () => {});
+    handleAsyncAction(builder, UpdateRole, () => {});
+    handleAsyncAction(builder, DeleteRole, () => {});
 
     //+------------------------------------------------------------------+
     //| Season                                            
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllSeasons, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllSeasons, (state, action) => {
+      if (!action.payload?.error) {
         state.allSeasons = action.payload || [];
       }       
     });
-    handleAsyncActionWithoutSuccess(builder, getAllSeasonNames, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllSeasonNames, (state, action) => {
+      if (!action.payload?.error) {
         state.allSeasonNames = (action.payload || []).map((item: any) => item?.name);
       }     
     });
-    handleAsyncAction(builder, createSeason, () => {});
-    handleAsyncAction(builder, updateSeason, () => {});
-
-    //+------------------------------------------------------------------+
-    //| Section                                            
-    //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllSections, (state, action) => {
-      if (!action.payload.error) {
-        state.allSections = action.payload || [];
-      }       
-    });
-    handleAsyncAction(builder, createSection, () => {});
-    handleAsyncAction(builder, updateSection, () => {});
-    handleAsyncAction(builder, deleteSection, () => {});
+    handleAsyncAction(builder, CreateSeason, () => {});
+    handleAsyncAction(builder, UpdateSeason, () => {});
 
     //+------------------------------------------------------------------+
     //| Shipping method                                            
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllShippingM, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllShippingM, (state, action) => {
+      if (!action.payload?.error) {
         state.allShippingM = action.payload || [];
       }       
     });
-    handleAsyncAction(builder, updateShippingM, () => {});
+    handleAsyncAction(builder, UpdateShippingM, () => {});
 
     //+------------------------------------------------------------------+
     //| Supplier                                            
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllSuppliers, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllSuppliers, (state, action) => {
+      if (!action.payload?.error) {
         state.allSuppliers = action.payload || [];
       }       
     });
-    handleAsyncActionWithoutSuccess(builder, getAllSupplierNames, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllSupplierNames, (state, action) => {
+      if (!action.payload?.error) {
         state.allSupplierNames = (action.payload || []).map((item: any) => item?.name);
       }     
     });
-    handleAsyncAction(builder, createSupplier, () => {});
-    handleAsyncAction(builder, updateSupplier, () => {});
-
-    //+------------------------------------------------------------------+
-    //| Tag                                            
-    //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllTags, (state, action) => {
-      if (!action.payload.error) {
-        state.allTags = action.payload || [];
-      }       
-    });
-    handleAsyncActionWithoutSuccess(builder, getAllTagNames, (state, action) => {
-      if (!action.payload.error) {
-        state.allTagNames = (action.payload || []).map((item: any) => item?.name);
-      }     
-    });
-    handleAsyncAction(builder, createTag, () => {});
-    handleAsyncAction(builder, updateTag, () => {});
-    handleAsyncAction(builder, deleteTag, () => {});
+    handleAsyncAction(builder, CreateSupplier, () => {});
+    handleAsyncAction(builder, UpdateSupplier, () => {});
 
     //+------------------------------------------------------------------+
     //| Transaction                                            
     //+------------------------------------------------------------------+
-    handleAsyncActionWithoutSuccess(builder, getAllTransactions, (state, action) => {
-      if (!action.payload.error) {
+    handleAsyncActionWithoutSuccess(builder, GetAllTransactions, (state, action) => {
+      if (!action.payload?.error) {
         state.allTransactions = action.payload || [];
       }       
     });
-    handleAsyncAction(builder, createTransaction, () => {});
+    handleAsyncAction(builder, CreateTransaction, () => {});
 
     //+------------------------------------------------------------------+
     //| User                                            
     //+------------------------------------------------------------------+
-    builder.addCase(signin.pending, (state) => {
+    builder.addCase(Signin.pending, (state) => {
       state.status = StatusModel.LOADING;
     })
-    .addCase(signin.fulfilled, (state, action) => {
+    .addCase(Signin.fulfilled, (state, action) => {
       if (action.payload) {
         const decodedToken = jwt.decode(action.payload) as TokenModel | null;
         if (decodedToken) {
@@ -381,16 +353,16 @@ const slice = createSlice({
         state.status = StatusModel.FAILED;
       }
     })
-    .addCase(signin.rejected, (state, action) => {
+    .addCase(Signin.rejected, (state, action) => {
       state.error = action.error?.message || null;
       state.status = StatusModel.FAILED;
     });    
-    builder.addCase(signout.fulfilled, (state) => {
+    builder.addCase(Signout.fulfilled, (state) => {
       state.status = StatusModel.SIGNOUTSUCCESSFUL;
       state.user = null;
       Cookies.remove(AUTHTOKEN);
     });
-    builder.addCase(setUser.fulfilled, (state) => {
+    builder.addCase(SetUser.fulfilled, (state) => {
       if (!state.user) {
         const jwtToken = Cookies.get(AUTHTOKEN);
         if (jwtToken) {
@@ -401,16 +373,16 @@ const slice = createSlice({
         }
       }
     });
-    builder.addCase(setIdle.fulfilled, (state) => {
+    builder.addCase(SetIdle.fulfilled, (state) => {
       state.status = StatusModel.IDLE;
       state.error = null;
     });
-    handleAsyncActionWithoutSuccess(builder, getAllUsers, (state, action) => {
+    handleAsyncActionWithoutSuccess(builder, GetAllUsers, (state, action) => {
       state.allUsers = action.payload || [];
     });
-    handleAsyncAction(builder, createUser, () => {});
-    handleAsyncAction(builder, updateUser, () => {});
-    handleAsyncAction(builder, changePassword, () => {}); 
+    handleAsyncAction(builder, CreateUser, () => {});
+    handleAsyncAction(builder, UpdateUser, () => {});
+    handleAsyncAction(builder, ChangePassword, () => {}); 
   },
 });
 

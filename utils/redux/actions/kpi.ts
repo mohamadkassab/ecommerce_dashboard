@@ -1,21 +1,21 @@
 import { CreateKpiModel } from '@/models/KpiModels';
-import { createChartService, deleteChartService, getAllChartsService } from '@/services/kpiService';
+import { CreateChartService, DeleteChartService, GetAllChartsService } from '@/services/kpiService';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 //+------------------------------------------------------------------+
 //| Kpi                                           
 //+------------------------------------------------------------------+
-export const getAllCharts = createAsyncThunk('getAllCharts', async () => {
-  const response = await getAllChartsService();
+export const GetAllCharts = createAsyncThunk('GetAllCharts', async () => {
+  const response = await GetAllChartsService();
   return response;
 });
 
-export const createChart = createAsyncThunk('createChart', async (formData: CreateKpiModel ) => {
-    const response = await createChartService(formData);
+export const CreateChart = createAsyncThunk('CreateChart', async (formData: CreateKpiModel ) => {
+    const response = await CreateChartService(formData);
     return response;
 });
   
-export const deleteChart = createAsyncThunk('deleteChart', async (id: number) => {
-  const response = await deleteChartService(id);
+export const DeleteChart = createAsyncThunk('DeleteChart', async (id: number) => {
+  const response = await DeleteChartService(id);
   return response;
 });

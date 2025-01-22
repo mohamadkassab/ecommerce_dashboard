@@ -1,4 +1,4 @@
-import { AttributeModel } from "./AttributeModel";
+import { AttributeWithOptionsModel } from "./AttributeWithOptionsModel";
 import { TransactionAttributeModel } from "./TransactionAttributeModet";
 import { TransactionTypeEnum } from "./TransactionTypeEnum";
 

@@ -1,143 +1,115 @@
-import { AttributeModel } from '@/models/AttributeModel';
+import { AttributeWithOptionsModel } from '@/models/AttributeWithOptionsModel';
 import { CategoryModel } from '@/models/CategoryModel';
 import { CountryModel } from '@/models/CountryModel';
 import { SeasonModel } from '@/models/SeasonModel';
-import { SectionModel } from '@/models/SectionModel';
-import { TagModel } from '@/models/TagModel';
 import { APIROUTES } from '@/utils/constants';
-import {apiRequest, apiRequestWithFile} from '@/utils/helpers/apiRequest';
+import {ApiRequest, ApiRequestWithFile} from '@/utils/helpers/apiRequest';
 
 //+------------------------------------------------------------------+
 //| Attribute                                           
 //+------------------------------------------------------------------+
-export const getAllAttributesService = async () =>
-    apiRequest('GET', APIROUTES.GETALLATTRIBUTES);
+export const GetAllAttributesWithOptionsService = async () =>
+    ApiRequest('GET', APIROUTES.GETALLATTRIBUTESWITHOPTIONS);
+
+export const GetAllAttributesService = async () =>
+    ApiRequest('GET', APIROUTES.GETALLATTRIBUTES);
   
-export const createAttributeService = async (formData: AttributeModel) =>
-    apiRequest('POST', APIROUTES.CREATEATTRIBUTE, formData);
+export const CreateAttributeService = async (formData: AttributeWithOptionsModel) =>
+    ApiRequest('POST', APIROUTES.CREATEATTRIBUTE, formData);
   
-export const updateAttributeService = async (formData: AttributeModel) =>
-    apiRequest('PUT', APIROUTES.UPDATEATTRIBUTE, formData);
+export const UpdateAttributeService = async (formData: AttributeWithOptionsModel) =>
+    ApiRequest('PUT', APIROUTES.UPDATEATTRIBUTE, formData);
   
-export const deleteAttributeService = async (id: number) =>
-    apiRequest('DELETE', `${APIROUTES.DELETEATTRIBUTE}/${id}`);
+export const DeleteAttributeService = async (id: number) =>
+    ApiRequest('DELETE', `${APIROUTES.DELETEATTRIBUTE}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Brand                                           
 //+------------------------------------------------------------------+
-export const getAllBrandsService = async () =>
-    apiRequest('GET', APIROUTES.GETALLBRANDS);
+export const GetAllBrandsService = async () =>
+    ApiRequest('GET', APIROUTES.GETALLBRANDS);
   
-export const createBrandService = async (formData: any) =>
-    apiRequestWithFile('POST', APIROUTES.CREATEBRAND, formData);
+export const CreateBrandService = async (formData: any) =>
+    ApiRequestWithFile('POST', APIROUTES.CREATEBRAND, formData);
   
-export const updateBrandService = async (formData: any) =>
-    apiRequestWithFile('PUT', APIROUTES.UPDATEBRAND, formData);
+export const UpdateBrandService = async (formData: any) =>
+    ApiRequestWithFile('PUT', APIROUTES.UPDATEBRAND, formData);
 
 //+------------------------------------------------------------------+
 //| Category                                           
 //+------------------------------------------------------------------+
-export const getAllCategoriesService = async () =>
-    apiRequest('GET', APIROUTES.GETALLCATEGORIES);
+export const GetAllCategoriesService = async () =>
+    ApiRequest('GET', APIROUTES.GETALLCATEGORIES);
   
-export const createCategoryService = async (formData: CategoryModel) =>
-    apiRequest('POST', APIROUTES.CREATECATEGORY, formData);
+export const CreateCategoryService = async (formData: CategoryModel) =>
+    ApiRequest('POST', APIROUTES.CREATECATEGORY, formData);
   
-export const updateCategoryService = async (formData: CategoryModel) =>
-    apiRequest('PUT', APIROUTES.UPDATECATEGORY, formData);
+export const UpdateCategoryService = async (formData: CategoryModel) =>
+    ApiRequest('PUT', APIROUTES.UPDATECATEGORY, formData);
   
-export const deleteCategoryService = async (id: number) =>
-    apiRequest('DELETE', `${APIROUTES.DELETECATEGORY}/${id}`);
+export const DeleteCategoryService = async (id: number) =>
+    ApiRequest('DELETE', `${APIROUTES.DELETECATEGORY}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Country                                           
 //+------------------------------------------------------------------+
-export const getAllCountriesService = async () =>
-    apiRequest('GET', APIROUTES.GETALLCOUNTRIES);
+export const GetAllCountriesService = async () =>
+    ApiRequest('GET', APIROUTES.GETALLCOUNTRIES);
   
-export const createCountryService = async (formData: CountryModel) =>
-    apiRequest('POST', APIROUTES.CREATECOUNTRY, formData);
+export const CreateCountryService = async (formData: CountryModel) =>
+    ApiRequest('POST', APIROUTES.CREATECOUNTRY, formData);
   
-export const updateCountryService = async (formData: CountryModel) =>
-    apiRequest('PUT', APIROUTES.UPDATECOUNTRY, formData);
+export const UpdateCountryService = async (formData: CountryModel) =>
+    ApiRequest('PUT', APIROUTES.UPDATECOUNTRY, formData);
 
 //+------------------------------------------------------------------+
 //| Currency                                           
 //+------------------------------------------------------------------+
-export const getAllCurrenciesService = async () =>
-    apiRequest('GET', APIROUTES.GETALLCURRENCIES);
+export const GetAllCurrenciesService = async () =>
+    ApiRequest('GET', APIROUTES.GETALLCURRENCIES);
   
-export const createCurrencyService = async (formData: CurrencyModel) =>
-    apiRequest('POST', APIROUTES.CREATECURRENCY, formData);
+export const CreateCurrencyService = async (formData: CurrencyModel) =>
+    ApiRequest('POST', APIROUTES.CREATECURRENCY, formData);
   
-export const updateCurrencyService = async (formData: CurrencyModel) =>
-    apiRequest('PUT', APIROUTES.UPDATECURRENCY, formData);
+export const UpdateCurrencyService = async (formData: CurrencyModel) =>
+    ApiRequest('PUT', APIROUTES.UPDATECURRENCY, formData);
   
-export const deleteCurrencyService = async (id: number) =>
-    apiRequest('DELETE', `${APIROUTES.DELETECURRENCY}/${id}`);
+export const DeleteCurrencyService = async (id: number) =>
+    ApiRequest('DELETE', `${APIROUTES.DELETECURRENCY}/${id}`);
 
 //+------------------------------------------------------------------+
 //| Season                                           
 //+------------------------------------------------------------------+
-export const getAllSeasonsService = async () =>
-    apiRequest('GET', APIROUTES.GETALLSEASONS);
+export const GetAllSeasonsService = async () =>
+    ApiRequest('GET', APIROUTES.GETALLSEASONS);
 
-export const createSeasonService = async (formData: SeasonModel) =>
-    apiRequest('POST', APIROUTES.CREATESEASON, formData);
+export const CreateSeasonService = async (formData: SeasonModel) =>
+    ApiRequest('POST', APIROUTES.CREATESEASON, formData);
 
-export const updateSeasonService = async (formData: SeasonModel) =>
-    apiRequest('PUT', APIROUTES.UPDATESEASON, formData);
-
-//+------------------------------------------------------------------+
-//| Section                                           
-//+------------------------------------------------------------------+
-export const getAllSectionsService = async () =>
-    apiRequest('GET', APIROUTES.GETALLSECTIONS);
-  
-export const createSectionService = async (formData: SectionModel) =>
-    apiRequest('POST', APIROUTES.CREATESECTION, formData);
-  
-export const updateSectionService = async (formData: SectionModel) =>
-    apiRequest('PUT', APIROUTES.UPDATESECTION, formData);
-  
-export const deleteSectionService = async (id: number) =>
-    apiRequest('DELETE', `${APIROUTES.DELETESECTION}/${id}`);
+export const UpdateSeasonService = async (formData: SeasonModel) =>
+    ApiRequest('PUT', APIROUTES.UPDATESEASON, formData);
 
 //+------------------------------------------------------------------+
 //| Shipping method                                           
 //+------------------------------------------------------------------+
-export const getAllShippingMService = async () =>
-    apiRequest('GET', APIROUTES.GETALLSHIPPINGM);
+export const GetAllShippingMService = async () =>
+    ApiRequest('GET', APIROUTES.GETALLSHIPPINGM);
   
-export const createShippingMService = async (formData: any) =>
-    apiRequestWithFile('POST', APIROUTES.CREATESHIPPINGM, formData);
+export const CreateShippingMService = async (formData: any) =>
+    ApiRequestWithFile('POST', APIROUTES.CREATESHIPPINGM, formData);
 
-export const updateShippingMService = async (formData: any) =>
-    apiRequestWithFile('PUT', APIROUTES.UPDATESHIPPINGM, formData);
+export const UpdateShippingMService = async (formData: any) =>
+    ApiRequestWithFile('PUT', APIROUTES.UPDATESHIPPINGM, formData);
 
 //+------------------------------------------------------------------+
 //| Supplier                                           
 //+------------------------------------------------------------------+
-export const getAllSuppliersService = async () =>
-    apiRequest('GET', APIROUTES.GETALLSUPPLIERS);
+export const GetAllSuppliersService = async () =>
+    ApiRequest('GET', APIROUTES.GETALLSUPPLIERS);
   
-export const createSupplierService = async (formData: SupplierModel) =>
-    apiRequest('POST', APIROUTES.CREATESUPPLIER, formData);
+export const CreateSupplierService = async (formData: SupplierModel) =>
+    ApiRequest('POST', APIROUTES.CREATESUPPLIER, formData);
   
-export const updateSupplierService = async (formData: SupplierModel) =>
-    apiRequest('PUT', APIROUTES.UPDATESUPPLIER, formData);
+export const UpdateSupplierService = async (formData: SupplierModel) =>
+    ApiRequest('PUT', APIROUTES.UPDATESUPPLIER, formData);
 
-//+------------------------------------------------------------------+
-//| Tag                                           
-//+------------------------------------------------------------------+
-export const getAllTagsService = async () =>
-    apiRequest('GET', APIROUTES.GETALLTAGS);
-  
-export const createTagService = async (formData: TagModel) =>
-    apiRequest('POST', APIROUTES.CREATETAG, formData);
-  
-export const updateTagService = async (formData: TagModel) =>
-    apiRequest('PUT', APIROUTES.UPDATETAG, formData);
-  
-export const deleteTagService = async (id: number) =>
-    apiRequest('DELETE', `${APIROUTES.DELETETAG}/${id}`);

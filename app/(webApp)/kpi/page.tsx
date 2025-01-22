@@ -5,7 +5,7 @@ import { Box, Card, CardContent, IconButton, Typography } from "@mui/material";
 import VerticalBarChart from "@/components/chart/VerticalBarChart";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
-import { deleteChart, getAllCharts } from "@/utils/redux/actions/kpi";
+import { DeleteChart, GetAllCharts } from "@/utils/redux/actions/kpi";
 import { KpiDetailsModel } from "@/models/KpiModels";
 import ChartWrapper from "@/components/wrapper/chartWrapper";
 import HorizontalBarChart from "@/components/chart/HorizontalBarChart";
@@ -16,7 +16,7 @@ import TopN from "@/components/chart/TopN";
 import BasicColorLegend from "@/components/chart/BasicColorLegend";
 import EditDeleteButtons from "@/components/shared/EditDeleteButtons";
 import { StatusModel } from "@/models/StatusModel";
-import { setIdle } from "@/utils/redux/actions/user";
+import { SetIdle } from "@/utils/redux/actions/user";
 
 const Page: React.FC = () => {
   const { status } = useAppSelector((state: any) => state.reducer);
@@ -33,19 +33,19 @@ const Page: React.FC = () => {
 
   React.useEffect(()=>{
     if(status === StatusModel.SUCCESS){
-       dispatch(setIdle());
+       dispatch(SetIdle());
        setRefresh(!refresh);
     }
   },[status])
 
   const onDeleteChart = async (e: React.FormEvent, id: number) => {
     e.preventDefault();
-    await dispatch(deleteChart(id));
+    await dispatch(DeleteChart(id));
     
   };
 
   React.useEffect(() => {
-    dispatch(getAllCharts());
+    dispatch(GetAllCharts());
   }, [refresh]);
 
   const handleScroll = () => {

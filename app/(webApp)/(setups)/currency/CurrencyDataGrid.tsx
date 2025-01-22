@@ -28,11 +28,11 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import {
-  createCurrency,
-  deleteCurrency,
-  getAllCountryNames,
-  getAllCurrencies,
-  updateCurrency,
+  CreateCurrency,
+  DeleteCurrency,
+  GetAllCountryNames,
+  GetAllCurrencies,
+  UpdateCurrency,
 } from "@/utils/redux/actions/setup";
 import FieldLabel from "@/components/label/FieldLabel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
@@ -47,6 +47,7 @@ interface rowProps extends CurrencyModel {}
 const defaultValues = {
   name: "",
   symbol: "",
+  exchangeRateUsd: 0,
   country: null,
   isActive: true,
 };
@@ -180,19 +181,17 @@ const CurrencyDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createCurrency(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateCurrency(formData)); // Dynamic component
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateCurrency(formData)); // Dynamic component
-    handleCloseEdit();
+    dispatch(UpdateCurrency(formData)); // Dynamic component
   };
 
   const handleConfirmDelete = () => {
     try {
-      dispatch(deleteCurrency(Number(itemToDelete?.id))); // Dynamic component
+      dispatch(DeleteCurrency(Number(itemToDelete?.id))); // Dynamic component
       setOpenDeleteConfirmation(false);
     } catch (e) {}
   };
@@ -246,14 +245,15 @@ const CurrencyDataGrid = () => {
 
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
+      setFormData(defaultValues);
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllCurrencies()); // Dynamic component
-    dispatch(getAllCountryNames()); // Dynamic component
+    dispatch(GetAllCurrencies()); // Dynamic component
+    dispatch(GetAllCountryNames()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [
@@ -317,7 +317,7 @@ const CurrencyDataGrid = () => {
             isOptionEqualToValue={(option, value) => option === value}
             renderOption={(props, option, { selected }) => {
               return (
-                <li {...props}>
+                <li {...props} key={option}>
                   <Checkbox checked={selected} />
                   <ListItemText primary={option} />
                 </li>

@@ -2,7 +2,7 @@ import * as React from "react";
 import PrimaryButton from "../button/PrimaryButton";
 import HorizontalBarChart from "../chart/HorizontalBarChart";
 import ChartWrapper from "../wrapper/chartWrapper";
-import { createChart } from "@/utils/redux/actions/kpi";
+import { CreateChart } from "@/utils/redux/actions/kpi";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import HorizontalBarChartStatic from "../chart_static/HorizontalBarChartStatic";
 import {
@@ -79,7 +79,7 @@ const HorizontalBarChartCreate: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await dispatch(
-      createChart({
+      CreateChart({
         label: formData.label,
         query: formData.query,
         chartType: "HorizontalBarChart",

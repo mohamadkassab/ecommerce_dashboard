@@ -4,7 +4,7 @@ import BasicColorLegend from "../chart/BasicColorLegend";
 import { DUMMYDATA } from "@/utils/constants";
 import BasicColorLegendStatic from "../chart_static/BasicColorLegendStatic";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
-import { createChart } from "@/utils/redux/actions/kpi";
+import { CreateChart } from "@/utils/redux/actions/kpi";
 import {
   Box,
   Card,
@@ -58,7 +58,7 @@ const BasicColorLegendCreate: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await dispatch(
-      createChart({
+      CreateChart({
         label: formData.label,
         query: formData.query,
         chartType: "BasicColorLegend",

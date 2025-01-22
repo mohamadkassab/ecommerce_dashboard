@@ -27,10 +27,10 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import {
-  getAllUsers,
-  getAllRoles,
-  createUser,
-  updateUser,
+  GetAllUsers,
+  GetAllRoles,
+  CreateUser,
+  UpdateUser,
 } from "@/utils/redux/actions/user";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -245,14 +245,12 @@ const UserDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createUser(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateUser(formData)); // Dynamic component
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateUser(formData)); // Dynamic component
-    handleCloseEdit();
+    dispatch(UpdateUser(formData)); // Dynamic component
   };
 
   const handleUpdateClick = (row: rowProps) => () => {
@@ -298,14 +296,15 @@ const UserDataGrid = () => {
 
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
+      setFormData(defaultValues);
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllRoles());
-    dispatch(getAllUsers());
+    dispatch(GetAllRoles());
+    dispatch(GetAllUsers());
   }, [refresh]);
 
   const columnsForms = [
@@ -408,7 +407,7 @@ const UserDataGrid = () => {
             disableCloseOnSelect
             options={allRoles || []}
             getOptionLabel={(option) => option.name}
-            value={formData.roles}
+            value={formData.roles || []}
             onChange={(event, newValue) => {
               handleArrayChange("roles", newValue);
             }}

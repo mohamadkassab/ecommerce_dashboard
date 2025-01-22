@@ -21,24 +21,29 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import { getAllAttributes } from "@/utils/redux/actions/setup";
 import FieldLabel from "@/components/label/FieldLabel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
 import ModalWrapper from "@/components/wrapper/ModalWrapper";
 import CustomTextField from "@/components/field/CustomTextField";
 import ActionButtons from "@/components/button/ActionButtons";
 import {
-  createTransaction,
-  getAllTransactions,
+  CreateTransaction,
+  GetAllTransactions,
 } from "@/utils/redux/actions/product";
 import { TransactionModel } from "@/models/Transaction";
-import { AttributeModel } from "@/models/AttributeModel";
+import { AttributeWithOptionsModel } from "@/models/AttributeWithOptionsModel";
 import { TransactionTypeEnum } from "@/models/TransactionTypeEnum";
+import { GetAllAttributesWithOptions } from "@/utils/redux/actions/setup";
 
 // Start Dynamic components
 interface rowProps extends TransactionModel {}
 
-const defaultValues = {};
+const defaultValues = {
+  productId: 0,
+  quantity: 0,
+  note: "",
+  transactionAttributes: [],
+};
 
 const TransactionDataGrid = () => {
   const columnsDataGrid: GridColDef[] = [
@@ -150,7 +155,7 @@ const TransactionDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const { allTransactions, allAttributes } = useAppSelector(
+  const { allTransactions, allAttributesWithOptions } = useAppSelector(
     (state: any) => state.reducer
   ); // Dynamic component
   const [openCreate, setOpenCreate] = React.useState(false);
@@ -165,8 +170,7 @@ const TransactionDataGrid = () => {
   const handleCloseCreate = () => setOpenCreate(false);
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createTransaction(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateTransaction(formData)); // Dynamic component
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,14 +200,15 @@ const TransactionDataGrid = () => {
 
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
+      setFormData(defaultValues);
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllTransactions()); // Dynamic component
-    dispatch(getAllAttributes()); // Dynamic component
+    dispatch(GetAllTransactions()); // Dynamic component
+    dispatch(GetAllAttributesWithOptions()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [
@@ -248,14 +253,14 @@ const TransactionDataGrid = () => {
           <Autocomplete
             options={Object.values(TransactionTypeEnum)}
             getOptionLabel={(option) => option}
-            value={formData?.transactionType}
+            value={formData?.transactionType || ""}
             onChange={(event, newValue) => {
               handleChangeByName("transactionType", newValue);
             }}
             isOptionEqualToValue={(option, value) => option === value}
             renderOption={(props, option, { selected }) => {
               return (
-                <li {...props}>
+                <li {...props} key={option}>
                   <Checkbox checked={selected} />
                   <ListItemText primary={option} />
                 </li>
@@ -284,11 +289,12 @@ const TransactionDataGrid = () => {
             multiple
             disableCloseOnSelect
             options={
-              allAttributes?.flatMap((attr: AttributeModel) =>
-                attr.options.map((option: string) => ({
-                  name: attr.name,
-                  option,
-                }))
+              allAttributesWithOptions?.flatMap(
+                (attr: AttributeWithOptionsModel) =>
+                  attr.options.map((option: string) => ({
+                    name: attr.name,
+                    option,
+                  }))
               ) || []
             }
             getOptionLabel={(option) => `${option.name}: ${option.option}`}
@@ -296,11 +302,11 @@ const TransactionDataGrid = () => {
             onChange={(event, newValue) => {
               const uniqueAttributes = new Map();
               newValue.forEach((attr) => {
-                uniqueAttributes.set(attr.name, attr); // Replace existing entry for the same name
+                uniqueAttributes.set(attr.name, attr);
               });
               handleChangeByName(
                 "transactionAttributes",
-                Array.from(uniqueAttributes.values()) // Convert back to array
+                Array.from(uniqueAttributes.values())
               );
             }}
             isOptionEqualToValue={(option, value) =>

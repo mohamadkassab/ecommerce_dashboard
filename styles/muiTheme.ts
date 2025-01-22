@@ -177,7 +177,7 @@ const muiTheme = createTheme({
     },
   },
 
-  direction: "ltr", // Consider RTL if needed
+  direction: "ltr", 
 });
 
 export default muiTheme;

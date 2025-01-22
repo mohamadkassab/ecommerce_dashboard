@@ -7,7 +7,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import axios from "axios";
 import { Typography } from "@mui/material";
 import { APIROUTES } from "@/utils/constants";
-import { findPropertyValueByKey } from "@/utils/helpers/funtions";
+import { FindPropertyValueByKey } from "@/utils/helpers/funtions";
 
 type HorizontalBarChartProps = {
   chart: any;

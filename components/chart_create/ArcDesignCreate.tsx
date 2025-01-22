@@ -4,7 +4,7 @@ import PrimaryButton from "../button/PrimaryButton";
 import ArcDesign from "../chart/ArcDesign";
 import ChartWrapper from "../wrapper/chartWrapper";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
-import { createChart } from "@/utils/redux/actions/kpi";
+import { CreateChart } from "@/utils/redux/actions/kpi";
 import ArcDesignStatic from "../chart_static/ArcDesignStatic";
 import { StatusModel } from "@/models/StatusModel";
 
@@ -40,7 +40,7 @@ const ArcDesignCreate: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await dispatch(
-      createChart({
+      CreateChart({
         label: formData.label,
         query: formData.query,
         chartType: "ArcDesign",

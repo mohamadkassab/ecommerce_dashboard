@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, Method } from 'axios';
 import { GLOBAL_REQUEST_TIMEOUT } from '@/utils/constants';
-import { getToken } from './funtions';
+import { GetToken } from './funtions';
 
 /**
  * A generic function for making API requests.
@@ -11,9 +11,9 @@ import { getToken } from './funtions';
  * @param {Record<string, string>} [headers] - Additional headers (optional).
  * @returns {Promise<any>} - API response or error object.
  */
-export const apiRequest = async (method: Method, url: string, data?: any, params?: string, headers: Record<string, string> = {}) => {
+export const ApiRequest = async (method: Method, url: string, data?: any, params?: string, headers: Record<string, string> = {}) => {
   try {
-    const token = getToken();
+    const token = GetToken();
     const config: AxiosRequestConfig = {
       method,
       url: params ? `${process.env.NEXT_PUBLIC_API_URL}${url}/${params}` : `${process.env.NEXT_PUBLIC_API_URL}${url}`,
@@ -34,9 +34,9 @@ export const apiRequest = async (method: Method, url: string, data?: any, params
   }
 };
 
-export const apiRequestWithFile = async (method: Method, url: string, data?: any, headers: Record<string, string> = {}) => {
+export const ApiRequestWithFile = async (method: Method, url: string, data?: any, headers: Record<string, string> = {}) => {
   try {
-    const token = getToken();
+    const token = GetToken();
     const config: AxiosRequestConfig = {
       method,
       url: `${process.env.NEXT_PUBLIC_API_URL}${url}`,

@@ -23,10 +23,7 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import {
-  getAllCategoryNames,
-  getAllTagNames,
-} from "@/utils/redux/actions/setup";
+import {GetAllCategoryNames} from "@/utils/redux/actions/setup";
 import FieldLabel from "@/components/label/FieldLabel";
 import ActionButtons from "@/components/button/ActionButtons";
 import ImageUploader from "@/components/image/ImageUploader";
@@ -36,10 +33,10 @@ import { FileTypeEnum } from "@/models/FileTypeEnum";
 import { maxSize_5MB } from "@/utils/constants";
 import { ProductContentModel } from "@/models/ProductContentModel";
 import {
-  createProductContent,
-  getAllProductContents,
-  getProductMedia,
-  updateProductContent,
+  CreateProductContent,
+  GetAllProductContents,
+  GetProductMedia,
+  UpdateProductContent,
 } from "@/utils/redux/actions/product";
 import DataGridBox from "@/components/wrapper/DataGridBox";
 
@@ -47,10 +44,14 @@ import DataGridBox from "@/components/wrapper/DataGridBox";
 interface rowProps extends ProductContentModel {}
 
 const defaultValues = {
+  productId: 0,
   shortDescription: "",
   longDescription: "",
+  weight: 0,
+  shippingWeight: 0,
+  minOrder: 0,
+  maxOrder: 0,
   categories: [],
-  tags: [],
   media: [],
 };
 
@@ -123,19 +124,6 @@ const ProductContentDataGrid = () => {
       align: "center",
       headerAlign: "center",
       flex: 1,
-      renderCell: (params) => {
-        const itemsDisplayed =
-          params?.value?.map((item: string) => item).join(", ") || "Empty";
-        return <span>{itemsDisplayed}</span>;
-      },
-      editable: false,
-    },
-    {
-      field: "tags",
-      headerName: "Tags",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
       renderCell: (params) => {
         const itemsDisplayed =
           params?.value?.map((item: string) => item).join(", ") || "Empty";
@@ -225,6 +213,7 @@ const ProductContentDataGrid = () => {
   const [refresh, setRefresh] = React.useState(false);
   const { status } = useAppSelector((state: any) => state.reducer);
   const [loading, setLoading] = React.useState(false);
+
   const handleOpenCreate = () => {
     setCurrentFileIndex(0);
     setFilesLen(0);
@@ -237,6 +226,7 @@ const ProductContentDataGrid = () => {
     setOpenCreate(false);
   };
   const handleOpenEdit = () => {
+    setAreMediaChanged(false);
     setIsFormSubmitted(false);
     setOpenEdit(true);
   };
@@ -244,8 +234,7 @@ const ProductContentDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createProductContent(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateProductContent(formData)); // Dynamic component
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
@@ -253,13 +242,12 @@ const ProductContentDataGrid = () => {
     const updatedFormData = !areMediaChanged
       ? { ...formData, media: null }
       : formData;
-    dispatch(updateProductContent(updatedFormData)); // Dynamic component
-    handleCloseEdit();
+    dispatch(UpdateProductContent(updatedFormData)); // Dynamic component
   };
 
   const handleUpdateClick = (row: rowProps) => () => {
     setImagePreview(null);
-    dispatch(getProductMedia(Number(row?.productId)));
+    dispatch(GetProductMedia(Number(row?.productId)));
     setFormData(row);
     handleOpenEdit();
   };
@@ -371,15 +359,18 @@ const ProductContentDataGrid = () => {
 
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
+      setIsFormSubmitted(false);
+      setFilesLen(0);
+      setFormData(defaultValues);
+      setImagePreview(null);
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllProductContents()); // Dynamic component
-    dispatch(getAllCategoryNames()); // Dynamic component
-    dispatch(getAllTagNames()); // Dynamic component
+    dispatch(GetAllProductContents()); // Dynamic component
+    dispatch(GetAllCategoryNames()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [
@@ -421,6 +412,8 @@ const ProductContentDataGrid = () => {
       inputProps: {
         maxLength: 16000,
       },
+      isScrollable: true,
+      maxRows: 3,
       showOnCreate: true,
       showOnEdit: true,
     },
@@ -497,14 +490,14 @@ const ProductContentDataGrid = () => {
             disableCloseOnSelect
             options={allCategoryNames || []}
             getOptionLabel={(option) => option}
-            value={formData?.categories}
+            value={formData?.categories || []}
             onChange={(event, newValue) => {
               handleArrayChange("categories", newValue);
             }}
             isOptionEqualToValue={(option, value) => option === value}
             renderOption={(props, option, { selected }) => {
               return (
-                <li {...props}>
+                <li {...props} key={option}>
                   <Checkbox checked={selected} />
                   <ListItemText primary={option} />
                 </li>
@@ -515,46 +508,6 @@ const ProductContentDataGrid = () => {
                 {...params}
                 variant="outlined"
                 required={!formData?.categories?.length}
-              />
-            )}
-            freeSolo={false}
-          />
-        </FormControl>
-      ),
-    },
-    {
-      showOnCreate: true,
-      showOnEdit: true,
-      component: (
-        <FormControl key={`form-tags`} fullWidth>
-          <FieldLabel
-            caption="Select Tags"
-            htmlFor="tag"
-            isRequired={true}
-          ></FieldLabel>
-          <Autocomplete
-            multiple
-            disableCloseOnSelect
-            options={allTagNames || []}
-            getOptionLabel={(option) => option}
-            value={formData?.tags}
-            onChange={(event, newValue) => {
-              handleArrayChange("tags", newValue);
-            }}
-            isOptionEqualToValue={(option, value) => option === value}
-            renderOption={(props, option, { selected }) => {
-              return (
-                <li {...props}>
-                  <Checkbox checked={selected} />
-                  <ListItemText primary={option} />
-                </li>
-              );
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                required={!formData?.tags?.length}
               />
             )}
             freeSolo={false}
@@ -634,6 +587,7 @@ const ProductContentDataGrid = () => {
               required={formData?.media?.length < 1}
               isFormSubmitted={isFormSubmitted}
               fileType={FileTypeEnum.ImageVideo}
+              note={`Max size: ${(maxSize_5MB / 1000000).toFixed(0)} MB \n Prefered aspect ratio: 1:1 \n First selected image will appear first`}
               errorMessage={`Media is required & less then ${(
                 maxSize_5MB / 1000000
               ).toFixed(0)} MB`}
@@ -685,6 +639,7 @@ const ProductContentDataGrid = () => {
               required={formData?.media?.length < 1}
               isFormSubmitted={isFormSubmitted}
               fileType={FileTypeEnum.ImageVideo}
+              note={`Max size: ${(maxSize_5MB / 1000000).toFixed(0)} MB \n Prefered aspect ratio: 1:1 \n First selected image will appear first`}
               errorMessage={`Media is required & less then ${(
                 maxSize_5MB / 1000000
               ).toFixed(0)} MB`}

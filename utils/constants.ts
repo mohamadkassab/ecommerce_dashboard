@@ -102,10 +102,8 @@ export const SECTIONS = [
       { title: 'country', protected: true, path:ROUTES.COUNTRY, requiredPermissions: ["country"] },
       { title: 'currency', protected: true, path:ROUTES.CURRENCY,requiredPermissions: [""] },
       { title: 'season', protected: true, path:ROUTES.SEASON, requiredPermissions: ["season"] },
-      { title: 'section', protected: true, path:ROUTES.SECTION, requiredPermissions: ["section"] },
       { title: 'shipping method', protected: true, path:ROUTES.SHIPPINGM, requiredPermissions: [""] },
       { title: 'supplier', protected: true, path:ROUTES.SUPPLIER, requiredPermissions: [""] },
-      { title: 'tag', protected: true, path:ROUTES.TAG, requiredPermissions: [""] },
     ],
   },
   // {
@@ -153,7 +151,8 @@ export const APIROUTES = {
   //+------------------------------------------------------------------+
   //| Attribute                                          
   //+------------------------------------------------------------------+
-  GETALLATTRIBUTES: "/Dashboard/Setup/GetAllAttributesWithOptions",
+  GETALLATTRIBUTESWITHOPTIONS: "/Dashboard/Setup/GetAllAttributesWithOptions",
+  GETALLATTRIBUTES: "/Dashboard/Setup/GetAllAttributes",
   CREATEATTRIBUTE: "/Dashboard/Setup/CreateAttribute",
   UPDATEATTRIBUTE: "/Dashboard/Setup/UpdateAttribute",
   DELETEATTRIBUTE: "/Dashboard/Setup/DeleteAttribute",
@@ -233,14 +232,6 @@ export const APIROUTES = {
   UPDATESEASON: "/Dashboard/Setup/UpdateSeason",
 
   //+------------------------------------------------------------------+
-  //| Section                                          
-  //+------------------------------------------------------------------+
-  GETALLSECTIONS: "/Dashboard/Setup/GetAllSections",
-  CREATESECTION: "/Dashboard/Setup/CreateSection",
-  UPDATESECTION: "/Dashboard/Setup/UpdateSection",
-  DELETESECTION: "/Dashboard/Setup/DeleteSection",
-
-  //+------------------------------------------------------------------+
   //| Shipping method                                          
   //+------------------------------------------------------------------+
   GETALLSHIPPINGM: "/Dashboard/Setup/GetAllShippingM",
@@ -253,14 +244,6 @@ export const APIROUTES = {
   GETALLSUPPLIERS: "/Dashboard/Setup/GetAllSuppliers",
   CREATESUPPLIER: "/Dashboard/Setup/CreateSupplier",
   UPDATESUPPLIER: "/Dashboard/Setup/UpdateSupplier",
-
-  //+------------------------------------------------------------------+
-  //| Tag                                          
-  //+------------------------------------------------------------------+
-  GETALLTAGS: "/Dashboard/Setup/GetAllTags",
-  CREATETAG: "/Dashboard/Setup/CreateTag",
-  UPDATETAG: "/Dashboard/Setup/UpdateTag",
-  DELETETAG: "/Dashboard/Setup/DeleteTag",
 
   //+------------------------------------------------------------------+
   //| Transaction                                          

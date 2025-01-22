@@ -24,10 +24,10 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import {
-  createSupplier,
-  getAllCountryNames,
-  getAllSuppliers,
-  updateSupplier,
+  CreateSupplier,
+  GetAllCountryNames,
+  GetAllSuppliers,
+  UpdateSupplier,
 } from "@/utils/redux/actions/setup";
 import FieldLabel from "@/components/label/FieldLabel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
@@ -202,14 +202,12 @@ const SupplierDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createSupplier(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateSupplier(formData)); // Dynamic component
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateSupplier(formData)); // Dynamic component
-    handleCloseEdit();
+    dispatch(UpdateSupplier(formData)); // Dynamic component
   };
 
   const handleUpdateClick = (row: rowProps) => () => {
@@ -244,14 +242,15 @@ const SupplierDataGrid = () => {
 
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
+      setFormData(defaultValues);
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllSuppliers()); // Dynamic component
-    dispatch(getAllCountryNames()); // Dynamic component
+    dispatch(GetAllSuppliers()); // Dynamic component
+    dispatch(GetAllCountryNames()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [
@@ -359,7 +358,7 @@ const SupplierDataGrid = () => {
             isOptionEqualToValue={(option, value) => option === value}
             renderOption={(props, option, { selected }) => {
               return (
-                <li {...props}>
+                <li {...props} key={option}>
                   <Checkbox checked={selected} />
                   <ListItemText primary={option} />
                 </li>

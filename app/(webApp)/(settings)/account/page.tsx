@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Typography, Divider, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
-import { changePassword, signout } from "@/utils/redux/actions/user";
+import { ChangePassword, Signout } from "@/utils/redux/actions/user";
 import { UserChangePasswordModel } from "@/models/UserChangePasswordModel";
 import ModalWrapper from "@/components/wrapper/ModalWrapper";
 import CustomTextField from "@/components/field/CustomTextField";
@@ -15,7 +15,7 @@ const Page = () => {
   const { status } = useAppSelector((state: any) => state.reducer);
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
-      dispatch(signout());
+      dispatch(Signout());
     }
   }, [status]);
 
@@ -42,7 +42,7 @@ const Page = () => {
   };
   const handleChangePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(changePassword(changePasswordFormData));
+    dispatch(ChangePassword(changePasswordFormData));
   };
   const handleCloseChangePassword = () => {
     setOpenChangePassword(false);

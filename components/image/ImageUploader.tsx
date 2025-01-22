@@ -1,5 +1,5 @@
 import React from "react";
-import { FormHelperText } from "@mui/material";
+import { FormHelperText, Typography } from "@mui/material";
 import Image from "next/image";
 import { FileTypeEnum } from "@/models/FileTypeEnum";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -18,6 +18,7 @@ interface ImageUploaderProps {
   isMultiple?: boolean;
   fileLen?: any;
   currentFileIndex?: any;
+  note?: string;
 }
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({
@@ -32,7 +33,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   fileType = FileTypeEnum.Image, // Default to "image"
   isMultiple = false,
   fileLen,
-  currentFileIndex
+  currentFileIndex,
+  note,
 }) => {
   // Determine the accepted file types based on fileType prop
   const acceptTypes =
@@ -43,8 +45,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       : "image/*,video/*";
 
   return (
-    <div className="flex flex-col gap-2 items-center pt-2 flex-none w-[400px] max-h-[400px] mb-[50px]">
-      <div className="relative w-full max-w-[400px] max-h-[400px] ">
+    <div className="flex flex-col gap-2 items-center pt-2 flex-none w-[300px] h-[300px] mb-[50px]">
+      <div className="relative w-full w-[300px] h-[300px] ">
         {/* Left Arrow */}
         {isMultiple && (
           <button
@@ -59,9 +61,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         <Image
           src={imagePreview || "/images/default-image.png"}
           alt="Preview"
-          className="w-full h-auto rounded object-contain max-h-[400px] max-w-[400px]"
-          width={400}
-          height={400}
+          className="w-full h-auto rounded object-contain h-[300px] w-[300px]"
+          width={300}
+          height={300}
         />
 
         {/* Right Arrow */}
@@ -92,6 +94,18 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         className="hidden"
         multiple={isMultiple}
       />
+      {note && (
+        <div className="w-[100%] flex justify-start">
+          <Typography variant="body2" color="secondary.light">
+            {note.split("\n").map((line, index) => (
+              <React.Fragment key={index}>
+                {line}
+                <br />
+              </React.Fragment>
+            ))}
+          </Typography>
+        </div>
+      )}
       {fileLen > 0 && <label>{`${currentFileIndex + 1}/${fileLen}`}</label>}
       {required && !imagePreview && isFormSubmitted && (
         <FormHelperText error>

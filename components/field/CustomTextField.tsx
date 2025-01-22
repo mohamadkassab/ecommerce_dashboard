@@ -20,6 +20,8 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({ item }) => {
         onChange={item?.onChange}
         inputProps={item?.inputProps || undefined}
         variant="outlined"
+        multiline={item?.isScrollable}
+        maxRows={item?.maxRows}
         fullWidth
         sx={{
           marginTop: 0,

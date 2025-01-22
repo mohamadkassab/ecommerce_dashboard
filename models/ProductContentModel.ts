@@ -7,7 +7,6 @@ export interface ProductContentModel {
     minOrder?: number;
     maxOrder?: number;
     categories: string[];
-    tags: string[];
     media: (File | null)[];
     updatedAt?: Date;
     updatedBy?: string;

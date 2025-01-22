@@ -17,9 +17,9 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import {
-  createSeason,
-  getAllSeasons,
-  updateSeason,
+  CreateSeason,
+  GetAllSeasons,
+  UpdateSeason,
 } from "@/utils/redux/actions/setup";
 import { SeasonModel } from "@/models/SeasonModel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
@@ -137,14 +137,12 @@ const SeasonDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createSeason(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateSeason(formData)); // Dynamic component
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateSeason(formData)); // Dynamic component
-    handleCloseEdit();
+    dispatch(UpdateSeason(formData)); // Dynamic component
   };
 
   const handleUpdateClick = (row: rowProps) => () => {
@@ -172,13 +170,14 @@ const SeasonDataGrid = () => {
 
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
+      setFormData(defaultValues);
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllSeasons());
+    dispatch(GetAllSeasons());
   }, [refresh]);
 
   const columnsForms = [

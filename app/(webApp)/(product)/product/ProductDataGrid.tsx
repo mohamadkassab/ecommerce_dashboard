@@ -27,9 +27,10 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import {
-  getAllBrandNames,
-  getAllSeasonNames,
-  getAllSupplierNames,
+  GetAllAttributes,
+  GetAllBrandNames,
+  GetAllSeasonNames,
+  GetAllSupplierNames,
 } from "@/utils/redux/actions/setup";
 import FieldLabel from "@/components/label/FieldLabel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
@@ -38,9 +39,9 @@ import CustomTextField from "@/components/field/CustomTextField";
 import ActionButtons from "@/components/button/ActionButtons";
 import { ProductModel } from "@/models/ProductModel";
 import {
-  createProduct,
-  getAllProducts,
-  updateProduct,
+  CreateProduct,
+  GetAllProducts,
+  UpdateProduct,
 } from "@/utils/redux/actions/product";
 
 // Start Dynamic components
@@ -49,6 +50,10 @@ interface rowProps extends ProductModel {}
 const defaultValues = {
   code: "",
   name: "",
+  cost: 0,
+  price: 0,
+  discount: 0,
+  attributes: [],
   supplier: "",
   brand: "",
   season: "",
@@ -116,6 +121,24 @@ const ProductDataGrid = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      editable: false,
+    },
+    {
+      field: "attributes",
+      headerName: "Attributes",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      valueGetter: (params: string[]) => {
+        return (
+          params
+            ?.map(
+              (item: string) =>
+                `${item}`
+            )
+            .join(" | ") || ""
+        );
+      },
       editable: false,
     },
     {
@@ -229,7 +252,7 @@ const ProductDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const { allProducts, allSupplierNames, allBrandNames, allSeasonNames } =
+  const { allProducts, allSupplierNames, allBrandNames, allSeasonNames, allAttributes } =
     useAppSelector((state: any) => state.reducer); // Dynamic component
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
@@ -247,14 +270,12 @@ const ProductDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createProduct(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateProduct(formData)); // Dynamic component
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateProduct(formData)); // Dynamic component
-    handleCloseEdit();
+    dispatch(UpdateProduct(formData)); // Dynamic component
   };
 
   const handleUpdateClick = (row: rowProps) => () => {
@@ -297,16 +318,18 @@ const ProductDataGrid = () => {
 
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
+      setFormData(defaultValues);
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllProducts()); // Dynamic component
-    dispatch(getAllSeasonNames()); // Dynamic component
-    dispatch(getAllBrandNames()); // Dynamic component
-    dispatch(getAllSupplierNames()); // Dynamic component
+    dispatch(GetAllProducts()); // Dynamic component
+    dispatch(GetAllSeasonNames()); // Dynamic component
+    dispatch(GetAllBrandNames()); // Dynamic component
+    dispatch(GetAllSupplierNames()); // Dynamic component
+    dispatch(GetAllAttributes()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [
@@ -370,7 +393,8 @@ const ProductDataGrid = () => {
       onChange: handleChange,
       inputProps: {
         inputMode: "decimal",
-        maxLength: 5,
+        min: 0,
+        max: 99.99
       },
       showOnCreate: true,
       showOnEdit: true,
@@ -393,6 +417,42 @@ const ProductDataGrid = () => {
       showOnCreate: true,
       showOnEdit: true,
       component: (
+        <FormControl key={`form-attribute`} fullWidth>
+          <FieldLabel
+            caption="Select Attributes"
+            htmlFor="attributes"
+            isRequired={true}
+          ></FieldLabel>
+          <Autocomplete
+            multiple
+            disableCloseOnSelect
+            options={allAttributes || []}
+            getOptionLabel={(option) => option}
+            value={formData?.attributes || []}
+            onChange={(event, newValue) => {
+              handleChangeByName("attributes", newValue);
+            }}
+            isOptionEqualToValue={(option, value) => option === value}
+            renderOption={(props, option, { selected }) => {
+              return (
+                <li {...props} key={option}>
+                  <Checkbox checked={selected} />
+                  <ListItemText primary={option} />
+                </li>
+              );
+            }}
+            renderInput={(params) => (
+              <TextField {...params} variant="outlined" />
+            )}
+            freeSolo={false}
+          />
+        </FormControl>
+      ),
+    },
+    {
+      showOnCreate: true,
+      showOnEdit: true,
+      component: (
         <FormControl key={`form-supplier`} fullWidth>
           <FieldLabel
             caption="Select Supplier"
@@ -409,7 +469,7 @@ const ProductDataGrid = () => {
             isOptionEqualToValue={(option, value) => option === value}
             renderOption={(props, option, { selected }) => {
               return (
-                <li {...props}>
+                <li {...props} key={option}>
                   <Checkbox checked={selected} />
                   <ListItemText primary={option} />
                 </li>

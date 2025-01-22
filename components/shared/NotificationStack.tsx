@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/utils/redux/hooks';
 import LoadingComponent from './LoadingComponent';
 import CloseIcon from '@mui/icons-material/Close'; 
 import { StatusModel } from '@/models/StatusModel';
-import { setIdle } from '@/utils/redux/actions/user';
+import { SetIdle } from '@/utils/redux/actions/user';
 
 const NotificationStack: React.FC = () => {
     const { status, error } = useAppSelector((state: any) => state.reducer);
@@ -20,11 +20,11 @@ const NotificationStack: React.FC = () => {
     useEffect(() => {
         if (status === StatusModel.FAILED || error !== null) {
             setErrorMessage(error);
-            dispatch(setIdle());
+            dispatch(SetIdle());
             setShowError(true);
             setCountdown(6); // Reset countdown on error
         } else if (status === StatusModel.SUCCESS) {
-            dispatch(setIdle());
+            dispatch(SetIdle());
             setShowSuccess(true);
             setTimeout(() => {
                 setShowSuccess(false);

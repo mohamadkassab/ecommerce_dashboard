@@ -5,7 +5,7 @@ import { DUMMYDATA } from "@/utils/constants";
 import TopN from "../chart/TopN";
 import ChartWrapper from "../wrapper/chartWrapper";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
-import { createChart } from "@/utils/redux/actions/kpi";
+import { CreateChart } from "@/utils/redux/actions/kpi";
 import TopNStatic from "../chart_static/TopNStatic";
 import {
   Box,
@@ -55,7 +55,7 @@ const TopNCreate: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await dispatch(
-      createChart({
+      CreateChart({
         label: formData.label,
         query: formData.query,
         chartType: "TopN",

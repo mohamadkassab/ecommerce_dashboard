@@ -24,11 +24,11 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import {
-  getAllRoles,
-  getAllPermissions,
-  createRole,
-  updateRole,
-  deleteRole,
+  GetAllRoles,
+  GetAllPermissions,
+  CreateRole,
+  UpdateRole,
+  DeleteRole,
 } from "@/utils/redux/actions/user";
 import { StatusModel } from "@/models/StatusModel";
 import { RoleModel } from "@/models/RoleModel";
@@ -177,19 +177,17 @@ const RoleDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createRole(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateRole(formData)); // Dynamic component
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateRole(formData)); // Dynamic component
-    handleCloseEdit();
+    dispatch(UpdateRole(formData)); // Dynamic component
   };
 
   const handleConfirmDelete = () => {
     try {
-      dispatch(deleteRole(Number(itemToDelete?.id))); // Dynamic component
+      dispatch(DeleteRole(Number(itemToDelete?.id))); // Dynamic component
       setOpenDeleteConfirmation(false);
     } catch (e) {}
   };
@@ -237,14 +235,15 @@ const RoleDataGrid = () => {
 
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
+      setFormData(defaultValues);
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllRoles());
-    dispatch(getAllPermissions());
+    dispatch(GetAllRoles());
+    dispatch(GetAllPermissions());
   }, [refresh]);
 
   const columnsForms = [
@@ -277,15 +276,12 @@ const RoleDataGrid = () => {
             disableCloseOnSelect
             options={allPermissions || []}
             getOptionLabel={(option) => option.name}
-            value={formData.permissions}
+            value={formData.permissions || []}
             onChange={(event, newValue) => {
               handleArrayChange("permissions", newValue);
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             renderOption={(props, option, { selected }) => {
-              const isSelected = formData?.permissions?.some(
-                (permission) => permission.id === option.id
-              );
               return (
                 <li {...props}>
                   <Checkbox checked={selected} />

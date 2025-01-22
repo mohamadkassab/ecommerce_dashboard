@@ -15,7 +15,7 @@ import {
 import PrimaryButton from "../button/PrimaryButton";
 import VerticalBarChart from "../chart/VerticalBarChart";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
-import { createChart } from "@/utils/redux/actions/kpi";
+import { CreateChart } from "@/utils/redux/actions/kpi";
 import ChartWrapper from "../wrapper/chartWrapper";
 import { StatusModel } from "@/models/StatusModel";
 
@@ -51,7 +51,7 @@ const VerticalBarChartCreate: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await dispatch(
-      createChart({
+      CreateChart({
         label: formData.label,
         query: formData.query,
         chartType: "VerticalBarChart",

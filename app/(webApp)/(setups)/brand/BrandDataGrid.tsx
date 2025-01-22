@@ -24,10 +24,10 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import {
-  createBrand,
-  getAllBrands,
-  getAllCountryNames,
-  updateBrand,
+  CreateBrand,
+  GetAllBrands,
+  GetAllCountryNames,
+  UpdateBrand,
 } from "@/utils/redux/actions/setup";
 import { BrandModel } from "@/models/BrandModel";
 import FieldLabel from "@/components/label/FieldLabel";
@@ -37,7 +37,7 @@ import ImageUploader from "@/components/image/ImageUploader";
 import ModalWrapper from "@/components/wrapper/ModalWrapper";
 import CustomTextField from "@/components/field/CustomTextField";
 import { FileTypeEnum } from "@/models/FileTypeEnum";
-import { maxSize_2MB } from "@/utils/constants";
+import { maxSize_5MB } from "@/utils/constants";
 
 // Start Dynamic components
 interface rowProps extends BrandModel {}
@@ -171,14 +171,12 @@ const BrandDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createBrand(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateBrand(formData)); // Dynamic component
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateBrand(formData)); // Dynamic component
-    handleCloseEdit();
+    dispatch(UpdateBrand(formData)); // Dynamic component
   };
 
   const handleUpdateClick = (row: rowProps) => () => {
@@ -212,7 +210,7 @@ const BrandDataGrid = () => {
     if (!file.size || !file.type) {
       return;
     }
-    if (file && file.size > maxSize_2MB) {
+    if (file && file.size > maxSize_5MB) {
       return;
     }
     const previewUrl = URL.createObjectURL(file);
@@ -246,14 +244,16 @@ const BrandDataGrid = () => {
 
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
+      setFormData(defaultValues);
+      setImagePreview(null);
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllBrands()); // Dynamic component
-    dispatch(getAllCountryNames()); // Dynamic component
+    dispatch(GetAllBrands()); // Dynamic component
+    dispatch(GetAllCountryNames()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [
@@ -296,14 +296,14 @@ const BrandDataGrid = () => {
           <Autocomplete
             options={allCountryNames || []}
             getOptionLabel={(option) => option}
-            value={formData?.country}
+            value={formData?.country }
             onChange={(event, newValue) => {
               handleChangeCountry(newValue);
             }}
             isOptionEqualToValue={(option, value) => option === value}
             renderOption={(props, option, { selected }) => {
               return (
-                <li {...props}>
+                <li {...props} key={option}>
                   <Checkbox checked={selected} />
                   <ListItemText primary={option} />
                 </li>
@@ -388,8 +388,9 @@ const BrandDataGrid = () => {
               required={!formData?.logoFile}
               isFormSubmitted={isFormSubmitted}
               fileType={FileTypeEnum.Image}
+              note={`Max size: ${(maxSize_5MB / 1000000).toFixed(0)} MB \n Prefered aspect ratio: 1:1`}
               errorMessage={`Image is required & less then ${(
-                maxSize_2MB / 1000000
+                maxSize_5MB / 1000000
               ).toFixed(0)} MB`}
               label="Choose Image"
             />
@@ -432,6 +433,7 @@ const BrandDataGrid = () => {
               onChange={handleChangeFile}
               required={!formData?.logoFile}
               isFormSubmitted={isFormSubmitted}
+              note={`Max size: ${(maxSize_5MB / 1000000).toFixed(0)} MB \n Prefered aspect ratio: 1:1`}
               errorMessage="Please upload a valid image file."
               label="Choose Image"
             />

@@ -25,12 +25,12 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import {
-  createAttribute,
-  deleteAttribute,
-  getAllAttributes,
-  updateAttribute,
+  CreateAttribute,
+  DeleteAttribute,
+  GetAllAttributesWithOptions,
+  UpdateAttribute,
 } from "@/utils/redux/actions/setup";
-import { AttributeModel } from "@/models/AttributeModel";
+import { AttributeWithOptionsModel } from "@/models/AttributeWithOptionsModel";
 import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog";
 import ActionButtons from "@/components/button/ActionButtons";
 import FieldLabel from "@/components/label/FieldLabel";
@@ -39,9 +39,10 @@ import ModalWrapper from "@/components/wrapper/ModalWrapper";
 import CustomTextField from "@/components/field/CustomTextField";
 
 // Start Dynamic components
-interface rowProps extends AttributeModel {}
+interface rowProps extends AttributeWithOptionsModel {}
 
 const defaultValues = {
+  id: 0,
   name: "",
   options: [],
 };
@@ -141,7 +142,7 @@ const AttributeDataGrid = () => {
   }
 
   const dispatch = useAppDispatch();
-  const { allAttributes } = useAppSelector((state: any) => state.reducer); // Dynamic component
+  const { allAttributesWithOptions } = useAppSelector((state: any) => state.reducer); // Dynamic component
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [formData, setFormData] = React.useState<rowProps>(defaultValues);
@@ -159,19 +160,17 @@ const AttributeDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createAttribute(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateAttribute(formData)); // Dynamic component
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateAttribute(formData)); // Dynamic component
-    handleCloseEdit();
+    dispatch(UpdateAttribute(formData)); // Dynamic component
   };
 
   const handleConfirmDelete = () => {
     try {
-      dispatch(deleteAttribute(Number(itemToDelete?.id))); // Dynamic component
+      dispatch(DeleteAttribute(Number(itemToDelete?.id))); // Dynamic component
       setOpenDeleteConfirmation(false);
     } catch (e) {}
   };
@@ -219,13 +218,14 @@ const AttributeDataGrid = () => {
 
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
+      setFormData(defaultValues);
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllAttributes()); // Dynamic component
+    dispatch(GetAllAttributesWithOptions()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [
@@ -262,11 +262,11 @@ const AttributeDataGrid = () => {
             onChange={(event, newValue) => {
               handleArrayChange("options", newValue);
             }}
-            renderOption={(props, item, { selected }) => {
+            renderOption={(props, option, { selected }) => {
               return (
-                <li {...props}>
+                <li {...props} key={option}>
                   <Checkbox checked={selected} />
-                  <ListItemText primary={item} />
+                  <ListItemText primary={option} />
                 </li>
               );
             }}
@@ -286,7 +286,7 @@ const AttributeDataGrid = () => {
         Attribute
       </Typography>
       <DataGrid
-        rows={allAttributes} // Start Dynamic components
+        rows={allAttributesWithOptions} // Start Dynamic components
         columns={columnsDataGrid}
         disableRowSelectionOnClick
         loading={loading}

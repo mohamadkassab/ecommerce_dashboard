@@ -20,25 +20,27 @@ import {
   useAppDispatch,
   useAppStore,
 } from "@/utils/redux/hooks";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { ROUTES } from "@/utils/constants";
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 import { StatusModel } from "@/models/StatusModel";
-import { setIdle, signin } from "@/utils/redux/actions/user";
+import { SetIdle, Signin } from "@/utils/redux/actions/user";
 import { SignInModel } from "@/models/SignInModel";
 
 const SignInPage = () => {
   const router = useRouter();
   const { status } = useAppSelector((state: any) => state.reducer);
-  const [formData, setFormData] = useState<SignInModel>({ username: '', password: '' });
+  const [formData, setFormData] = useState<SignInModel>({
+    username: "",
+    password: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const dispatch = useAppDispatch();
 
-
   const onSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    await dispatch(signin({ formData : formData}));
+    await dispatch(Signin({ formData: formData }));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,83 +51,86 @@ const SignInPage = () => {
     }));
   };
 
-  React.useEffect(()=>{
-    if(status === StatusModel.SIGNINSUCCESSFUL){
-      dispatch(setIdle());
+  React.useEffect(() => {
+    if (status === StatusModel.SIGNINSUCCESSFUL) {
+      dispatch(SetIdle());
       router.push(ROUTES.DASHBOARD);
     }
   }, [status]);
 
-  
   return (
     <Container
-    component="main"
-    maxWidth="lg"
-    className="flex flex-col items-center justify-start min-h-screen px-4 sm:px-8"
-  >
-    <Box className="my-4 text-center">
-      <Image src={logo} alt="Logo" width={200} height={200} />
-    </Box>
-  
-    <Box className="bg-white   rounded-lg flex flex-col sm:flex-row ">
-      {/* Left Column: Form */}
-      <Box className="w-full sm:w-[30vw]">
-        <div className="flex flex-col justify-center items-center h-full">
-        <Typography variant="h3" align="center" gutterBottom>
-          Sign In
-        </Typography>
-        <form onSubmit={onSignIn}>
-          <TextField
-            name="username"
-            required
-            type="email"
-            label="Email Address"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={formData.username}
-            onChange={handleChange}
-            className="mb-4"
-          />
-          <TextField
-            required
-            name="password"
-            label="Password"
-            type={showPassword ? "text" : "password"}
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={formData.password}
-            onChange={handleChange}
-            inputProps={{
-              minLength: 6,
-              maxLength: 255,
-            }}
-            className="mb-6"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleClickShowPassword} edge="end">
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Box className="text-center">
-            <PrimaryButton type="submit">Sign In</PrimaryButton>
-          </Box>
-        </form>
-        </div>
+      component="main"
+      maxWidth="lg"
+      className="flex flex-col items-center justify-start min-h-screen px-4 sm:px-8"
+    >
+      <Box className="my-4 text-center">
+        <Image src={logo} alt="Logo" width={200} height={200} />
       </Box>
-  
-      {/* Right Column: Image */}
-      <Box className="w-full sm:w-[50vw] flex justify-center">
-        <Image src={signinImage} alt="Sign In Image" width={500} height={500} />
+
+      <Box className="bg-white   rounded-lg flex flex-col sm:flex-row ">
+        {/* Left Column: Form */}
+        <Box className="w-full sm:w-[30vw]">
+          <div className="flex flex-col justify-center items-center h-full">
+            <Typography variant="h3" align="center" gutterBottom>
+              Sign In
+            </Typography>
+            <form onSubmit={onSignIn}>
+              <TextField
+                name="username"
+                required
+                type="email"
+                label="Email Address"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={formData.username}
+                onChange={handleChange}
+                className="mb-4"
+              />
+              <TextField
+                required
+                name="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={formData.password}
+                onChange={handleChange}
+                inputProps={{
+                  minLength: 6,
+                  maxLength: 255,
+                }}
+                className="mb-6"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleClickShowPassword} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Box className="text-center">
+                <PrimaryButton type="submit">Sign In</PrimaryButton>
+              </Box>
+            </form>
+          </div>
+        </Box>
+
+        {/* Right Column: Image */}
+        <Box className="w-full sm:w-[50vw] flex justify-center">
+          <Image
+            src={signinImage}
+            alt="Sign In Image"
+            width={500}
+            height={500}
+          />
+        </Box>
       </Box>
-    </Box>
-  </Container>
-  
+    </Container>
   );
 };
 

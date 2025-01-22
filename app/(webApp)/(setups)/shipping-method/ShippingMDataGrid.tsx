@@ -18,9 +18,9 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import {
-  createShippingM,
-  getAllShippingM,
-  updateShippingM,
+  CreateShippingM,
+  GetAllShippingM,
+  UpdateShippingM,
 } from "@/utils/redux/actions/setup";
 import { ShippingMModel } from "@/models/ShippingMModel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
@@ -183,14 +183,12 @@ const ShippingMDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createShippingM(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateShippingM(formData)); // Dynamic component
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateShippingM(formData)); // Dynamic component
-    handleCloseEdit();
+    dispatch(UpdateShippingM(formData)); // Dynamic component
   };
 
   const handleUpdateClick = (row: rowProps) => () => {
@@ -259,13 +257,15 @@ const ShippingMDataGrid = () => {
 
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
+      setFormData(defaultValues);
+      setImagePreview(null);
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllShippingM()); // Dynamic component
+    dispatch(GetAllShippingM()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [

@@ -17,9 +17,9 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import {
-  createCountry,
-  getAllCountries,
-  updateCountry,
+  CreateCountry,
+  GetAllCountries,
+  UpdateCountry,
 } from "@/utils/redux/actions/setup";
 import { CountryModel } from "@/models/CountryModel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
@@ -146,14 +146,12 @@ const CountryDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createCountry(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateCountry(formData)); // Dynamic component
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateCountry(formData)); // Dynamic component
-    handleCloseEdit();
+    dispatch(UpdateCountry(formData)); // Dynamic component
   };
 
   const handleUpdateClick = (row: rowProps) => () => {
@@ -187,7 +185,7 @@ const CountryDataGrid = () => {
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllCountries());
+    dispatch(GetAllCountries());
   }, [refresh]);
 
   const columnsForms = [

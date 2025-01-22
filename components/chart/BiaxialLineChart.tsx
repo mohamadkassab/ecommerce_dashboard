@@ -2,7 +2,7 @@ import * as React from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { APIROUTES } from '@/utils/constants';
 import axios from 'axios';
-import { getMinMaxDates } from '@/utils/helpers/funtions';
+import { GetMinMaxDates } from '@/utils/helpers/funtions';
 
 
 
@@ -36,7 +36,7 @@ export default function BiaxialLineChart({chart}:BiaxialLineChartProps) {
 
   
   const dateFormatter = (date: Date) => {
-    const { minDate, maxDate } = getMinMaxDates(dateSeries);
+    const { minDate, maxDate } = GetMinMaxDates(dateSeries);
     const startYear = minDate.getFullYear();
     const startMonth = minDate.getMonth();
     const endYear = maxDate.getFullYear();

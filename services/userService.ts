@@ -3,36 +3,36 @@ import { RoleModel } from '@/models/RoleModel';
 import { UserChangePasswordModel } from '@/models/UserChangePasswordModel';
 import { UserModel } from '@/models/UserModel';
 import { APIROUTES, AUTHTOKEN, GLOBAL_REQUEST_TIMEOUT } from '@/utils/constants';
-import {apiRequest} from '@/utils/helpers/apiRequest';
+import {ApiRequest} from '@/utils/helpers/apiRequest';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
 //+------------------------------------------------------------------+
 //| Permission                                          
 //+------------------------------------------------------------------+
-export const getAllPermissionsService = async () =>
-  apiRequest('GET', APIROUTES.GETALLPERMISSIONS);
+export const GetAllPermissionsService = async () =>
+  ApiRequest('GET', APIROUTES.GETALLPERMISSIONS);
 
 //+------------------------------------------------------------------+
 //| Role                                           
 //+------------------------------------------------------------------+
-export const getAllRolesService = async () =>
-  apiRequest('GET', APIROUTES.GETALLROLES);
+export const GetAllRolesService = async () =>
+  ApiRequest('GET', APIROUTES.GETALLROLES);
 
-export const createRoleService = async (formData: RoleModel) =>
-  apiRequest('POST', APIROUTES.CREATEROLE, formData);
+export const CreateRoleService = async (formData: RoleModel) =>
+  ApiRequest('POST', APIROUTES.CREATEROLE, formData);
 
-export const updateRoleService = async (formData: RoleModel) =>
-  apiRequest('PUT', APIROUTES.UPDATEROLE, formData);
+export const UpdateRoleService = async (formData: RoleModel) =>
+  ApiRequest('PUT', APIROUTES.UPDATEROLE, formData);
 
-export const deleteRoleService = async (id: number) =>{
-  apiRequest('DELETE', `${APIROUTES.DELETEROLE}/${id}`);
+export const DeleteRoleService = async (id: number) =>{
+  ApiRequest('DELETE', `${APIROUTES.DELETEROLE}/${id}`);
 }
  
 //+------------------------------------------------------------------+
 //| User                                           
 //+------------------------------------------------------------------+
-export const sigInUser = async (formData: SigninModel) => {
+export const SiginUser = async (formData: SigninModel) => {
   try {
     const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}${APIROUTES.SIGNIN}`, { username: formData.username, password: formData.password }, {
       headers: {
@@ -45,19 +45,19 @@ export const sigInUser = async (formData: SigninModel) => {
   }
 };
 
-export const signOutService = async () =>{
+export const SignoutService = async () =>{
   Cookies.remove(`${AUTHTOKEN}`);
-  apiRequest('POST', APIROUTES.SIGNOUT);
+  ApiRequest('POST', APIROUTES.SIGNOUT);
 };
 
-export const getAllUsersService = async () =>
-  apiRequest('GET', APIROUTES.GETALLUSERS);
+export const GetAllUsersService = async () =>
+  ApiRequest('GET', APIROUTES.GETALLUSERS);
 
-export const createUserService = async (formData: UserModel) =>
-  apiRequest('POST', APIROUTES.CREATEUSER, formData);
+export const CreateUserService = async (formData: UserModel) =>
+  ApiRequest('POST', APIROUTES.CREATEUSER, formData);
 
-export const updateUserService = async (formData: UserModel) =>
-  apiRequest('PUT', APIROUTES.UPDATEUSER, formData);
+export const UpdateUserService = async (formData: UserModel) =>
+  ApiRequest('PUT', APIROUTES.UPDATEUSER, formData);
 
-export const changePasswordService = async (formData: UserChangePasswordModel) =>
-  apiRequest('POST', APIROUTES.CHANGEPASSWORD, formData);
+export const ChangePasswordService = async (formData: UserChangePasswordModel) =>
+  ApiRequest('POST', APIROUTES.CHANGEPASSWORD, formData);

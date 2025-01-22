@@ -6,7 +6,7 @@ interface Property {
     propertyValue: string;
   }
 
-export const findPropertyValueByKey = (
+export const FindPropertyValueByKey = (
     key: string, 
     properties: Property[]
   ): string | undefined => {
@@ -14,13 +14,13 @@ export const findPropertyValueByKey = (
     return property ? property.propertyValue : undefined;
   };
 
-  export const getMinMaxDates = (dates: Date[]): { minDate: Date; maxDate: Date } => {
+  export const GetMinMaxDates = (dates: Date[]): { minDate: Date; maxDate: Date } => {
     if (dates.length === 0) return { minDate: new Date(), maxDate: new Date() };
     const minDate = new Date(Math.min(...dates.map(date => date.getTime())));
     const maxDate = new Date(Math.max(...dates.map(date => date.getTime())));
     return { minDate, maxDate };
   };
 
-  export const getToken = () => {
+  export const GetToken = () => {
     return Cookies.get(`${AUTHTOKEN}`);
   }

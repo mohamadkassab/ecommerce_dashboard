@@ -18,10 +18,10 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
 import { StatusModel } from "@/models/StatusModel";
 import {
-  createCategory,
-  deleteCategory,
-  getAllCategories,
-  updateCategory,
+  CreateCategory,
+  DeleteCategory,
+  GetAllCategories,
+  UpdateCategory,
 } from "@/utils/redux/actions/setup";
 import { CategoryModel } from "@/models/CategoryModel";
 import DataGridBox from "@/components/wrapper/DataGridBox";
@@ -150,19 +150,17 @@ const CategoryDataGrid = () => {
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createCategory(formData)); // Dynamic component
-    handleCloseCreate();
+    dispatch(CreateCategory(formData)); // Dynamic component
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateCategory(formData)); // Dynamic component
-    handleCloseEdit();
+    dispatch(UpdateCategory(formData)); // Dynamic component
   };
 
   const handleConfirmDelete = () => {
     try {
-      dispatch(deleteCategory(Number(itemToDelete?.id))); // Dynamic component
+      dispatch(DeleteCategory(Number(itemToDelete?.id))); // Dynamic component
       setOpenDeleteConfirmation(false);
     } catch (e) {}
   };
@@ -201,13 +199,14 @@ const CategoryDataGrid = () => {
 
   React.useEffect(() => {
     if (status === StatusModel.SUCCESS) {
+      setFormData(defaultValues);
       setRefresh(!refresh);
     }
   }, [status]);
 
   // Start Dynamic components
   React.useEffect(() => {
-    dispatch(getAllCategories()); // Dynamic component
+    dispatch(GetAllCategories()); // Dynamic component
   }, [refresh]);
 
   const columnsForms = [

@@ -6,6 +6,7 @@ export interface ProductModel {
     price?: number;
     discount?: number;
     year?: number;
+    attributes: string[];
     supplier: string;
     brand: string;
     season: string;

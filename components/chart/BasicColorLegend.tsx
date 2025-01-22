@@ -5,7 +5,7 @@ import { ChartsReferenceLine } from "@mui/x-charts/ChartsReferenceLine";
 import { PiecewiseColorLegend } from "@mui/x-charts/ChartsLegend";
 import { APIROUTES, DUMMYDATA } from "@/utils/constants";
 import axios from "axios";
-import { getMinMaxDates } from "@/utils/helpers/funtions";
+import { GetMinMaxDates } from "@/utils/helpers/funtions";
 
 
 type BasicColorLegendProps = {
@@ -21,7 +21,7 @@ export default function BasicColorLegend({ chart }: BasicColorLegendProps) {
   const [highMargin, setHighMargin] = React.useState<number>(0);
 
   const dateFormatter = (date: Date) => {
-    const { minDate, maxDate } = getMinMaxDates([]);
+    const { minDate, maxDate } = GetMinMaxDates([]);
     const startYear = minDate.getFullYear();
     const startMonth = minDate.getMonth();
     const endYear = maxDate.getFullYear();

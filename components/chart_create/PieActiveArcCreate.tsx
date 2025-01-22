@@ -4,7 +4,7 @@ import PieActiveArc from "../chart/PieActiveArc";
 import ChartWrapper from "../wrapper/chartWrapper";
 import PieActiveArcStatic from "../chart_static/PieActiveArcStatic";
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks";
-import { createChart } from "@/utils/redux/actions/kpi";
+import { CreateChart } from "@/utils/redux/actions/kpi";
 import {
   Box,
   Card,
@@ -79,7 +79,7 @@ const PieActiveArcCreate: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await dispatch(
-      createChart({
+      CreateChart({
         label: formData.label,
         query: formData.query,
         chartType: "PieActiveArc",
