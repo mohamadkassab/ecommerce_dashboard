@@ -23,6 +23,7 @@ import { CreateProduct, CreateProductContent, CreateTransaction, GetAllProductCo
 import { ProductModel } from '@/models/ProductModel';
 import { ProductContentModel } from '@/models/ProductContentModel';
 import { TransactionModel } from '@/models/Transaction';
+import { IsErrorPayload } from '../helpers/funtions';
 
 
 interface InitialState {
@@ -72,13 +73,6 @@ const decodeAndVerifyToken = (token: string | undefined): TokenModel | null => {
 };
 
 //+------------------------------------------------------------------+
-//| Helper function to check if payload contains error                                          
-//+------------------------------------------------------------------+
-function isErrorPayload(payload: any): payload is { error: any } {
-  return payload && typeof payload.error !== "undefined";
-}
-
-//+------------------------------------------------------------------+
 //| Utility to handle common async action states (pending, fulfilled, rejected)                                          
 //+------------------------------------------------------------------+
 const handleAsyncAction = <T>(
@@ -93,8 +87,8 @@ const handleAsyncAction = <T>(
     })
     .addCase(action.fulfilled, (state, action) => {
       onSuccess(state, action);
-      if (isErrorPayload(action.payload)) {
-        state.error = action.payload?.error.response.data.message || "Failed";
+      if (IsErrorPayload(action.payload)) {
+        state.error = action.payload?.error?.response?.data?.message || "Failed";
         state.status = StatusModel.FAILED;
       }else{
         state.status = StatusModel.SUCCESS;
@@ -118,8 +112,8 @@ const handleAsyncActionWithoutSuccess = <T>(
     })
     .addCase(action.fulfilled, (state, action) => {
       onSuccess(state, action);
-      if (isErrorPayload(action.payload)) {
-        state.error = action.payload?.error.response.data.message || "Failed";
+      if (IsErrorPayload(action.payload)) {
+        state.error = action.payload?.error?.response?.data?.message || "Failed";
         state.status = StatusModel.FAILED;
       }else{
         state.status = StatusModel.OK;

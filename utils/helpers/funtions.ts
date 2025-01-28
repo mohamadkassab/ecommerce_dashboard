@@ -24,3 +24,7 @@ export const FindPropertyValueByKey = (
   export const GetToken = () => {
     return Cookies.get(`${AUTHTOKEN}`);
   }
+
+  export function IsErrorPayload(payload: any): payload is { error: any } {
+    return payload && typeof payload.error !== "undefined";
+  }
